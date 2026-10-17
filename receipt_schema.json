@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Receipt extraction schema for Ass6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["transaction_date", "merchant", "items", "grand_total", "currency"],
+  "properties": {
+    "transaction_date": {"type": ["string", "null"]},
+    "merchant": {"type": ["string", "null"]},
+    "grand_total": {"type": ["number", "null"]},
+    "currency": {"type": ["string", "null"]},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "quantity", "unit", "unit_price", "line_total"],
+        "properties": {
+          "name": {"type": ["string", "null"]},
+          "quantity": {"type": ["number", "null"]},
+          "unit": {"type": ["string", "null"]},
+          "unit_price": {"type": ["number", "null"]},
+          "line_total": {"type": ["number", "null"]}
+        }
+      }
+    }
+  }
+}

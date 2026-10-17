@@ -9,9 +9,10 @@ JSON Extraction Scorer สำหรับ Pilot 2 (LLM Extraction Accuracy)
 
 Schema ที่รองรับ (ตัวอย่าง):
 {
-  "store_name": "...", "date": "YYYY-MM-DD",
-  "items": [{"name": "...", "quantity": N, "unit_price": N, "category": "..."}],
-  "total": N
+  "merchant": "...", "transaction_date": "YYYY-MM-DD", "currency": "THB",
+  "items": [{"name": "...", "quantity": N, "unit": "...",
+             "unit_price": N, "line_total": N}],
+  "grand_total": N
 }
 
 การใช้งาน (ไฟล์เดี่ยว):
@@ -27,11 +28,52 @@ import json
 import os
 import sys
 from difflib import SequenceMatcher
+from decimal import Decimal
+from pathlib import Path
+import math
+import unicodedata
 
-TOP_LEVEL_FIELDS = ["store_name", "date", "total"]
-ITEM_FIELDS = ["name", "quantity", "unit_price", "category"]
+SCHEMA = json.loads(Path(__file__).with_name("receipt_schema.json").read_text(encoding="utf-8"))
+TOP_LEVEL_FIELDS = [key for key in SCHEMA["required"] if key != "items"]
+ITEM_SCHEMA = SCHEMA["properties"]["items"]["items"]
+ITEM_FIELDS = ITEM_SCHEMA["required"]
 NAME_MATCH_THRESHOLD = 0.6  # ความคล้ายขั้นต่ำของชื่อสินค้าที่ถือว่า "match กัน" (fuzzy)
 
+def schema_errors(value, spec=SCHEMA, path="$"):
+    """Validate the deliberately small, dependency-free receipt schema."""
+    types = spec.get("type", [])
+    types = [types] if isinstance(types, str) else types
+    actual = ("null" if value is None else "boolean" if isinstance(value, bool)
+              else "object" if isinstance(value, dict) else "array" if isinstance(value, list)
+              else "string" if isinstance(value, str) else "number"
+              if isinstance(value, (int, float)) and math.isfinite(value) else "invalid")
+    if actual not in types:
+        return [f"{path}: expected {types}, got {actual}"]
+    errors = []
+    if actual == "object":
+        errors += [f"{path}.{key}: required" for key in spec.get("required", []) if key not in value]
+        for key, item in value.items():
+            if key not in spec.get("properties", {}):
+                errors.append(f"{path}.{key}: unknown field")
+            else:
+                errors += schema_errors(item, spec["properties"][key], f"{path}.{key}")
+    elif actual == "array":
+        for index, item in enumerate(value):
+            errors += schema_errors(item, spec["items"], f"{path}[{index}]")
+    return errors
+
+def normalize(value):
+    if isinstance(value, str):
+        return unicodedata.normalize("NFC", value).strip()
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return Decimal(str(value))
+    return value
+
+def failed_result(json_valid, errors):
+    return {"json_valid": json_valid, "schema_valid": 0,
+            "schema_errors": "; ".join(errors), "precision": 0.0,
+            "recall": 0.0, "f1": 0.0, "exact_match": 0,
+            "hallucination_count": None}
 
 def name_similarity(a, b):
     if not a or not b:
@@ -43,7 +85,19 @@ def match_items(gt_items, hyp_items):
     """จับคู่ item ระหว่าง GT กับ output ด้วย fuzzy name matching (greedy, ไม่ซ้ำคู่)"""
     matched_pairs = []
     used_hyp = set()
+    used_gt = set()
+    # Match complete equal rows first so duplicate product names and reordering
+    # do not steal the correct pair from one another.
+    for gi, item in enumerate(gt_items):
+        for hj, candidate in enumerate(hyp_items):
+            if hj not in used_hyp and all(normalize(item[k]) == normalize(candidate[k]) for k in ITEM_FIELDS):
+                matched_pairs.append((gi, hj))
+                used_gt.add(gi)
+                used_hyp.add(hj)
+                break
     for gi, gt_item in enumerate(gt_items):
+        if gi in used_gt:
+            continue
         best_j, best_score = None, 0.0
         for hj, hyp_item in enumerate(hyp_items):
             if hj in used_hyp:
@@ -61,6 +115,12 @@ def match_items(gt_items, hyp_items):
 
 def score(gt, hyp):
     """คืนค่า dict ผลลัพธ์การให้คะแนน 1 คู่ (gt dict, hyp dict)"""
+    errors = schema_errors(gt)
+    if errors:
+        raise ValueError("Ground truth does not match receipt_schema.json: " + "; ".join(errors))
+    errors = schema_errors(hyp)
+    if errors:
+        return failed_result(1, errors)
     tp, fp, fn = 0, 0, 0
     field_matches = []
 
@@ -70,7 +130,7 @@ def score(gt, hyp):
         hyp_val = hyp.get(field)
         gt_present = gt_val is not None and str(gt_val).strip() != ""
         hyp_present = hyp_val is not None and str(hyp_val).strip() != ""
-        is_match = gt_present and hyp_present and str(gt_val).strip() == str(hyp_val).strip()
+        is_match = gt_present and hyp_present and normalize(gt_val) == normalize(hyp_val)
         field_matches.append(is_match if gt_present else None)
         if gt_present and hyp_present and is_match:
             tp += 1
@@ -90,7 +150,7 @@ def score(gt, hyp):
             hyp_val = hyp_items[hj].get(field)
             gt_present = gt_val is not None and str(gt_val).strip() != ""
             hyp_present = hyp_val is not None and str(hyp_val).strip() != ""
-            is_match = gt_present and hyp_present and str(gt_val).strip() == str(hyp_val).strip()
+            is_match = gt_present and hyp_present and normalize(gt_val) == normalize(hyp_val)
             if gt_present and is_match:
                 tp += 1
             elif gt_present:
@@ -99,21 +159,23 @@ def score(gt, hyp):
                 fp += 1
 
     # item ที่หาย (unmatched_gt) = FN สำหรับทุก field ของ item นั้น
-    fn += len(unmatched_gt) * len(ITEM_FIELDS)
-    # item ที่หลอน (unmatched_hyp) = hallucination, ไม่นับเป็น FP ของ field-matching
-    # (เพราะเป็นปัญหาคนละมิติ — item ที่ไม่มีตัวตนใน GT เลย)
+    fn += sum(max(1, sum(gt_items[i][k] is not None for k in ITEM_FIELDS)) for i in unmatched_gt)
+    fp += sum(max(1, sum(hyp_items[i][k] is not None for k in ITEM_FIELDS)) for i in unmatched_hyp)
     hallucination_count = len(unmatched_hyp)
 
     precision = tp / (tp + fp) if (tp + fp) > 0 else None
     recall = tp / (tp + fn) if (tp + fn) > 0 else None
-    f1 = (2 * precision * recall / (precision + recall)
-          if precision is not None and recall is not None and (precision + recall) > 0
-          else None)
+    f1 = (2 * tp / (2 * tp + fp + fn)) if (2 * tp + fp + fn) else None
 
-    exact_match = (fp == 0 and fn == 0 and hallucination_count == 0)
+    exact_match = (not unmatched_gt and not unmatched_hyp
+                   and all(normalize(gt[k]) == normalize(hyp[k]) for k in TOP_LEVEL_FIELDS)
+                   and all(normalize(gt_items[i][k]) == normalize(hyp_items[j][k])
+                           for i, j in matched_pairs for k in ITEM_FIELDS))
 
     return {
         "json_valid": 1,
+        "schema_valid": 1,
+        "schema_errors": "",
         "precision": round(precision, 4) if precision is not None else None,
         "recall": round(recall, 4) if recall is not None else None,
         "f1": round(f1, 4) if f1 is not None else None,
@@ -135,9 +197,10 @@ def process_pair(gt_path, hyp_path):
     hyp, hyp_ok = load_json_safe(hyp_path)
     if not gt_ok:
         raise ValueError(f"อ่าน ground truth ไม่ได้: {gt_path}")
+    if schema_errors(gt):
+        raise ValueError("Ground truth does not match receipt_schema.json: " + "; ".join(schema_errors(gt)))
     if not hyp_ok:
-        return {"json_valid": 0, "precision": None, "recall": None, "f1": None,
-                "exact_match": 0, "hallucination_count": None}
+        return failed_result(0, ["Missing or invalid JSON output"])
     return score(gt, hyp)
 
 
@@ -162,15 +225,12 @@ def main():
         for fname in gt_files:
             gt_path = os.path.join(args.gt_dir, fname)
             hyp_path = os.path.join(args.hyp_dir, fname)
-            if not os.path.exists(hyp_path):
-                print(f"⚠️  ข้าม {fname} — ไม่พบไฟล์ที่ตรงกันใน hyp-dir", file=sys.stderr)
-                continue
             result = process_pair(gt_path, hyp_path)
             result["filename"] = fname
             rows.append(result)
             print(f"{fname}: {result}")
 
-        fieldnames = ["filename", "json_valid", "precision", "recall", "f1",
+        fieldnames = ["filename", "json_valid", "schema_valid", "schema_errors", "precision", "recall", "f1",
                       "exact_match", "hallucination_count"]
         with open(args.out, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)

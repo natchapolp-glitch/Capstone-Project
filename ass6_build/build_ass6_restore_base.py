@@ -12,6 +12,25 @@ ARCH = ROOT / "ass6_assets" / "system_architecture.png"
 OUT.parent.mkdir(exist_ok=True)
 FONT = "TH Sarabun New"
 
+def set_complex_script(rpr, size=None, bold=None):
+    # Thai uses szCs/bCs; python-docx's font.size only sets the Latin sz.
+    if size is not None:
+        el = rpr.find(qn("w:szCs"))
+        if el is None:
+            el = OxmlElement("w:szCs")
+            rpr.append(el)
+        el.set(qn("w:val"), str(int(size * 2)))
+    if bold is not None:
+        el = rpr.find(qn("w:bCs"))
+        if el is None:
+            el = OxmlElement("w:bCs")
+            rpr.append(el)
+        el.set(qn("w:val"), "1" if bold else "0")
+    if rpr.rFonts is not None:
+        for attr in list(rpr.rFonts.attrib):
+            if "theme" in attr.lower():
+                del rpr.rFonts.attrib[attr]
+
 def font_style(style, size, bold=False):
     style.font.name = FONT
     style.font.size = Pt(size)
@@ -24,6 +43,7 @@ def font_style(style, size, bold=False):
         rpr.insert(0, rf)
     for key in ("ascii", "hAnsi", "eastAsia", "cs"):
         rf.set(qn(f"w:{key}"), FONT)
+    set_complex_script(rpr, size, bold)
 
 def set_run_font(run, bold=None, size=None):
     run.font.name = FONT
@@ -38,6 +58,7 @@ def set_run_font(run, bold=None, size=None):
         rpr.insert(0, rf)
     for key in ("ascii", "hAnsi", "eastAsia", "cs"):
         rf.set(qn(f"w:{key}"), FONT)
+    set_complex_script(rpr, size, bold)
 
 def p(text="", style=None, align=None, keep=True):
     para = doc.add_paragraph(style=style)
@@ -85,7 +106,7 @@ def table(headers, rows, widths=None):
         c.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
         pr = c.paragraphs[0]
         pr.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        set_run_font(pr.add_run(h), bold=True, size=13)
+        set_run_font(pr.add_run(h), bold=True, size=14)
         tcpr = c._tc.get_or_add_tcPr()
         shd = OxmlElement("w:shd")
         shd.set(qn("w:fill"), "DCE6EE")
@@ -102,7 +123,7 @@ def table(headers, rows, widths=None):
             c.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
             pr = c.paragraphs[0]
             pr.alignment = WD_ALIGN_PARAGRAPH.LEFT if i == 0 else WD_ALIGN_PARAGRAPH.CENTER
-            set_run_font(pr.add_run(str(val)), size=13)
+            set_run_font(pr.add_run(str(val)), size=14)
             if ri % 2:
                 tcpr = c._tc.get_or_add_tcPr()
                 shd = OxmlElement("w:shd")
@@ -150,7 +171,7 @@ normal.paragraph_format.space_after = Pt(5)
 normal.paragraph_format.widow_control = True
 for name, size, before, after in (("Title", 18, 0, 12), ("Heading 1", 16, 13, 6), ("Heading 2", 14, 9, 4)):
     s = doc.styles[name]
-    font_style(s, size, True)
+    font_style(s, size, name != "Heading 2")
     s.paragraph_format.space_before = Pt(before)
     s.paragraph_format.space_after = Pt(after)
     s.paragraph_format.keep_with_next = True
@@ -261,11 +282,12 @@ table(["รายการ", "ผล ณ 17 ต.ค. 2569", "ข้อจำก�
 subheading("5.2", "ชุดข้อมูลและเฉลยอ้างอิง")
 p("ใช้เฉพาะใบซื้อสินค้าที่มองเห็นรายการสินค้า จำนวน และราคาเป็นชุดหลัก เอกสารชำระเงินหรือใบค่าหอเก็บเป็นชุดเสริมหรือทดสอบชนิดเอกสาร ไม่ปะปนกับคะแนนสกัดรายการสินค้า 59 ภาพปัจจุบันเป็นผู้สมัคร; จะรวมภาพที่ถ่ายซ้ำและเอกสารคู่เป็นกลุ่มธุรกรรมก่อนแบ่งชุดฝึก/ตรวจ/ทดสอบ เพื่อไม่ให้ข้อมูลใกล้ซ้ำข้ามชุด เป้าหมายระยะถัดไปคือเพิ่มความหลากหลายของร้าน ฉาก แสง มุม และอุปกรณ์ถ่าย และขยายเป็นอย่างน้อย 100 ธุรกรรมอิสระหากการเก็บข้อมูลและเวลาทำได้")
 p("การตรวจชื่อสินค้าเบื้องต้นในภาพผู้สมัคร 59 ภาพพบว่า ถอดชื่อครบครั้งแรก 12 ภาพ ถอดไม่ครบ 45 ภาพ โดย 28 ภาพมีช่วงชื่อที่อ่านได้แน่ชัดและ 17 ภาพยังไม่มีช่วงชื่อที่ยืนยันได้ อีก 2 ภาพไม่มีบรรทัดชื่อสินค้า ตัวเลขอักษรจากส่วนที่อ่านได้ยังใช้แทนสัดส่วนภาษาของทั้งชุดไม่ได้ และยังไม่มีผู้ตรวจซ้ำ")
-p("เฉลยแต่ละภาพจะประกอบด้วยกรอบเอกสาร ข้อความอ้างอิง และ JSON schema คงที่: transaction_date, merchant, items[{name, quantity, unit, unit_price, line_total}], grand_total, currency และช่องสถานะอ่านไม่ออก กำหนด null สำหรับข้อมูลไม่ปรากฏ ไม่เดาจากบริบท จะให้ผู้วิจัยสองคนตรวจเฉลยแยกกันแล้วแก้ข้อขัดแย้งร่วมกัน พร้อมบันทึก version, กลุ่มธุรกรรม และเหตุผลการตัดภาพออก การวัดมุมเอียงละเอียดต้องกำหนดแนวอ้างอิงของกระดาษหรือบรรทัด ส่วนสัดส่วนตัวอักษรไทย/อังกฤษจะนับจากข้อความเฉลยที่ตรวจแล้ว ไม่ใช้ OCR ดิบเป็นค่าจริง")
+p("เฉลยแต่ละภาพจะประกอบด้วยกรอบเอกสาร ข้อความอ้างอิง และ JSON schema คงที่: transaction_date, merchant, items[{name, quantity, unit, unit_price, line_total}], grand_total, currency ตามไฟล์ receipt_schema.json ทุกคีย์ต้องปรากฏ และกำหนด null สำหรับข้อมูลที่ไม่ปรากฏในเอกสาร สถานะอ่านไม่ออกและสถานะตรวจยืนยันบันทึกใน manifest แยกจากผลสกัด เพื่อแยกข้อมูลที่ไม่มีออกจากข้อมูลที่ยังอ่านไม่ได้ จะให้ผู้วิจัยสองคนตรวจเฉลยแยกกันแล้วแก้ข้อขัดแย้งร่วมกัน พร้อมบันทึก version, กลุ่มธุรกรรม และเหตุผลการตัดภาพออก การวัดมุมเอียงละเอียดต้องกำหนดแนวอ้างอิงของกระดาษหรือบรรทัด ส่วนสัดส่วนตัวอักษรไทย/อังกฤษจะนับจากข้อความเฉลยที่ตรวจแล้ว ไม่ใช้ OCR ดิบเป็นค่าจริง")
 
 subheading("5.3", "การทดลองและตัวชี้วัด")
 p("การตรวจจับใช้กรอบ receipt_region หนึ่งบริเวณต่อภาพเท่าที่นิยามอนุญาต รายงาน mAP@0.5, mAP@0.5:0.95, precision, recall และสัดส่วนกรอบคะแนนสูงสุดที่ IoU≥0.5 แยกฉากเดิมกับฉากใหม่ พร้อมรายงานจำนวนภาพและช่วงความไม่แน่นอนเมื่อขนาดชุดทดสอบเหมาะสม การตรวจ OCR เปรียบเทียบอย่างน้อย EasyOCR กับ Tesseract บนภาพและการ crop เดียวกัน ใช้ CER หลังประกาศกฎ normalize Unicode/ช่องว่าง และวัดความถูกต้องวันที่ ยอดรวม และบรรทัดสินค้าแยกจาก CER [6–8]")
 p("การสกัด JSON ใช้ข้อความ OCR เดียวกันในแต่ละเงื่อนไข และใช้ข้อความเฉลยแทน OCR อีกชุดหนึ่งเพื่อแยกความผิดพลาดต้นทาง เปรียบเทียบอย่างน้อยสองโมเดลขนาดเล็กที่ตรวจสิทธิและความเข้ากันได้แล้ว × สองระดับ quantization × เปิด/ปิด constrained decoding ภายใต้ prompt, schema, seed และขีดจำกัดโทเคนเดียวกัน ตัวชี้วัดหลักคือ parse rate, schema-valid rate, exact-match รายฟิลด์, ความคลาดเคลื่อนจำนวนเงิน และความครบของรายการสินค้า ตัวชี้วัดทรัพยากรคือเวลา end-to-end, เวลาแต่ละขั้น, peak RAM และขนาดโมเดล รายงานผลตามธุรกรรมและใช้การสุ่มซ้ำแบบจัดกลุ่มธุรกรรมเพื่อประมาณช่วงความไม่แน่นอน ไม่ตีความความต่างเล็กน้อยจากภาพใกล้ซ้ำว่าเป็นหลักฐานอิสระ")
+p("ตัวให้คะแนนเบื้องต้นตรวจ schema ก่อนให้คะแนน และตรวจทุกฟิลด์ใน receipt_schema.json โดยปรับข้อความเป็น Unicode NFC และตัดช่องว่างหัวท้าย เปรียบเทียบตัวเลขตามค่า จับคู่รายการที่ตรงทุกฟิลด์ก่อน แล้วจึงจับคู่ชื่อที่เหลือแบบหนึ่งต่อหนึ่งด้วย SequenceMatcher ที่เกณฑ์ 0.6 ฟิลด์ผิดนับทั้ง false positive และ false negative รายการเกินลด precision และรายการขาดลด recall ผล exact-match ต้องตรงทุกฟิลด์และไม่มีรายการเกินหรือขาด ผลที่ไม่ผ่าน schema หรือไม่มีไฟล์คำตอบนับเป็นความล้มเหลว วิธีนี้ใช้กับเฉลยที่ตรวจครบแล้วเท่านั้น ภาพที่ยังถอดไม่ครบจะแยกรายงานจำนวนและไม่ใช้ null กลบส่วนที่อ่านไม่ได้ ปัจจุบันตัวให้คะแนนผ่านการทดสอบด้วยข้อมูลสมมติ ยังไม่มีผลประเมินโมเดล JSON จริง")
 caption("ตาราง", 3, "จุดตัดสินใจของการทดลอง")
 table(["ขั้น", "เปรียบเทียบ", "เกณฑ์ตัดสินหลัก"], [
     ("ตรวจจับ", "ฉากเดิม / ต่างฉาก", "mAP และกรอบสูงสุด IoU≥0.5"),

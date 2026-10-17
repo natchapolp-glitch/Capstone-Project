@@ -4,6 +4,7 @@ from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE, MSO_CONNECTOR
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.oxml.xmlchemy import OxmlElement
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'ass5_output' / 'Residential_Intelligence_Project_Progress_READY_2026-10-18.pptx'
@@ -52,6 +53,15 @@ def txt(slide, value, x, y, w, h, size=20, color=INK, bold=False, align=PP_ALIGN
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.text = item; p.alignment = align
         p.font.name = FONT; p.font.size = Pt(size); p.font.bold = bold; p.font.color.rgb = color
+        # Thai otherwise inherits the theme's complex-script font (Angsana).
+        for props in [p._p.get_or_add_pPr().get_or_add_defRPr()] + [r._r.get_or_add_rPr() for r in p.runs]:
+            props.set('lang', 'th-TH')
+            for tagname in ('a:latin', 'a:ea', 'a:cs'):
+                element = props.find('{http://schemas.openxmlformats.org/drawingml/2006/main}' + tagname.split(':')[1])
+                if element is None:
+                    element = OxmlElement(tagname)
+                    props.append(element)
+                element.set('typeface', FONT)
         p.space_after = Pt(4)
     return sh
 
@@ -158,18 +168,31 @@ for y,n,head,body,status,color in [(1.72,'1','รับรู้และสก�
     txt(s,status,10.32,y+.23,2.02,.37,13,color,True,PP_ALIGN.RIGHT)
 txt(s,'ใบเสร็จบอกการซื้อเข้า; การคำนวณ burn rate ต้องมีข้อมูลคงเหลือหรือการใช้ตามเวลาเพิ่มเติม',.82,6.39,11.8,.38,14,MUTED)
 
-# 10. Retain the original academic and architectural base, phrased for new listeners.
-s=base('จากฐานวิชาการสู่ผลทดลอง','กรอบวรรณกรรม สถาปัตยกรรม และแผนเดิม นำมาสู่การทดลองนำร่องที่ตรวจได้')
-for y,head,original,now in [
-    (1.75,'งานวิจัย 3 มิติ','ฐานคิด: quantization / JSON / IoT','นำมาใช้: ตัวแปรและตัววัดการทดลอง'),
-    (3.12,'สถาปัตยกรรม 3 ชั้น','ฐานคิด: กล้อง–YOLO–OCR–LLM–MQTT','นำมาใช้: e-Senses โดยเริ่มทดลอง e-Eye'),
-    (4.49,'แผนดำเนินงาน','ฐานคิด: ต้นแบบ → LLM → IoT → pilot','ผลวันนี้: ภาพจริงและ YOLO/OCR บน PC'),
-]:
-    box(s,.8,y,11.72,1.08,PALE,radius=True)
-    txt(s,head,1.05,y+.16,2.03,.68,18,NAVY,True)
-    txt(s,original,3.1,y+.16,4.25,.68,16,INK)
-    txt(s,now,7.5,y+.16,4.55,.68,16,BLUE,True)
-txt(s,'ผลจาก PC ยังไม่ใช่ผล NPU หรือผลครบทั้งระบบ',.84,6.16,11.6,.47,19,ORANGE,True)
+# 10. A planned end result for listeners who have never seen the project.
+s=base('ภาพหนึ่งใบจะกลายเป็นข้อมูลอะไร?','ตัวอย่างผลลัพธ์เป้าหมาย ใช้ข้อมูลสมมติ ยังไม่ได้พัฒนาระบบนี้')
+box(s,.78,1.87,2.75,3.94,PALE,radius=True)
+txt(s,'1  รับภาพใบเสร็จ',.99,2.08,2.3,.45,20,NAVY,True)
+box(s,1.04,2.74,2.23,2.63,WHITE,border=RGBColor(211,223,231))
+txt(s,'ร้านตัวอย่าง\n18 ต.ค. 2569\n\nข้าว 1 ถุง       100\nนม 2 กล่อง      50\nรวม 150 บาท',1.19,2.94,1.94,2.21,16,INK)
+txt(s,'→',3.57,3.40,.4,.5,25,TEAL,True)
+box(s,4.02,1.87,4.95,3.94,PALE,radius=True)
+txt(s,'2  สกัดเป็นรายการที่ตรวจได้',4.22,2.08,4.5,.45,20,NAVY,True)
+txt(s,'ร้านตัวอย่าง   วันที่ 2026-10-18',4.25,2.74,4.4,.4,16,INK)
+box(s,4.23,3.31,4.51,.44,TEAL)
+for x,t,w in [(4.35,'สินค้า',1.2),(5.65,'จำนวน',1.0),(6.81,'ต่อหน่วย',.85),(7.84,'รวม',.7)]:
+    txt(s,t,x,3.4,w,.3,14,WHITE,True)
+for y,name,qty,price,total in [(3.94,'ข้าว','1 ถุง','100','100'),(4.47,'นม','2 กล่อง','25','50')]:
+    for x,t,w in [(4.35,name,1.2),(5.65,qty,1.05),(6.9,price,.8),(7.87,total,.75)]:
+        txt(s,t,x,y,w,.4,16,INK)
+txt(s,'ยอดรวม 150 THB',4.35,5.14,4.15,.4,18,NAVY,True)
+txt(s,'→',9.02,3.40,.4,.5,25,TEAL,True)
+box(s,9.46,1.87,3.07,3.94,MINT,radius=True)
+txt(s,'3  ตรวจและยืนยัน',9.67,2.08,2.65,.45,20,NAVY,True)
+tag(s,'รอตรวจรายการ',9.72,2.87,2.48,ORANGE)
+txt(s,'ผู้ใช้เทียบกับภาพ\nแก้รายการที่อ่านผิด\nแล้วยืนยันข้อมูล',9.72,3.53,2.45,1.25,18,INK)
+txt(s,'ส่งข้อมูลซื้อเข้า\nสู่ระบบบ้าน',9.72,4.94,2.45,.73,18,TEAL,True)
+txt(s,'ตารางนี้แสดงข้อมูลที่จะเก็บเป็น JSON และตรวจย้อนกลับถึงภาพต้นฉบับได้',.84,6.10,11.6,.42,17,NAVY)
+txt(s,'สถานะยืนยันเป็นขั้นตอนเป้าหมาย; การวิเคราะห์อัตราการใช้ต้องมีข้อมูลคงเหลือเพิ่มเติม',.84,6.61,11.6,.3,13,MUTED)
 
 # 11. Show the relationship between all 59 reviewed images and the YOLO subsets.
 s=base('ภาพ 59 ใบถูกใช้ทำอะไรบ้าง?','ตรวจข้อมูลภาพครบชุด แล้วแยกภาพตามความเหมาะสมของการทดลอง YOLO')
