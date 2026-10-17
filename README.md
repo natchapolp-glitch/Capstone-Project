@@ -2,6 +2,10 @@
 
 Project materials for the residential intelligence capstone. Examination group: **SCS3**.
 
+## Next implementation handoff
+
+Use the [five-part PC implementation plan](PREBOARD_IMPLEMENTATION_PLAN.md) and [status checklist](PREBOARD_STATUS.md) for the next 6.1 sol implementation round. Implementation has not started in this planning handoff; completed evidence must return for review before updating the READY assignment files.
+
 ## Current deliverables
 
 | Work | Editable file | Viewing/printing file |
