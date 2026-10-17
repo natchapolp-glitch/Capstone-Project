@@ -48,7 +48,7 @@ Ass6 ต่อจาก Assignment 4 ฉบับ PDF 32 หน้า โดย�
 & 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' 'receipt_lab\demo_receipt_pc.py' --show
 ```
 
-ทดสอบล่าสุดได้ 1 กรอบที่ confidence 0.981 เมื่อ threshold = 0.80 หากย้ายไปเครื่องอื่นที่ไม่มีข้อมูลและ weights ใน `SeminarLab` ให้ใช้ภาพที่ฝังในสไลด์ 15 แทน ภาพใบเสร็จดิบและข้อความถอดรายภาพอยู่ในพื้นที่ส่วนตัว `SeminarLab` นอก OneDrive ไม่ต้องแนบไปกับชุดส่งงาน
+ทดสอบล่าสุดได้ 1 กรอบที่ confidence 0.981 เมื่อ threshold = 0.80 หากย้ายไปเครื่องอื่นที่ไม่มีข้อมูลและ weights ใน `SeminarLab` ให้ใช้ภาพที่ฝังในสไลด์ 15 แทน ภาพต้นฉบับ 124 ไฟล์และ `manifest.csv` อัปโหลดไว้ใน `raw_receipts/` ของ repo แล้วตามคำขอภายหลัง ส่วนข้อความถอดรายภาพและไฟล์ผลทดลองระหว่างทางยังอยู่ใน `SeminarLab` นอก repo
 
 ## หากจะทำงานต่อหลังส่งรอบนี้
 
