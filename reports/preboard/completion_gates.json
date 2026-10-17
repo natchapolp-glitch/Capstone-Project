@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-10-17T19:38:13.445367+00:00",
+  "overall_complete": false,
+  "gates": [
+    {
+      "part": 1,
+      "status": "WAITING_HUMAN",
+      "reviewed_photos": 0,
+      "reviewed_transactions": 0,
+      "remaining": "Owner full transcription, blind second entry, adjudication, grouping and splits",
+      "structural_errors": []
+    },
+    {
+      "part": 2,
+      "status": "IN_PROGRESS",
+      "evidence": [],
+      "field_evidence": [],
+      "remaining": "Run paired scored OCR benchmark after checked truth; engineering OCR exists but has no accuracy denominator"
+    },
+    {
+      "part": 3,
+      "status": "IN_PROGRESS",
+      "evidence": [],
+      "remaining": "Run 16 conditions per document from reference and OCR; current 24 attempts are engineering only"
+    },
+    {
+      "part": 4,
+      "status": "PASS_IMPLEMENTATION",
+      "evidence": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\runs\\delivery-integration\\evidence.json",
+      "note": "Engineering demo confirmations are automated and do not count as human ground truth or user study"
+    },
+    {
+      "part": 5,
+      "status": "WAITING_DATA",
+      "reviewed_new_photos": 0,
+      "reviewed_new_transactions": 0,
+      "remaining": "Six new real photos / three new transactions, checked truths, frozen config and final benchmark"
+    }
+  ]
+}

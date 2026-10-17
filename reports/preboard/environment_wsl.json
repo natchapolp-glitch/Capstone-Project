@@ -1,0 +1,9 @@
+{
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "apt_runtime_versions": [
+    "mosquitto=2.0.22-5build1",
+    "tesseract-ocr=5.5.0-1build1",
+    "tesseract-ocr-eng=1:4.1.0-2build1",
+    "tesseract-ocr-tha=1:4.1.0-2build1"
+  ]
+}

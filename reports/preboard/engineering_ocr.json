@@ -1,0 +1,77 @@
+{
+  "scope": "paired engineering runs on same reference crops; not CER/accuracy; timing not a controlled benchmark",
+  "runs": [
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "engine": "easyocr",
+      "status": "ok",
+      "wall_seconds": 36.87294899999688,
+      "input_sha256": "0028fd8a1c7e4b921e181522f33c1748a973eb0dac27c95d91176075d4deff6c",
+      "text_length": 568,
+      "memory_bytes": 1551495168,
+      "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+      "raw_evidence_sha256": "937b3f520b6695af3fe1297af5623515dc49ef432d9b2d392baec2c4aa9157f2",
+      "accuracy_scored": false
+    },
+    {
+      "doc_id": "R4F4EA934251E",
+      "engine": "easyocr",
+      "status": "ok",
+      "wall_seconds": 71.7418456000014,
+      "input_sha256": "f61208fb5fc37bb2f2f031a19795bbdb93dc82661e4dbe5a844edaa0a27bbb6b",
+      "text_length": 791,
+      "memory_bytes": 1260363776,
+      "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+      "raw_evidence_sha256": "99223fede1924d62934e95900d279819665106526aeabeef990a8b29a05d1e45",
+      "accuracy_scored": false
+    },
+    {
+      "doc_id": "RC4859AC7A019",
+      "engine": "easyocr",
+      "status": "ok",
+      "wall_seconds": 98.73923490000016,
+      "input_sha256": "5fa3c1f170eab7884a016d03413e164f4cd0fe34c03e591871a9cf025244a4e7",
+      "text_length": 1226,
+      "memory_bytes": 1525268480,
+      "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+      "raw_evidence_sha256": "b4e5ecb7fb9a901e5e25a118c756c2d34c44ea4eb9ecd889e1ba27030efe2f5c",
+      "accuracy_scored": false
+    },
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "engine": "tesseract",
+      "status": "ok",
+      "wall_seconds": 0.4798905969999936,
+      "input_sha256": "0028fd8a1c7e4b921e181522f33c1748a973eb0dac27c95d91176075d4deff6c",
+      "text_length": 120,
+      "memory_bytes": 49668096,
+      "memory_metric": "Linux RUSAGE_CHILDREN maxrss for Tesseract child (KiB converted to bytes)",
+      "raw_evidence_sha256": "02474ad5bd47e3de64e64054361d451b5eac8adb9f9133811978653662957245",
+      "accuracy_scored": false
+    },
+    {
+      "doc_id": "R4F4EA934251E",
+      "engine": "tesseract",
+      "status": "ok",
+      "wall_seconds": 0.8440889839999954,
+      "input_sha256": "f61208fb5fc37bb2f2f031a19795bbdb93dc82661e4dbe5a844edaa0a27bbb6b",
+      "text_length": 857,
+      "memory_bytes": 52113408,
+      "memory_metric": "Linux RUSAGE_CHILDREN maxrss for Tesseract child (KiB converted to bytes)",
+      "raw_evidence_sha256": "57d91273e2e349f0a7a05e0f0bae255e83b3bde40fe1a7b31647bdde97c7f960",
+      "accuracy_scored": false
+    },
+    {
+      "doc_id": "RC4859AC7A019",
+      "engine": "tesseract",
+      "status": "ok",
+      "wall_seconds": 1.6244661380000025,
+      "input_sha256": "5fa3c1f170eab7884a016d03413e164f4cd0fe34c03e591871a9cf025244a4e7",
+      "text_length": 1454,
+      "memory_bytes": 56000512,
+      "memory_metric": "Linux RUSAGE_CHILDREN maxrss for Tesseract child (KiB converted to bytes)",
+      "raw_evidence_sha256": "615b0a252e5910b6e2d46e8677b63c0441608fd30177df4e4f9c7d9781bcb6c8",
+      "accuracy_scored": false
+    }
+  ]
+}

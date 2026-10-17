@@ -4,7 +4,7 @@ Project materials for the residential intelligence capstone. Examination group: 
 
 ## Next implementation handoff
 
-Use the [five-part PC implementation plan](PREBOARD_IMPLEMENTATION_PLAN.md) and [status checklist](PREBOARD_STATUS.md) for the next 6.1 sol implementation round. Implementation has not started in this planning handoff; completed evidence must return for review before updating the READY assignment files.
+Use the [five-part PC implementation plan](PREBOARD_IMPLEMENTATION_PLAN.md), [current implementation status](PREBOARD_STATUS.md), and [local demo/review quickstart](PREBOARD_QUICKSTART.md). Implementation and real model runs are underway on `pc-preboard-implementation`. [Aggregate evidence](reports/preboard/) distinguishes engineering runs from scored evaluation. The owner works alone and will check transcripts twice; this is recorded as a single-reviewer limitation. All five completion gates must pass before the final review and READY assignment updates.
 
 ## Current deliverables
 

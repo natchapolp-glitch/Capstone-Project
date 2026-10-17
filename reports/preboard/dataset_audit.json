@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-10-17T19:38:13.383605+00:00",
+  "photo_candidates": 59,
+  "original_photo_candidates": 59,
+  "new_challenge_candidates": 0,
+  "original_annotation_status_counts": {
+    "draft_ai": 59
+  },
+  "manifest_sha256": "85cce2c8265edaf3bdffce690409c6988fc29c33ea24e77298423378dfc3cdd9",
+  "original_boxes_present": 54,
+  "complex_or_missing_boxes": 5,
+  "annotation_status_counts": {
+    "draft_ai": 59
+  },
+  "unresolved_transaction_groups": 59,
+  "human_review_rounds_received": 3,
+  "photos_with_human_entries": 3,
+  "human_round_counts": {
+    "first": 3,
+    "second": 0
+  },
+  "structural_errors": [],
+  "review_method": "single_reviewer_double_entry as authorized; AI drafts not human-reviewed"
+}

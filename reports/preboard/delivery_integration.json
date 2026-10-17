@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-10-17T18:42:29.058807+00:00",
+  "purpose": "real local transport integration test; confirmations automated, not human review",
+  "event_id": "f3ff9a94-7ed0-40c8-aa90-77da6161bbb8:1",
+  "broker_stopped_delivery_failed": true,
+  "repeat_confirmation_same_event": true,
+  "restart_no_pending_event": true,
+  "invalid_schema_blocked": true,
+  "rejected_receipt_status": "rejected",
+  "mqtt_qos": 1,
+  "retained_state": true,
+  "delivery_semantics": "at least once; event_id dedup plus state overwrite, no additive inventory counting",
+  "real_photo_traces": [
+    {
+      "doc_id": "R4F4EA934251E",
+      "source_pipeline_id": "009e1fb1-96d1-486d-b39b-d2def074e1e3",
+      "event_id": "f3ff9a94-7ed0-40c8-aa90-77da6161bbb8:1",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ]
+    },
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "source_pipeline_id": "554f62ae-3dd7-42b2-8797-c0d99604681f",
+      "event_id": "f6db0b83-1b34-4428-a1c2-73ae79bb561c:1",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ]
+    },
+    {
+      "doc_id": "R74946CAAC57E",
+      "source_pipeline_id": "1d85f34a-576f-403d-8865-ec7ce1ba5c3d",
+      "event_id": "23f46c83-2d7e-41b4-9741-576b0966488c:1",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ]
+    }
+  ],
+  "ha_entities": [
+    "sensor.seminar_latest_purchase_total",
+    "sensor.seminar_latest_item_count"
+  ],
+  "private_evidence_sha256": "92777e5932186b7326b1431320fd6d255fe781af0fd0c4ba244ed37bcf295f90"
+}

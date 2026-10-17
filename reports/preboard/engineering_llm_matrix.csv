@@ -1,0 +1,9 @@
+﻿model,grammar,attempts,request_failures,parse_valid,schema_valid,median_seconds,min_seconds,max_seconds,p95_seconds,percentile_limitation,sampled_peak_rss_bytes,accuracy_scored
+qwen3-0.6B-Q4_K_M,False,3,0,3,3,4.077837699995143,3.8667285999981686,4.29130620000069,4.269959350000136,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,1663139840,False
+qwen3-0.6B-Q4_K_M,True,3,0,3,3,4.042283799994038,3.758594399987487,4.255560800011153,4.234233100009442,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,1666732032,False
+qwen3-0.6B-Q8_0,False,3,0,3,0,5.411471100000199,5.3236806000059005,5.896613700009766,5.848099440008809,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,1688113152,False
+qwen3-0.6B-Q8_0,True,3,0,3,3,5.761924499995075,5.4615215999947395,5.853494700000738,5.844337680000171,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,1688104960,False
+qwen3-1.7B-Q4_K_M,False,3,0,3,3,9.146903000000748,8.686136799995438,9.17639280000003,9.173443820000102,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,2861309952,False
+qwen3-1.7B-Q4_K_M,True,3,0,3,3,9.199181299991324,9.058732799996505,9.222779699994135,9.220419859993854,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,2861531136,False
+qwen3-1.7B-Q8_0,False,3,0,0,0,10.977571499999613,10.78895790000388,11.341029400005937,11.304683610005304,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,2904526848,False
+qwen3-1.7B-Q8_0,True,3,0,3,3,10.828915799997048,10.827313899993896,11.026295399991795,11.00655743999232,Interpolated descriptive p95 from only three repetitions of one transcript; not a population estimate,2904526848,False

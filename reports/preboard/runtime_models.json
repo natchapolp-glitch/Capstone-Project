@@ -1,0 +1,51 @@
+{
+  "llama_tag": "b11714",
+  "binary_archive_sha256": "f78eded047061a3f86372db426797400a2f1bb0ec37868d5927dd820eb3386c0",
+  "models": [
+    {
+      "id": "qwen3-0.6B-Q8_0",
+      "repo": "Qwen/Qwen3-0.6B-GGUF",
+      "revision": "23749fefcc72300e3a2ad315e1317431b06b590a",
+      "license": "apache-2.0",
+      "quantization": "Q8_0",
+      "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+      "bytes": 639446688,
+      "quantization_source": "publisher Q8_0"
+    },
+    {
+      "id": "qwen3-0.6B-Q4_K_M",
+      "repo": "Qwen/Qwen3-0.6B-GGUF",
+      "revision": "23749fefcc72300e3a2ad315e1317431b06b590a",
+      "license": "apache-2.0",
+      "quantization": "Q4_K_M",
+      "sha256": "15e434d8ddf0af38fe3f7003af6ce6eac4edada6df34324aa45979f9cc79f02e",
+      "bytes": 396704416,
+      "quantization_source": "local requantization from publisher Q8_0, not original FP16"
+    },
+    {
+      "id": "qwen3-1.7B-Q8_0",
+      "repo": "Qwen/Qwen3-1.7B-GGUF",
+      "revision": "90862c4b9d2787eaed51d12237eafdfe7c5f6077",
+      "license": "apache-2.0",
+      "quantization": "Q8_0",
+      "sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a",
+      "bytes": 1834426016,
+      "quantization_source": "publisher Q8_0"
+    },
+    {
+      "id": "qwen3-1.7B-Q4_K_M",
+      "repo": "Qwen/Qwen3-1.7B-GGUF",
+      "revision": "90862c4b9d2787eaed51d12237eafdfe7c5f6077",
+      "license": "apache-2.0",
+      "quantization": "Q4_K_M",
+      "sha256": "54c0f1203a724e9f33e76916beab3bdfaffef56cf7b42a93b1bc21319fc0bf97",
+      "bytes": 1107408544,
+      "quantization_source": "local requantization from publisher Q8_0, not original FP16"
+    }
+  ],
+  "sources": [
+    "https://huggingface.co/Qwen/Qwen3-0.6B-GGUF",
+    "https://huggingface.co/Qwen/Qwen3-1.7B-GGUF",
+    "https://github.com/ggml-org/llama.cpp/releases/tag/b11714"
+  ]
+}

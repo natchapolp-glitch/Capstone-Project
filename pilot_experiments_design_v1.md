@@ -1,4 +1,6 @@
 # การออกแบบ 3 Pilot Experiments ตามข้อเสนอแนะของ GeCOT
+
+> เอกสารนี้เป็นประวัติแผน v1 งานปัจจุบันใช้ `PREBOARD_IMPLEMENTATION_PLAN.md`, `experiments/preboard/protocol.json`, `receipt_schema.json` และ `PREBOARD_STATUS.md` แทนส่วนจำนวนภาพ ชื่อโมเดล schema และ matrix ที่ล้าสมัย ผู้ใช้ยืนยันทำคนเดียว จึงตรวจสองรอบโดยคนเดียวและรายงานข้อจำกัดนี้
 **สำหรับวิทยานิพนธ์:** การพัฒนาระบบประสาทส่วนกลางอัจฉริยะในที่พักอาศัยเพื่อสกัดและวิเคราะห์ข้อมูลห่วงโซ่อุปทานในครัวเรือนด้วยปัญญาประดิษฐ์ประมวลผลเฉพาะถิ่น
 **อ้างอิงสถาปัตยกรรม:** IP Camera (RTSP) → VLAN-isolated Edge Server (NPU) → YOLO document detection → Local OCR (PaddleOCR/EasyOCR) → Quantized Local LLM (Ollama: Llama-3/Phi-3/Gemma ผ่าน llama.cpp) → Structured JSON → Home Assistant (MQTT) → Smart Fridge/Storage Inventory + Burn Rate prediction + Stateful validation dashboard
 

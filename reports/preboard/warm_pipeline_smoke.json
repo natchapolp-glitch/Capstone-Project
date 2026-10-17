@@ -1,0 +1,47 @@
+{
+  "purpose": "engineering smoke only; no accuracy scored; concurrent OCR workload",
+  "runs": [
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "warmup": true,
+      "receipt_id": "a8ffac6c-d7f1-4970-b899-67b7d8404595",
+      "run_id": "c2019f25-460a-42ae-aed5-c5a192665ec5",
+      "status": "pending_review",
+      "runtime_reused": true,
+      "llm_status": "ok",
+      "schema_valid": true,
+      "measurement": {
+        "wall_seconds": 17.563630299991928,
+        "sampled_peak_rss_bytes": 2042421248,
+        "rss_samples": 209,
+        "rss_interval_seconds": 0.05,
+        "measured_pid": 1748,
+        "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+        "latency_scope": "warm resident models; startup excluded",
+        "note": "Windows pipeline process tree; Linux Tesseract child memory is recorded separately in OCR result"
+      }
+    },
+    {
+      "doc_id": "R74946CAAC57E",
+      "warmup": false,
+      "receipt_id": "39a08435-09dd-4a43-95f4-f44315cc6cf7",
+      "run_id": "8c2bada4-6f05-42d2-98b2-27fe4fd62939",
+      "status": "pending_review",
+      "runtime_reused": true,
+      "llm_status": "ok",
+      "schema_valid": true,
+      "measurement": {
+        "wall_seconds": 7.683911900006933,
+        "sampled_peak_rss_bytes": 2071789568,
+        "rss_samples": 97,
+        "rss_interval_seconds": 0.05,
+        "measured_pid": 1748,
+        "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+        "latency_scope": "warm resident models; startup excluded",
+        "note": "Windows pipeline process tree; Linux Tesseract child memory is recorded separately in OCR result"
+      }
+    }
+  ],
+  "raw_evidence_sha256": "0dde83ada63ffea866e597aa54df6b20a52220d849cf4264bb27cf8766d8e1a4",
+  "limitation": "Two engineering images, one warm-up and one subsequent call, with concurrent OCR workload; not accuracy or a controlled benchmark"
+}
