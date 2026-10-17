@@ -120,3 +120,20 @@ def line_records(doc_id,text,single_region):
     return [{'region_id':region,'line_id':f'{region}:line-{i:04d}','text':line,
              'location_source':'human-provided reading order; no line-level pixel box'}
             for i,line in enumerate(text.splitlines(),1)]
+
+
+def reconcile_statuses():
+    """Migrate pending status labels from immutable human evidence, never create truth."""
+    data=read_json(MANIFEST);changed=0
+    for row in data['records']:
+        entries=[e for e in annotations(row['doc_id']) if e.get('reviewer_kind')=='human' and e.get('attestation') is True and e.get('source_sha256')==row['sha256']]
+        if not entries:continue
+        target=WORK/'annotations/adjudicated'/f"{row['doc_id']}.json"
+        if row['annotation_status']=='adjudicated' and len(entries)==2 and target.exists() and set(read_json(target).get('review_record_hashes',[]))=={object_hash(e) for e in entries}:
+            continue
+        status='partial_unreadable' if any(e['unreadable_regions'] for e in entries) else 'human_transcribed'
+        if row['annotation_status']!=status:
+            row['annotation_status']=status;changed+=1
+    if changed:
+        data['version']=data.get('version',0)+1;write_json(MANIFEST,data)
+    return changed

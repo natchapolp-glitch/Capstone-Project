@@ -43,3 +43,13 @@ Checkpoint 18 ตุลาคม 2569 เวลา 02:38: รับรอบแ�
 ข้อจำกัด: Q4_K_M สร้างจาก publisher Q8_0 อีกทอด ไม่ใช่ quantize โดยตรงจาก FP16; ผล 24 ครั้งเป็น engineering จากหนึ่ง OCR transcript ไม่ใช่คะแนนสกัดข้อมูล ผล OCR engineering ชุดแรกไม่ได้ควบคุม background workload จึงไม่สรุปเปรียบเทียบความเร็วสอง engine จากตัวเลขนั้น
 
 เดโม warm แบบโมเดลอยู่ใน RAM รันจริงเพิ่มสองภาพ (หนึ่ง warm-up และหนึ่งรอบถัดมา) หลักฐานอยู่ใน `reports/preboard/warm_pipeline_smoke.json` มี EasyOCR batch ทำงานพร้อมกัน จึงใช้ยืนยันเส้นทางการทำงาน ไม่ใช้เป็นตารางเปรียบเทียบความเร็วขั้นสุดท้าย
+
+## งานต่อหลัง checkpoint แรก
+
+Checkpoint ถัดมา 18 ตุลาคม 2569 เวลา 03:13: รับรอบแรก 14 ภาพ, รอบสอง 0, adjudicated 0; EasyOCR draft 31/59 และยังทำงานอยู่ ตรวจ tests ระบบ 36 กรณีและ scorer 13 กรณีผ่าน รวม 49 กรณี มี integration test ของตัวสรุปผลใน repo ชั่วคราวแยก ไม่ได้เผยแพร่คะแนนจาก fixture เป็นผลโครงงาน
+
+- เพิ่มตัวสรุป scored runs เป็น JSON/CSV/Markdown พร้อมตัวหาร, จำนวนธุรกรรม, failure, median/range/p95, RAM แยก metric และ MAE คู่ coverage เงื่อนไขรับงานตรวจ hash ของตารางเทียบ raw output ปัจจุบันด้วย แต่ยังไม่มีคะแนนความถูกต้องจริงให้สร้างตาราง
+- แก้ `OverflowError` ของจำนวนเต็มยาวใน validator, ใช้กติกา empty string เดียวกันทั้งแถวที่จับคู่/ไม่จับคู่ และปฏิเสธ key ซ้ำ/NaN/Infinity ใน raw JSON ทดสอบย้อน raw engineering เดิม 24 ครั้งได้ parse-valid 21 และ schema-valid 18 เหมือนเดิม ไม่ใช่การรันโมเดลใหม่
+- ตัวเปรียบเทียบฟิลด์ครอบคลุม OCR สองตัว × crop สองแบบ × สามรอบ พร้อม warm-up และ resume โดยใช้ extractor เดียวกัน ยังต้องรัน inference จริงหลังมีเฉลยที่ตกลงแล้ว
+- สถานะการกรอกเดิมที่ยังค้าง label `draft_ai` ถูกปรับจากหลักฐานคนกรอกที่มีอยู่เท่านั้น ไม่แก้ transcript และไม่เลื่อนเป็น adjudicated
+- งานฝั่งโค้ดที่ต้องต่อ: fingerprint ของ OCR/YOLO assets ให้ครบ และวัดการส่ง MQTT/การสังเกต state ใน HA แยกจากเวลาคนตรวจ ส่วนการวิเคราะห์ข้อผิดพลาดและ review packet ขั้นสุดท้ายยังต้องรอผล scored runs

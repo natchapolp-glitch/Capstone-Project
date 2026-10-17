@@ -3,7 +3,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from json_extraction_scorer import score, process_pair
+from json_extraction_scorer import score, process_pair, strict_json_loads
 
 
 def receipt():
@@ -74,6 +74,21 @@ class ReceiptScorerTests(unittest.TestCase):
             result = process_pair(path, Path(temp) / "missing.json")
             self.assertEqual(result["json_valid"], 0)
             self.assertEqual(result["exact_match"], 0)
+
+    def test_large_finite_integer_is_scored_without_overflow(self):
+        prediction=receipt();prediction['grand_total']=10**400
+        result=score(receipt(),prediction)
+        self.assertEqual(result['schema_valid'],1)
+        self.assertLess(result['f1'],1)
+
+    def test_duplicate_keys_and_non_json_constants_are_not_silently_parsed(self):
+        for text in ['{"items":[{"name":"a","name":"b"}]}','{"grand_total":NaN}','{"grand_total":Infinity}']:
+            with self.assertRaises(ValueError):strict_json_loads(text)
+
+    def test_empty_strings_in_unmatched_items_use_the_same_presence_rule(self):
+        prediction=receipt()
+        prediction['items'].append({'name':'milk','quantity':None,'unit':'','unit_price':None,'line_total':None})
+        self.assertEqual(score(receipt(),prediction)['precision'],0.9)
 
 
 if __name__ == "__main__":

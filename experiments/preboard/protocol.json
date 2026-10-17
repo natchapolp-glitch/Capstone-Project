@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "status": "engineering infrastructure; dataset not yet human-reviewed",
+  "version": 2,
+  "status": "human first entries underway; no adjudicated truth or scored model evaluation yet",
   "schema": "receipt_schema.json",
   "seed": 20261018,
   "device": "PC CPU",
@@ -21,6 +21,17 @@
   "warm_repetitions": 3,
   "ocr_engines": ["EasyOCR th+en", "Tesseract tha+eng"],
   "ocr_modes": ["reference_region_oracle_orientation", "predicted_region_operator_orientation"],
+  "controlled_ocr_field_extractor": {
+    "model": "frozen from development",
+    "grammar": true,
+    "engines": ["easyocr", "tesseract"],
+    "crop_modes": ["reference", "predicted"],
+    "excluded_warmup_calls": 1,
+    "repetitions": 3,
+    "accuracy_repetition": 0,
+    "latency_scope": "fixed extractor only; source OCR benchmark is separate"
+  },
+  "raw_json_parser": "reject duplicate keys and NaN/Infinity; no repair",
   "normalization": "NFC, CRLF to LF, collapse horizontal whitespace within lines, strip ends; preserve line order",
   "review_method": "single_reviewer_double_entry, explicitly authorized by owner; AI drafts do not count as human review",
   "missing_outputs": "keep attempted row, count request failure; no silent retry or JSON repair",

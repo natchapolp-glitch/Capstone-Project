@@ -1,10 +1,12 @@
 """Both OCR engines use the identical fixed LLM; these are OCR+extractor metrics."""
 import argparse
 import uuid
+import random
+from itertools import product
 from pathlib import Path
 
 from json_extraction_scorer import score, failed_result
-from .common import WORK, read_json, write_json, utc, digest
+from .common import REPO, WORK, read_json, write_json, utc, digest, environment
 from .dataset import MANIFEST, validate, fingerprints
 from .field_metrics import field_metrics
 from .llm import LocalLLM
@@ -16,10 +18,14 @@ def main():
     ap.add_argument("--split", choices=["development","evaluation","challenge"], required=True)
     ap.add_argument("--model", required=True)
     ap.add_argument("--ocr-run", type=Path, required=True)
-    ap.add_argument("--crop", choices=["reference","predicted"], default="reference")
+    ap.add_argument("--crop", choices=["reference","predicted","both"], default="both")
+    ap.add_argument('--repetitions',type=int,default=3)
+    ap.add_argument('--run-id')
     args=ap.parse_args()
+    if args.repetitions<1:ap.error('repetitions must be positive')
     data=read_json(MANIFEST)
-    rows=[r for r in data["records"] if r["split"]==args.split]
+    source_ids=read_json(args.ocr_run/'manifest.json')['doc_ids']
+    rows=[r for r in data["records"] if r["split"]==args.split and r['doc_id'] in source_ids]
     errors=validate({**data,"records":rows},require_review=True)
     if not rows or errors:
         ap.error("No complete reviewed split: "+"; ".join(errors))
@@ -28,30 +34,58 @@ def main():
     if args.split!='development':
         if not selection.exists() or read_json(selection)['model_id']!=args.model:
             ap.error('Use the model frozen from development before evaluation/challenge')
-    folder=WORK/"runs"/("ocr-fields-"+uuid.uuid4().hex[:12])
-    write_json(folder/"manifest.json",{"timestamp":utc(),"dataset_sha256":digest(MANIFEST),"dataset_snapshot":fingerprints(rows),"split":args.split,
+    folder=WORK/"runs"/(args.run_id or "ocr-fields-"+uuid.uuid4().hex[:12])
+    engines=['easyocr','tesseract'];modes=['reference','predicted'] if args.crop=='both' else [args.crop]
+    jobs=list(product(rows,engines,modes,range(args.repetitions)))
+    sources={};hashes={}
+    for row,engine,mode,_ in jobs:
+        key=f"{row['doc_id']}-{engine}-{mode}"
+        path=source_run/'attempts'/(key+'-r0.json')
+        hashes[key]=digest(path) if path.exists() else None
+        sources[key]=read_json(path) if path.exists() else {'text':'','status':'missing_output'}
+    manifest={"timestamp":utc(),"dataset_sha256":digest(MANIFEST),"dataset_snapshot":fingerprints(rows),"split":args.split,
                "purpose":"scored_ocr_fields_with_fixed_extractor","model":args.model,
+               'environment':environment(),'ocr_source_hashes':hashes,'modes':modes,'repetitions':args.repetitions,
                "ocr_run":str(source_run),"ocr_completion_sha256":digest(source_run/'completion.json'),
                "selection_sha256":digest(selection) if selection.exists() else None,
-               "engines":["easyocr","tesseract"],"grammar":True,"expected_attempts":len(rows)*2,
-               "metric_scope":"OCR followed by same fixed local extractor; not isolated OCR field accuracy"})
-    with LocalLLM(args.model) as llm:
-        for row in rows:
-            doc=row["doc_id"];truth=read_json(WORK/"annotations/adjudicated"/f"{doc}.json")["extraction"]
-            for engine in ["easyocr","tesseract"]:
-                path=source_run/'attempts'/f"{doc}-{engine}-{args.crop}-r0.json"
-                source=read_json(path) if path.exists() else {"text":"","status":"missing_output"}
+               'scorer_sha256':digest(REPO/'json_extraction_scorer.py'),
+               'driver_sha256':{name:digest(REPO/'receipt_lab/preboard'/name) for name in ['evaluate_ocr_fields.py','llm.py','field_metrics.py']},
+               "engines":engines,"grammar":True,"expected_attempts":len(jobs),
+               'timing_scope':'Fixed extractor only; OCR times are in the paired OCR benchmark',
+               "metric_scope":"OCR followed by same fixed local extractor; not isolated OCR field accuracy"}
+    if (folder/'manifest.json').exists():
+        old=read_json(folder/'manifest.json')
+        for key in ['dataset_snapshot','ocr_source_hashes','selection_sha256','scorer_sha256','model','modes','engines','repetitions','driver_sha256']:
+            if old.get(key)!=manifest[key]:ap.error('Cannot resume changed inputs/config/code; preserve old evidence and use a new run ID')
+    else:write_json(folder/'manifest.json',manifest)
+    def job_key(row,engine,mode,rep):return f"{row['doc_id']}-{engine}-{mode}-r{rep}"
+    random.Random(20261018).shuffle(jobs)
+    pending=[job for job in jobs if not (folder/'attempts'/(job_key(*job)+'.json')).exists()]
+    if pending:
+        session=folder/'sessions'/uuid.uuid4().hex
+        with LocalLLM(args.model) as llm:
+            write_json(session/'load-fixed-extractor.json',llm.load)
+            write_json(session/'warmup.json',{'synthetic':True,'included_in_metrics':False,
+                       **llm.extract('RECEIPT\nSAMPLE SHOP\nMilk 1 20.00\nTOTAL 20.00 THB',grammar=True)})
+            for row,engine,mode,rep in pending:
+                doc=row['doc_id'];truth=read_json(WORK/'annotations/adjudicated'/f'{doc}.json')['extraction']
+                key=f'{doc}-{engine}-{mode}';source=sources[key]
                 result=llm.extract(source["text"],grammar=True)
                 result["doc_id"]=doc;result["engine"]=engine
-                result['source_evidence_sha256']=digest(path) if path.exists() else None
+                result['mode']=mode;result['repetition']=rep;result['attempt_key']=job_key(row,engine,mode,rep)
+                result['upstream_status']=source['status']
+                result['source_evidence_sha256']=hashes[key]
                 pred=result["parsed_output"] if result["status"]=="ok" and source["status"]=="ok" else None
                 result["fields"]=field_metrics(truth,pred)
                 result["score"]=score(truth,pred) if result['parse_valid'] and result['status']=='ok' and source['status']=='ok' else failed_result(int(result['parse_valid']),['upstream or extraction failure'])
-                write_json(folder/f"{doc}-{engine}.json",result)
-                print(doc,engine,result["score"]["f1"],flush=True)
-    actual=[read_json(folder/f"{r['doc_id']}-{engine}.json") for r in rows for engine in ['easyocr','tesseract']]
-    write_json(folder/'completion.json',{'complete':len(actual)==len(rows)*2,'attempts':len(actual),
-               'expected_attempts':len(rows)*2,'doc_ids':sorted(r['doc_id'] for r in rows),'accuracy_scored':True})
+                write_json(folder/'attempts'/(result['attempt_key']+'.json'),result)
+                print(result['attempt_key'],result["score"]["f1"],flush=True)
+    actual=[read_json(p) for p in (folder/'attempts').glob('*.json')]
+    expected={job_key(*job) for job in jobs};keys=[r['attempt_key'] for r in actual]
+    write_json(folder/'completion.json',{'complete':set(keys)==expected and len(keys)==len(expected),'attempts':len(actual),
+               'expected_attempts':len(jobs),'doc_ids':sorted(r['doc_id'] for r in rows),'accuracy_scored':True,
+               'accuracy_repetition':0,'failed_inputs_or_requests':sum(r['status']!='ok' or r['upstream_status']!='ok' for r in actual)})
+    print(folder,flush=True)
 
 
 if __name__=="__main__":main()

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-17T19:37:15.752854+00:00",
+  "timestamp": "2026-10-17T20:13:06.711272+00:00",
   "runs": [
     {
       "command": [
@@ -15,9 +15,9 @@
         "-v"
       ],
       "exit_code": 0,
-      "tests": 30,
-      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\6977b7b3267f\\check-0.txt",
-      "log_sha256": "d48b54911352aa53122840c3e889b2d4a897248d915683ce80bc3888b2fd507a"
+      "tests": 36,
+      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\03b0155974e6\\check-0.txt",
+      "log_sha256": "9313b4ef31bbb3e74e71495dee575d1a16bfc04d98180f676ebf50553fadbe5f"
     },
     {
       "command": [
@@ -31,9 +31,9 @@
         "-v"
       ],
       "exit_code": 0,
-      "tests": 10,
-      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\6977b7b3267f\\check-1.txt",
-      "log_sha256": "115c12b7ef4190b6fb67f745bde19871b5d373cb6366127434669b5091919908"
+      "tests": 13,
+      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\03b0155974e6\\check-1.txt",
+      "log_sha256": "b721227b0a517ba13a187688b5a1f00d958fd450510dccbb08697f944d8a9616"
     },
     {
       "command": [
@@ -47,8 +47,8 @@
       ],
       "exit_code": 0,
       "tests": null,
-      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\6977b7b3267f\\check-2.txt",
-      "log_sha256": "c30aa068e1e6b8443ba47cc0c1a1598eb68856d1a3c6b4e7e1270323b4f95f86"
+      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\03b0155974e6\\check-2.txt",
+      "log_sha256": "1717a62774c9b4548dee5241b2f1e201cf6ce58304cc92d44a787d2f1e6f8d4a"
     },
     {
       "command": [
@@ -79,23 +79,24 @@
     }
   ],
   "implementation_sha256": {
+    "receipt_lab/preboard/aggregate.py": "2c4b377f849d747a920eb5b120db78da09f9b217077bed178ac87d2e0b5de7e3",
     "receipt_lab/preboard/batch_draft_ocr.py": "b9c20aed9f4f637cc30ba6f706728c7351ddc00dcfd7c6ae95fdec4cdb34192a",
     "receipt_lab/preboard/benchmark_ocr.py": "50bc59dcf5a63995c96261aff5ff6f5249378ec6f143b5134dabdebbd5c1994a",
-    "receipt_lab/preboard/challenge_pipeline.py": "7ae6ea9a434b723c1ff519a8cb8c5673a0f52189f0262a850e81b84e790e1fc9",
+    "receipt_lab/preboard/challenge_pipeline.py": "fbba4f8f225b43d95e04765c49e5c1bd52a721b1de90905ac1d930ca38ca9681",
     "receipt_lab/preboard/common.py": "362f4b90e5a2af1aedb20d4d4100974b5c9bfb7d98aaedab86356a8ba8f8f3fb",
     "receipt_lab/preboard/dataset.py": "b53fc6d49b418787ada8292c0859cc0fb6a45e4c7538ac1db8a8951a816d8e7e",
-    "receipt_lab/preboard/evaluate_ocr_fields.py": "749c52b99e9752eff9fdb44f2b149fcf94d118a1909aaa8002617fbd0d1b8395",
-    "receipt_lab/preboard/experiment.py": "281722978a8c44be9589bdaaeaf02fda2a15d663120c2d3851ac0db093213dab",
-    "receipt_lab/preboard/field_metrics.py": "4ff283340a5f83abcc16b9ae99b7d1092d2c427d4dd09558c9ad5ae9694af404",
-    "receipt_lab/preboard/gates.py": "820b939052900bca0345f86ba759df040fd69fe7ede96f3e2ce34f785077d141",
+    "receipt_lab/preboard/evaluate_ocr_fields.py": "86b0774bd6fe4b3dbdd164e2d4a1a083b52a83f54d33d7968eb3a2efd198ab47",
+    "receipt_lab/preboard/experiment.py": "ce01c82707a6b8ae38db5ba1b02d6dc18b7dbe42d2eaeee865bc4b1c161f3306",
+    "receipt_lab/preboard/field_metrics.py": "6babfa908970c0258b7a5bf29148e0123d77be53490cb9ba6a78d8cadfc10e4f",
+    "receipt_lab/preboard/gates.py": "10f7fa63244860b8ce3c98f193ddebc980f5067fa626746808764949c9cbca4d",
     "receipt_lab/preboard/ha_confirm_linux.py": "fdf25a075e2cb2a22912185f8067eb18ec8ac2c8fefac7c118c9ef97193ccff9",
     "receipt_lab/preboard/intake_challenge.py": "80d49db97eb8f66c9ef09e3f44639546e88f374b3e7ebe70e6787dbd22ce6709",
-    "receipt_lab/preboard/llm.py": "c95fa3e7ec47cc0384fc73370c7ba818456bc14864ad0ef73be9d8d048ba7059",
+    "receipt_lab/preboard/llm.py": "ce2ac9b55018464c93398a9c49a3646ba1709929607ea1a20f6108e64e6ccc1d",
     "receipt_lab/preboard/metrics.py": "eb69c560da87375cb2fba7bec83bedf43444276c9e1a8c28cd71870f2d650721",
     "receipt_lab/preboard/ocr.py": "283e54eefc27cbe0c4c26f3ed51fb9a75c1e7e968b173700f2419c037a20bb03",
     "receipt_lab/preboard/regions.py": "83abfd7b074eff7785247eb632f8436ecf295368d67b1d4f662faee06c989329",
-    "receipt_lab/preboard/report.py": "c91a57eeb567ee06c6048612025595a67e027656452f013f5b14cd6b45b23184",
-    "receipt_lab/preboard/review.py": "fe3ac5fec0cb9cd4735d9ba8f6b4c20444464ed9bfa9a022e0f70cd80142abf4",
+    "receipt_lab/preboard/report.py": "be0324a6c991dc062b531888719a37340ed085cef1d5f7026f3d6c79f03b7e76",
+    "receipt_lab/preboard/review.py": "e7997c95269dba8c98f715e74966040e39a43ccb512b5984312fd1dd9345a5a3",
     "receipt_lab/preboard/selection.py": "e1040af82fe658949f8bfa82dfd0211746ed1bf0bd157d41bc0ce316d8fc4c20",
     "receipt_lab/preboard/services.py": "8e76219c5fb2fde5d32266df92227919ba84359a2c556f938490ef333859726e",
     "receipt_lab/preboard/services_linux.py": "725438c71f97e584306c5b0482e6a4a09a8819eed2ed7777b0dc4305df43eacc",
@@ -111,7 +112,7 @@
     "receipt_lab/demo_pc/adjudicate.html": "09c5034f46bbbe6b4a73965ead54f78fcfb950af77d834da480824f6d2f3dad9",
     "receipt_lab/demo_pc/index.html": "ab6a2d03f95138453e975a5cd07a4f8883cf53f33f7687574a9264a32bc47067",
     "receipt_lab/demo_pc/review.html": "42b1212713c9fd20814504e4149e2b799484481842cfda692814dfd0e3c840d6",
-    "json_extraction_scorer.py": "2f96dcb7caeb13a10732cb7b38dcb7024a927a80378b65e2988656211388fd76",
+    "json_extraction_scorer.py": "3975da916558da302269aafec8e60089f9afac4cbf7aaa6ca62689d3a245015a",
     "receipt_schema.json": "8876e5fcd4a7734e3362a4bb52e3f031ebf9eab0423530237bae0de185bd4965"
   },
   "browser_visual_qa": false,

@@ -10,6 +10,7 @@ from json_extraction_scorer import failed_result, score
 from .common import REPO, WORK, digest, environment, object_hash, read_json, utc, write_json
 from .dataset import MANIFEST, validate, fingerprints
 from .llm import LocalLLM
+from .field_metrics import field_metrics
 
 
 def checked_ocr_run(folder, rows, split):
@@ -89,6 +90,8 @@ def main():
                 "expected_attempts": len(samples)*len(registry["models"])*2*args.repetitions,
                 "normalization": "raw response; no JSON repair", "selection_sha256": digest(WORK/"selection.json") if (WORK/"selection.json").exists() else None}
     manifest["model_registry_sha256"] = digest(WORK/"model_registry.json")
+    manifest['scorer_sha256']=digest(REPO/'json_extraction_scorer.py')
+    manifest['driver_sha256']={name:digest(REPO/'receipt_lab/preboard'/name) for name in ['experiment.py','llm.py','field_metrics.py']}
     manifest["split"] = args.split
     manifest["dataset_snapshot"] = fingerprints([r for r in read_json(MANIFEST)["records"] if r["doc_id"] in {s["doc_id"] for s in samples}])
     manifest["input_samples"] = [{"doc_id": s["doc_id"], "source_kind": s["source_kind"],
@@ -97,7 +100,7 @@ def main():
                                   "source_evidence_sha256": s.get("source_evidence_sha256")} for s in samples]
     if (folder/"manifest.json").exists():
         old = read_json(folder/"manifest.json")
-        for k in ["dataset_snapshot", "schema_sha256", "matrix", "purpose", "selection_sha256", "input_samples", "model_registry_sha256", "split"]:
+        for k in ["dataset_snapshot", "schema_sha256", "matrix", "purpose", "selection_sha256", "input_samples", "model_registry_sha256", "split", "scorer_sha256", "driver_sha256"]:
             if old[k] != manifest[k]:
                 raise ValueError("Cannot resume with changed inputs/config")
         manifest = old
@@ -105,14 +108,19 @@ def main():
         write_json(folder/"manifest.json", manifest)
     rng = random.Random(20261018)
     models = registry["models"].copy(); rng.shuffle(models)
+    session=folder/'sessions'/uuid.uuid4().hex
     for info in models:
         model_jobs = list(itertools.product(samples, [True, False], range(args.repetitions)))
         rng.shuffle(model_jobs)
+        def attempt_path(sample,grammar,rep):
+            return folder/'attempts'/f"{sample['doc_id']}-{sample['source_kind']}-{info['id']}-{'grammar' if grammar else 'free'}-r{rep}.json"
+        if all(attempt_path(*job).exists() for job in model_jobs):
+            continue
         with LocalLLM(info["id"]) as llm:
-            write_json(folder/f"load-{info['id']}.json", llm.load)
+            write_json(session/f"load-{info['id']}.json", llm.load)
             # Warm-up excluded from reported attempts; actual, separately retained response.
             warmup = llm.extract("RECEIPT\nSHOP SAMPLE\nMilk 1 20.00\nTOTAL 20.00 THB", grammar=True)
-            write_json(folder/f"warmup-{info['id']}.json", {"synthetic": True, "included_in_metrics": False, **warmup})
+            write_json(session/f"warmup-{info['id']}.json", {"synthetic": True, "included_in_metrics": False, **warmup})
             for sample, grammar, rep in model_jobs:
                 key = f"{sample['doc_id']}-{sample['source_kind']}-{info['id']}-{'grammar' if grammar else 'free'}-r{rep}"
                 path = folder/"attempts"/f"{key}.json"
@@ -130,6 +138,7 @@ def main():
                     result["score"] = score(sample["truth"], result["parsed_output"]) if result["parse_valid"] else failed_result(0, ["raw output parse failed"])
                     if result["status"] != "ok":
                         result["score"] = failed_result(int(result["parse_valid"]), [result["status"]])
+                    result['fields']=field_metrics(sample['truth'],result['parsed_output'] if result['status']=='ok' and result['parse_valid'] else None)
                 write_json(path, result)
                 print(key, result["status"], result["schema_valid"], round(result["measurement"]["wall_seconds"], 2), flush=True)
     attempts = [read_json(p) for p in (folder/"attempts").glob("*.json")]

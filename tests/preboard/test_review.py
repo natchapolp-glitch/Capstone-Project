@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from receipt_lab.preboard.common import write_json, read_json, digest
-from receipt_lab.preboard.review import submit_human, adjudicate
+from receipt_lab.preboard.review import submit_human, adjudicate, reconcile_statuses
 from receipt_lab.preboard.dataset import validate
 from receipt_lab.preboard.field_metrics import field_metrics
 
@@ -33,6 +33,11 @@ class HumanReviewTests(unittest.TestCase):
                 self.assertEqual(changed['revision'],2)
                 self.assertEqual(len(list((folder/'annotations/human/R123456789ABC').glob('*.json'))),3)
                 self.assertEqual(read_json(manifest)['records'][0]['annotation_status'],'human_transcribed')
+                data=read_json(manifest);data['records'][0]['annotation_status']='draft_ai';write_json(manifest,data)
+                history={p.name:digest(p) for p in (folder/'annotations/human/R123456789ABC').glob('*.json')}
+                self.assertEqual(reconcile_statuses(),1)
+                self.assertEqual(read_json(manifest)['records'][0]['annotation_status'],'human_transcribed')
+                self.assertTrue(all(digest(folder/'annotations/human/R123456789ABC'/name)==value for name,value in history.items()))
 
     def test_ai_or_unattested_entry_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -44,6 +49,16 @@ class HumanReviewTests(unittest.TestCase):
 
 
 class FieldTests(unittest.TestCase):
+    def test_large_money_error_is_serializable_and_keeps_decimal_evidence(self):
+        import json
+        from decimal import Decimal
+        result=field_metrics({**blank(),'grand_total':100},{**blank(),'grand_total':10**400})
+        error=result['numeric_absolute_errors_on_present_matched_fields'][0]
+        self.assertIsNone(error['absolute_error'])
+        self.assertTrue(error['outside_float_range'])
+        self.assertEqual(Decimal(error['absolute_error_decimal']),Decimal(10**400-100))
+        json.dumps(result,allow_nan=False)
+
     def test_invalid_prediction_not_zero_money_error_success(self):
         truth={**blank(),'grand_total':100}
         result=field_metrics(truth,None)

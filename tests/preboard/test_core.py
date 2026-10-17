@@ -85,6 +85,8 @@ class MetricTests(unittest.TestCase):
     def test_empty_and_normalization(self):
         self.assertIsNone(ocr_metric("", "x")["cer"])
         self.assertEqual(ocr_metric("  cafe\u0301 \r\n a ", "caf\u00e9\na")["cer"], 0)
+        self.assertEqual(ocr_metric('น้ำตาล\r\n  ราคา  20','น้ำตาล\nราคา 20')['cer'],0)
+        self.assertGreater(ocr_metric('ข้าว','ข่าว')['cer'],0)
 
 
 class DatasetTests(unittest.TestCase):

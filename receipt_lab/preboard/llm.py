@@ -85,7 +85,8 @@ class LocalLLM:
         output = None
         parse_error = None
         try:
-            output = json.loads(content, parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
+            from json_extraction_scorer import strict_json_loads
+            output = strict_json_loads(content)
         except (ValueError, TypeError) as exc:
             parse_error = str(exc)
         from json_extraction_scorer import schema_errors

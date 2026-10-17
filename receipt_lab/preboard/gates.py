@@ -1,8 +1,19 @@
 """Fail-closed completion gates: engineering runs never pass accuracy gates."""
 import json
+from collections import Counter
 
 from .common import REPO, WORK, digest, read_json, utc, write_json
 from .dataset import MANIFEST, validate, fingerprints
+
+
+def has_aggregate(folder,manifest):
+    path=folder/'aggregate.json'
+    if not path.exists():return False
+    report=read_json(path)
+    if report.get('manifest_sha256')!=digest(folder/'manifest.json') or report.get('completion_sha256')!=digest(folder/'completion.json') or report.get('aggregator_sha256')!=digest(REPO/'receipt_lab/preboard/aggregate.py'):
+        return False
+    paths=list((folder/'attempts').glob('*.json'))
+    return len(paths)==manifest['expected_attempts'] and Counter(digest(p) for p in paths)==Counter(r['raw_evidence_sha256'] for r in report.get('documents',[]))
 
 
 def build_report():
@@ -22,9 +33,10 @@ def build_report():
         if not snapshot:continue
         current=[r for r in data['records'] if r['doc_id'] in snapshot]
         if fingerprints(current)!=snapshot:continue
-        if m.get('purpose')=='scored_ocr_evaluation' and m.get('split')=='evaluation' and c.get('complete') and c.get('accuracy_scored'):
+        if m.get('purpose') in {'scored_ocr_evaluation','scored_ocr_fields_with_fixed_extractor','scored_final_pipeline_challenge','scored_evaluation'} and not has_aggregate(manifest.parent,m):continue
+        if m.get('purpose')=='scored_ocr_evaluation' and m.get('split')=='evaluation' and set(m.get('engines',[]))=={'easyocr','tesseract'} and set(m.get('modes',[]))=={'reference','predicted'} and m.get('repetitions',0)>=3 and c.get('complete') and c.get('accuracy_scored'):
             scored_ocr.append(str(manifest.parent))
-        if m.get('purpose')=='scored_ocr_fields_with_fixed_extractor' and m.get('split')=='evaluation' and c.get('complete') and c.get('accuracy_scored') and (WORK/'selection.json').exists() and m.get('selection_sha256')==digest(WORK/'selection.json'):
+        if m.get('purpose')=='scored_ocr_fields_with_fixed_extractor' and m.get('split')=='evaluation' and set(m.get('modes',[]))=={'reference','predicted'} and m.get('repetitions',0)>=3 and c.get('complete') and c.get('accuracy_scored') and (WORK/'selection.json').exists() and m.get('selection_sha256')==digest(WORK/'selection.json'):
             scored_fields.append(str(manifest.parent))
         if m.get('purpose')=='scored_final_pipeline_challenge' and c.get('complete') and (WORK/'selection.json').exists() and m.get('selection_sha256')==digest(WORK/'selection.json'):
             expected=m.get('expected_attempts',0)

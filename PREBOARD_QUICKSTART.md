@@ -79,11 +79,13 @@ $preboardModel = (Get-Content 'C:\Users\NATCHAPOL\SeminarLab\preboard\selection.
 
 คำสั่งด้านบนเลือก OCR จาก development แล้วตรึงโมเดลก่อน evaluation ไฟล์ `selection.json` เก็บ criterion และ hash หลักฐาน ห้ามเลือกใหม่จากผล evaluation/challenge การให้คะแนน LLM/ฟิลด์ต้องระบุ `--ocr-run` ซึ่งชี้ผล benchmark ที่ครบและตรงกับเฉลยรุ่นนั้น ไม่อ่านจาก cache ที่อาจถูกเขียนทับ
 
-วัดฟิลด์จาก OCR สองตัวผ่านโมเดลที่ตรึงเดียวกัน โดยเปิด grammar เหมือนกันทั้งสอง engine ผลนี้เป็น OCR ร่วมกับ extractor คงที่ แยกจาก CER ของ OCR ล้วน
+วัดฟิลด์จาก OCR สองตัวผ่านโมเดลที่ตรึงเดียวกัน โดยเปิด grammar เหมือนกันทั้งสอง engine ค่าเริ่มต้นเทียบทั้ง reference/predicted crop อุ่นเครื่องหนึ่งรอบที่ไม่นับคะแนน แล้วรันสามรอบต่อเงื่อนไข ใช้ repetition 0 ให้คะแนน ฟังก์ชันนี้วัด OCR ร่วมกับ extractor คงที่ ส่วนเวลาที่บันทึกเป็นเวลาของ extractor; เวลา OCR อยู่ใน benchmark แยกต่างหาก ใช้ `--run-id` เดิมเพื่อรันต่อโดยไม่ทับ failure ได้
 
 เมื่อเฉลยภาพต่างฉากใหม่พร้อม ใช้ `python -m receipt_lab.preboard.challenge_pipeline` เพื่อวัด pipeline ที่ตรึงไว้บน PC ก่อนคนแก้คำตอบ ส่วนการยืนยันเข้า Home Assistant ยังคงต้องกดจากหน้าตรวจ
 
 OCR และ LLM benchmark ใช้ run ID เดิมเพื่อรันต่อหลังหยุดได้ โดยเก็บ trial ที่ล้มเหลวไว้ด้วย หากแก้ข้อมูล/config/code ต้องใช้ run ID ใหม่ ส่วน final challenge โหลดโมเดลครั้งเดียว เก็บเวลาโหลดแยก อุ่นเครื่องหนึ่งรอบ แล้ววัดขณะโมเดลอยู่ใน RAM สามรอบต่อภาพ เดโมทั่วไปที่เริ่มโมเดลใหม่ทุกคำขอจะไม่ถูกเรียกว่า warm inference
+
+หลังแต่ละ scored run เสร็จ ให้เรียก `python -m receipt_lab.preboard.aggregate --run <โฟลเดอร์ผลรัน> --publish` ตัวสรุปจะตรวจเฉลยรุ่นเดิมและ expected attempts แล้วสร้าง `aggregate.json`/`aggregate.csv` พร้อมตาราง Markdown ใน `reports/preboard/scored` ใช้คะแนนจาก repetition 0 เท่านั้น ส่วนรอบซ้ำใช้สรุปเวลา/RAM พร้อมจำนวนที่วัดไม่ได้ เก็บ cold load แยก และไม่รวม RSS ฝั่ง Windows กับ Linux เข้าด้วยกัน เกณฑ์รับงานจะยังไม่ผ่านหากไม่มีตารางที่อ้าง raw evidence รุ่นปัจจุบัน ผล engineering 24 ครั้งไม่สามารถใช้คำสั่งนี้เพื่อสร้างคะแนนความถูกต้องได้
 
 ไฟล์ `selection.json` ต้องมี engine, เวลา frozen_at และ hash หลักฐาน development โค้ดไม่เลือกผู้ชนะให้จากภาพ evaluation โดยอัตโนมัติ
 

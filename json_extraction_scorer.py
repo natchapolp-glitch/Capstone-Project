@@ -46,7 +46,7 @@ def schema_errors(value, spec=SCHEMA, path="$"):
     actual = ("null" if value is None else "boolean" if isinstance(value, bool)
               else "object" if isinstance(value, dict) else "array" if isinstance(value, list)
               else "string" if isinstance(value, str) else "number"
-              if isinstance(value, (int, float)) and math.isfinite(value) else "invalid")
+              if isinstance(value, int) or isinstance(value, float) and math.isfinite(value) else "invalid")
     if actual not in types:
         return [f"{path}: expected {types}, got {actual}"]
     errors = []
@@ -68,6 +68,19 @@ def normalize(value):
     if isinstance(value, (int, float)) and not isinstance(value, bool):
         return Decimal(str(value))
     return value
+
+def is_present(value):
+    return value is not None and (not isinstance(value,str) or bool(value.strip()))
+
+def strict_json_loads(text):
+    def object_pairs(pairs):
+        result={}
+        for key,value in pairs:
+            if key in result:raise ValueError('Duplicate JSON key: '+key)
+            result[key]=value
+        return result
+    def invalid_constant(value):raise ValueError('Non-JSON constant: '+value)
+    return json.loads(text,object_pairs_hook=object_pairs,parse_constant=invalid_constant)
 
 def failed_result(json_valid, errors):
     return {"json_valid": json_valid, "schema_valid": 0,
@@ -128,8 +141,8 @@ def score(gt, hyp):
     for field in TOP_LEVEL_FIELDS:
         gt_val = gt.get(field)
         hyp_val = hyp.get(field)
-        gt_present = gt_val is not None and str(gt_val).strip() != ""
-        hyp_present = hyp_val is not None and str(hyp_val).strip() != ""
+        gt_present = is_present(gt_val)
+        hyp_present = is_present(hyp_val)
         is_match = gt_present and hyp_present and normalize(gt_val) == normalize(hyp_val)
         field_matches.append(is_match if gt_present else None)
         if gt_present and hyp_present and is_match:
@@ -148,8 +161,8 @@ def score(gt, hyp):
         for field in ITEM_FIELDS:
             gt_val = gt_items[gi].get(field)
             hyp_val = hyp_items[hj].get(field)
-            gt_present = gt_val is not None and str(gt_val).strip() != ""
-            hyp_present = hyp_val is not None and str(hyp_val).strip() != ""
+            gt_present = is_present(gt_val)
+            hyp_present = is_present(hyp_val)
             is_match = gt_present and hyp_present and normalize(gt_val) == normalize(hyp_val)
             if gt_present and is_match:
                 tp += 1
@@ -159,8 +172,8 @@ def score(gt, hyp):
                 fp += 1
 
     # item ที่หาย (unmatched_gt) = FN สำหรับทุก field ของ item นั้น
-    fn += sum(max(1, sum(gt_items[i][k] is not None for k in ITEM_FIELDS)) for i in unmatched_gt)
-    fp += sum(max(1, sum(hyp_items[i][k] is not None for k in ITEM_FIELDS)) for i in unmatched_hyp)
+    fn += sum(max(1, sum(is_present(gt_items[i][k]) for k in ITEM_FIELDS)) for i in unmatched_gt)
+    fp += sum(max(1, sum(is_present(hyp_items[i][k]) for k in ITEM_FIELDS)) for i in unmatched_hyp)
     hallucination_count = len(unmatched_hyp)
 
     precision = tp / (tp + fp) if (tp + fp) > 0 else None
@@ -186,9 +199,9 @@ def score(gt, hyp):
 
 def load_json_safe(path):
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f), True
-    except (json.JSONDecodeError, FileNotFoundError):
+        with open(path, "r", encoding="utf-8-sig") as f:
+            return strict_json_loads(f.read()), True
+    except (ValueError, FileNotFoundError):
         return None, False
 
 

@@ -47,6 +47,18 @@ def main():
                 "sources":["https://huggingface.co/Qwen/Qwen3-0.6B-GGUF","https://huggingface.co/Qwen/Qwen3-1.7B-GGUF","https://github.com/ggml-org/llama.cpp/releases/tag/"+registry['llama_tag']]})
     private=WORK/"runs/engineering-matrix-real-ocr-v1"
     attempts=[read_json(p) for p in (private/"attempts").glob('*.json')]
+    from json_extraction_scorer import strict_json_loads, schema_errors
+    reparsed=[]
+    for attempt in attempts:
+        try:
+            value=strict_json_loads(attempt['raw_content']);parsed=True;valid=not schema_errors(value)
+        except (ValueError,TypeError):parsed=False;valid=False
+        reparsed.append({'attempt_key':attempt['attempt_key'],'parse_valid':parsed,'schema_valid':valid,
+                         'changed':parsed!=attempt['parse_valid'] or valid!=attempt['schema_valid']})
+    write_json(output/'strict_parser_audit.json',{'timestamp':utc(),'scope':'Post hoc parser audit of preserved engineering output; no model reruns and no accuracy scoring',
+               'scorer_sha256':digest(REPO/'json_extraction_scorer.py'),'attempts':len(reparsed),
+               'parse_valid':sum(a['parse_valid'] for a in reparsed),'schema_valid':sum(a['schema_valid'] for a in reparsed),
+               'changed_attempts':[a['attempt_key'] for a in reparsed if a['changed']]})
     groups={}
     for a in attempts:
         groups.setdefault((a['model']['id'],a['grammar']),[]).append(a)

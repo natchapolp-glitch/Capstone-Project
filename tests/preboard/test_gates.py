@@ -22,6 +22,7 @@ class GateTests(unittest.TestCase):
         self.patches = [patch.object(gates, "WORK", self.root),
                         patch.object(gates, "MANIFEST", self.root / "dataset.json"),
                         patch.object(gates, "validate", return_value=[]),
+                        patch.object(gates, "has_aggregate", return_value=True),
                         patch.object(gates, "fingerprints", return_value=self.snapshot)]
         for p in self.patches:
             p.start()
