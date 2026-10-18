@@ -5,8 +5,8 @@
     "ass5_output/Residential_Intelligence_Project_Progress_REVIEWED_2026-10-18.pptx": "f7a60c0b2d6dcfe35eb692bf3f62ad2140817cf1ed1bb906e7463d54f027be24",
     "ass5_output/Residential_Intelligence_Project_Progress_REVIEWED_2026-10-18.pdf": "f4e3238e7d05bdfaa5a4c8b06973dadaa0504aa6c34ac18f63b857d749bf50c4",
     "ass5_output/Residential_Intelligence_Presentation_Script_REVIEWED_2026-10-18.md": "ee02d3703814f06faf035558c658aa442cadf1acd23981d206d962897c03187f",
-    "ass6_output/Residential_Intelligence_Computer_Project_Proposal_REVIEWED_2026-10-18.docx": "67989a409a24f5fb804d5c737f75b75fd2bfbab4c9419e5e340924b1a1dc887a",
-    "ass6_output/Residential_Intelligence_Computer_Project_Proposal_REVIEWED_2026-10-18.pdf": "8f1b59a394889701059e19ef2891942b16918206cec2c9e6007f32ec7d4fd2f7"
+    "ass6_output/Residential_Intelligence_Computer_Project_Proposal_REVIEWED_2026-10-18.docx": "f24001e5a01a2b4f3df6ba9211a880b0104a8cd1b612fc30b2e0f8f62a342a77",
+    "ass6_output/Residential_Intelligence_Computer_Project_Proposal_REVIEWED_2026-10-18.pdf": "0d0aa5ce9203b8f027f0bb91d3fd66b58054e3b1d6065f3ccf93d6c2e0e740ef"
   },
   "pdf_pages": {
     "Residential_Intelligence_Project_Progress_REVIEWED_2026-10-18.pdf": 21,
@@ -71,7 +71,7 @@
       }
     },
     "Residential_Intelligence_Computer_Project_Proposal_REVIEWED_2026-10-18.pdf": {
-      "sha256": "8f1b59a394889701059e19ef2891942b16918206cec2c9e6007f32ec7d4fd2f7",
+      "sha256": "0d0aa5ce9203b8f027f0bb91d3fd66b58054e3b1d6065f3ccf93d6c2e0e740ef",
       "pages_reviewed": [
         1,
         2,
@@ -97,8 +97,8 @@
         22
       ],
       "unresolved_findings": [],
-      "reviewed_at": "2026-10-18T04:51:55.927594+00:00",
-      "method": "Word export rendered with Poppler; each page visually inspected. Unchanged revised pages compared byte-for-byte at PNG level.",
+      "reviewed_at": "2026-10-18T05:00:56.653317+00:00",
+      "method": "Native Word PDF rendered at 1400 px; pages 20-22 visually reviewed after bibliography spacing correction; pages 1-19 identical to previously reviewed render.",
       "rendered_page_sha256": {
         "1": "4bbb04e6a25cc6b71fa0bd1205f9931ea4d6610ca6195f89607a4b244fbddf81",
         "2": "199ea492f6119dae4645402ae2c0559cf3ef273c58368ae00ae7400859dceb07",
@@ -119,9 +119,9 @@
         "17": "5659a4b1ed95bcdfda3d6d96eca7e2c6d0fa4932f3009e1f5d65dddd3c77f070",
         "18": "c8e750aa4488fe604e2eb293f8cb8a9b0a70f8e7ac0cc8eec7b510aa47fd611b",
         "19": "10d2cda194a08adff4fcde6ac24dc9a6d8ec37dd7dec28bf6194460e35a328a6",
-        "20": "b18514444a78065cf13625f3d184859b2a80e3b9126f2365d177d667720fa9e0",
-        "21": "26168fdb757e4f33ec95509c8d16eecbf82d28985ccc7be238c7aa0a6d9d7fac",
-        "22": "5805b87b218d9496254c67e2c1b6b9c253fe74839407a73b12cb5cb133d6710e"
+        "20": "d102f7d8cff149e1c8b4ded9833dcff165ac845680bef64d11fcdf6abbeb1ca1",
+        "21": "ee4d38587277a75c2dea1f0b2a668f785888d65fb51e9cf3404523d487af1a72",
+        "22": "8dbf7dd71e2a538542148fbd2b892a42729cb395ce692bea791b1c7fc8a0b101"
       }
     }
   },

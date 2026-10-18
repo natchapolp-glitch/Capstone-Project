@@ -183,6 +183,14 @@ def main():
                             b=OxmlElement('w:bCs'); b.set(qn('w:val'),'1'); rpr.append(b)
     for p in doc.paragraphs:
         if re.match(r'^\[\d+\]',p.text):
+            # Faculty guide section 7.3: two spaces after bibliography
+            # punctuation. Preserve URLs and punctuation within identifiers.
+            parts=re.split(r'(https?://\S+)',p.text)
+            value=''.join(part if part.startswith(('http://','https://')) else
+                          re.sub(r'([.,:;])[ \t]+',r'\1  ',part) for part in parts)
+            p.clear()
+            r=p.add_run(value); r.bold=False; r.italic=False
+            r.font.name='TH Sarabun New'; r.font.size=Pt(14)
             p.paragraph_format.keep_together=True
         if p.text.startswith('ตารางที่ '):
             value=p.text

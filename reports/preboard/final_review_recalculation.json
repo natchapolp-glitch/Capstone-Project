@@ -1,0 +1,32 @@
+{
+  "status": "pass",
+  "reviewed_at": "2026-10-18T04:57:42.421126+00:00",
+  "method": "Independent edit-distance, strict JSON structure, group arithmetic and PC median calculations from raw evidence; no new model inference",
+  "ocr": {
+    "easyocr": {
+      "edits": 23069,
+      "characters": 28011,
+      "micro_cer": 0.823569312055978
+    },
+    "tesseract": {
+      "edits": 26490,
+      "characters": 28011,
+      "micro_cer": 0.9456999036092963
+    }
+  },
+  "llm_attempts": 288,
+  "llm_groups": 16,
+  "llm_status_counts": {
+    "ok": 282,
+    "truncated": 6
+  },
+  "pc_attempts": 9,
+  "pc_failures": 0,
+  "semantic_accuracy": null,
+  "source_reports": {
+    "single_pass_ocr.json": "8deafaf618434019cd0e74f84747fa5533cc26db4b3ea6fdbf51797fa539db55",
+    "single_pass_llm.json": "97f092d54f862bad0d6ea177bdc41e99587e239baf4e1734be5a22b2a4cdaa54",
+    "pc_transport_profile.json": "d4f9284b3d3d1bf6739410053314b6c84cfb2018b48dc7687457aacc522018e7"
+  },
+  "reviewer_script_sha256": "524774d7079ef1ecbbce4ff5eb31e53266d9203116a6d27d81be920570631926"
+}
