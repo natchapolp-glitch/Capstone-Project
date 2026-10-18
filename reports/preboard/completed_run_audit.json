@@ -1,0 +1,162 @@
+{
+  "timestamp": "2026-10-18T04:46:00.468493+00:00",
+  "status": "pass",
+  "llm_attempts": 288,
+  "llm_status_counts": {
+    "ok": 282,
+    "truncated": 6
+  },
+  "finish_reason_counts": {
+    "stop": 282,
+    "length": 6
+  },
+  "grammar_truncated": 3,
+  "parse_valid": 255,
+  "schema_valid": 231,
+  "output_limits": {
+    "2048": 288
+  },
+  "pc_attempts": 9,
+  "pc_failures": 0,
+  "stage_measurements_complete": true,
+  "raw_evidence_verified": true,
+  "semantic_accuracy": null,
+  "note": "Parse/schema counts describe raw returned content; truncated/request-failed attempts remain in every denominator. No output repair.",
+  "legacy_field_note": "single_pass_llm.groups.request_failures counts every non-ok status, including truncated. Use the explicit status counts here to distinguish HTTP/request failures from output-limit termination.",
+  "group_status_counts": [
+    {
+      "model": "qwen3-0.6B-Q8_0",
+      "source": "owner_text",
+      "grammar": true,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-0.6B-Q8_0",
+      "source": "owner_text",
+      "grammar": false,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-0.6B-Q8_0",
+      "source": "tesseract",
+      "grammar": true,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-0.6B-Q8_0",
+      "source": "tesseract",
+      "grammar": false,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-0.6B-Q4_K_M",
+      "source": "owner_text",
+      "grammar": true,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-0.6B-Q4_K_M",
+      "source": "owner_text",
+      "grammar": false,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-0.6B-Q4_K_M",
+      "source": "tesseract",
+      "grammar": true,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-0.6B-Q4_K_M",
+      "source": "tesseract",
+      "grammar": false,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q8_0",
+      "source": "owner_text",
+      "grammar": true,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q8_0",
+      "source": "owner_text",
+      "grammar": false,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q8_0",
+      "source": "tesseract",
+      "grammar": true,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q8_0",
+      "source": "tesseract",
+      "grammar": false,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q4_K_M",
+      "source": "owner_text",
+      "grammar": true,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q4_K_M",
+      "source": "owner_text",
+      "grammar": false,
+      "statuses": {
+        "ok": 18
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q4_K_M",
+      "source": "tesseract",
+      "grammar": true,
+      "statuses": {
+        "ok": 15,
+        "truncated": 3
+      }
+    },
+    {
+      "model": "qwen3-1.7B-Q4_K_M",
+      "source": "tesseract",
+      "grammar": false,
+      "statuses": {
+        "ok": 15,
+        "truncated": 3
+      }
+    }
+  ],
+  "source_report_sha256": {
+    "single_pass_llm.json": "97f092d54f862bad0d6ea177bdc41e99587e239baf4e1734be5a22b2a4cdaa54",
+    "pc_transport_profile.json": "d4f9284b3d3d1bf6739410053314b6c84cfb2018b48dc7687457aacc522018e7"
+  }
+}

@@ -1,7 +1,46 @@
 {
-  "timestamp": "2026-10-17T20:13:03.530014+00:00",
+  "timestamp": "2026-10-18T04:46:00.808669+00:00",
   "overall_complete": false,
   "gates": [
+    {
+      "part": 1,
+      "status": "TEXT_REFERENCE_ACCEPTED_WITH_LIMITATIONS",
+      "saved_photos": 59,
+      "missing_doc_ids": [],
+      "remaining_limitations": "Incomplete/formatted transcripts and transaction/box audit do not become full ground truth."
+    },
+    {
+      "part": 2,
+      "status": "DESCRIPTIVE_CER_REPORTED",
+      "scorable_photos": 24,
+      "excluded_photos": 35,
+      "evidence": "reports/preboard/single_pass_ocr.json",
+      "field_accuracy": null
+    },
+    {
+      "part": 3,
+      "status": "FORMAT_AND_COST_REPORTED",
+      "actual_attempts": 288,
+      "semantic_accuracy": null,
+      "raw_evidence_verified": true,
+      "note": "No further owner entry required; unavailable semantic scores remain unavailable."
+    },
+    {
+      "part": 4,
+      "status": "TECHNICAL_INTEGRATION_VERIFIED",
+      "real_photo_traces": 3,
+      "note": "Automated engineering confirmation, not a human usability test; transaction grouping not certified."
+    },
+    {
+      "part": 5,
+      "status": "PC_MEASUREMENTS_WITH_LIMITATIONS",
+      "new_challenge_photos": 0,
+      "raw_evidence_verified": true,
+      "evidence": "reports/preboard/pc_transport_profile.json",
+      "remaining_limitations": "No fresh held-out scene set, complete semantic JSON truth, board latency or measured energy."
+    }
+  ],
+  "original_protocol_gates": [
     {
       "part": 1,
       "status": "WAITING_HUMAN",
@@ -25,8 +64,15 @@
     },
     {
       "part": 4,
-      "status": "PASS_IMPLEMENTATION",
+      "status": "WAITING_HUMAN",
       "evidence": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\runs\\delivery-integration\\evidence.json",
+      "technical_trace_pass": true,
+      "reviewed_demo_transactions": 0,
+      "pending_group_review_doc_ids": [
+        "R3B0A1D27A6DC",
+        "R4F4EA934251E",
+        "R74946CAAC57E"
+      ],
       "note": "Engineering demo confirmations are automated and do not count as human ground truth or user study"
     },
     {
@@ -36,5 +82,12 @@
       "reviewed_new_transactions": 0,
       "remaining": "Six new real photos / three new transactions, checked truths, frozen config and final benchmark"
     }
-  ]
+  ],
+  "scope_amendment": {
+    "review_method": "single_reviewer_single_pass",
+    "second_round_required": false,
+    "structured_json_reference": "unreviewed",
+    "snapshot_matches_current_entries": true
+  },
+  "document_completion_scope": "Ass5/Ass6 can report verified progress and limitations; original five research goals are not all experimentally complete."
 }

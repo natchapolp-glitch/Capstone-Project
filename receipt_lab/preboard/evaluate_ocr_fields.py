@@ -11,6 +11,7 @@ from .dataset import MANIFEST, validate, fingerprints
 from .field_metrics import field_metrics
 from .llm import LocalLLM
 from .experiment import checked_ocr_run
+from .assets import require_registry
 
 
 def main():
@@ -34,6 +35,9 @@ def main():
     if args.split!='development':
         if not selection.exists() or read_json(selection)['model_id']!=args.model:
             ap.error('Use the model frozen from development before evaluation/challenge')
+        chosen=read_json(selection)
+        for key,path in [('model_registry_sha256',WORK/'model_registry.json'),('scorer_sha256',REPO/'json_extraction_scorer.py'),('schema_sha256',REPO/'receipt_schema.json'),('llm_driver_sha256',REPO/'receipt_lab/preboard/llm.py')]:
+            if chosen.get(key)!=digest(path):ap.error('Frozen extractor version changed: '+key)
     folder=WORK/"runs"/(args.run_id or "ocr-fields-"+uuid.uuid4().hex[:12])
     engines=['easyocr','tesseract'];modes=['reference','predicted'] if args.crop=='both' else [args.crop]
     jobs=list(product(rows,engines,modes,range(args.repetitions)))
@@ -46,6 +50,7 @@ def main():
     manifest={"timestamp":utc(),"dataset_sha256":digest(MANIFEST),"dataset_snapshot":fingerprints(rows),"split":args.split,
                "purpose":"scored_ocr_fields_with_fixed_extractor","model":args.model,
                'environment':environment(),'ocr_source_hashes':hashes,'modes':modes,'repetitions':args.repetitions,
+               'asset_registry_sha256':require_registry(),
                "ocr_run":str(source_run),"ocr_completion_sha256":digest(source_run/'completion.json'),
                "selection_sha256":digest(selection) if selection.exists() else None,
                'scorer_sha256':digest(REPO/'json_extraction_scorer.py'),
@@ -55,7 +60,7 @@ def main():
                "metric_scope":"OCR followed by same fixed local extractor; not isolated OCR field accuracy"}
     if (folder/'manifest.json').exists():
         old=read_json(folder/'manifest.json')
-        for key in ['dataset_snapshot','ocr_source_hashes','selection_sha256','scorer_sha256','model','modes','engines','repetitions','driver_sha256']:
+        for key in ['dataset_snapshot','ocr_source_hashes','selection_sha256','scorer_sha256','model','modes','engines','repetitions','driver_sha256','asset_registry_sha256']:
             if old.get(key)!=manifest[key]:ap.error('Cannot resume changed inputs/config/code; preserve old evidence and use a new run ID')
     else:write_json(folder/'manifest.json',manifest)
     def job_key(row,engine,mode,rep):return f"{row['doc_id']}-{engine}-{mode}-r{rep}"

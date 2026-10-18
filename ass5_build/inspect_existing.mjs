@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {FileBlob,PresentationFile} from 'file:///C:/Users/NATCHAPOL/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs';
+const root=process.cwd();
+const out=path.join(process.env.USERPROFILE,'SeminarLab/preboard/document_review/artifact_import');
+await fs.mkdir(out,{recursive:true});
+const deck=await PresentationFile.importPptx(await FileBlob.load(path.join(root,'ass5_output/Residential_Intelligence_Project_Progress_READY_2026-10-18.pptx')));
+console.log('slides',deck.slides.items.length);
+const data=await deck.inspect({kind:'slide,textbox,shape,image,layout',maxChars:250000});
+await fs.writeFile(path.join(out,'inspection.json'),JSON.stringify(data,null,2));
+const png=await deck.export({slide:deck.slides.items[2],format:'png',scale:1});
+await fs.writeFile(path.join(out,'slide-3.png'),new Uint8Array(await png.arrayBuffer()));
+console.log(out);

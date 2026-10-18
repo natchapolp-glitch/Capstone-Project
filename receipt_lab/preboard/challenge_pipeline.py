@@ -8,6 +8,8 @@ from receipt_lab.demo_pc.store import Store
 from .common import REPO, WORK, read_json, write_json, digest, utc, environment
 from .dataset import MANIFEST, validate, fingerprints
 from .field_metrics import field_metrics
+from .assets import require_registry
+from .metrics import box_iou
 
 
 def main():
@@ -23,6 +25,7 @@ def main():
     if (folder/'manifest.json').exists():ap.error('Choose a new run ID; preserve previous runs')
     manifest={'timestamp':utc(),'purpose':'scored_final_pipeline_challenge','dataset_snapshot':fingerprints(rows),
               'environment':environment(),
+              'asset_registry_sha256':require_registry(),
               'selection_sha256':digest(selection),'expected_attempts':len(rows)*3,
               'scorer_sha256':digest(REPO/'json_extraction_scorer.py'),
               'score_scope':'raw model output before user correction; operator-selected orientation',
@@ -44,18 +47,22 @@ def run_warm(rows,store,runtime,folder,manifest):
             rid,result=process(row['doc_id'],store,rotation=row['rotation_to_read'],runtime=runtime)
             truth=read_json(WORK/'annotations/adjudicated'/f"{row['doc_id']}.json")['extraction']
             pred=result.get('extraction') if result.get('llm',{}).get('status')=='ok' else None
+            detected_box=result.get('detection_and_preprocessing',{}).get('transform',{}).get('box_original_pixels')
+            iou=box_iou(row['original_pixel_boxes'][0],detected_box)
             scored={'doc_id':row['doc_id'],'transaction_group_id':row['transaction_group_id'],'repetition':rep,
                     'receipt_id':rid,'pipeline_run_id':result['run_id'],'status':result['status'],
                     'model_status':result.get('llm',{}).get('status'),
                     'parse_valid':result.get('llm',{}).get('parse_valid',False),
                     'schema_valid':result.get('llm',{}).get('schema_valid',False),
                     'successful_processing':result['status']=='pending_review' and result.get('llm',{}).get('status')=='ok' and result.get('llm',{}).get('schema_valid',False),
+                    'detection':{'detected':detected_box is not None,'box_iou':iou,'iou50_success':iou>=0.5,
+                                 'scope':'Top-one document crop against owner-confirmed original-image region; not mAP'},
                     'score':score(truth,pred) if result.get('llm',{}).get('parse_valid') and result.get('llm',{}).get('status')=='ok' else failed_result(int(result.get('llm',{}).get('parse_valid',False)),['pipeline or extraction failure']),
                     'fields':field_metrics(truth,pred),
                     'measurement':result['processing_measurement'],'configuration':result['configuration'],
                     'stage_measurements':{
                         'detection_and_preprocessing':result.get('detection_and_preprocessing'),
-                        'ocr':{k:result.get('ocr',{}).get(k) for k in ['wall_seconds','sampled_peak_rss_bytes','child_peak_rss_bytes','memory_metric']},
+                        'ocr':{k:result.get('ocr',{}).get(k) for k in ['wall_seconds','sampled_peak_rss_bytes','child_peak_rss_bytes','memory_metric','windows_client_measurement','linux_tesseract_wall_seconds']},
                         'llm':result.get('llm',{}).get('measurement')},
                     'runtime_reused':result['runtime_reused']}
             attempts.append(scored)

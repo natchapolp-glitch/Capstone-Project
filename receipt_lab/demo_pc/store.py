@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from json_extraction_scorer import schema_errors
-from receipt_lab.preboard.common import object_hash, utc
+from receipt_lab.preboard.common import object_hash, utc, Measurement
 
 
 class Store:
@@ -121,26 +121,29 @@ class Store:
                         ("publish_failed" if error else "published", utc(), row["receipt_id"], row["revision"]))
 
 
-def publish_pending(store, host="127.0.0.1", port=18884):
+def publish_pending(store, host="127.0.0.1", port=18884, profile=False):
     import paho.mqtt.client as mqtt
     results = []
     for row in store.pending():
         client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="seminar-"+uuid.uuid4().hex[:10])
         error = None
-        try:
-            client.connect(host, port, keepalive=20)
-            client.loop_start()
-            info = client.publish("seminar/preboard/purchases/latest", row["payload"], qos=1, retain=True)
-            info.wait_for_publish(timeout=10)
-            if not info.is_published():
-                raise TimeoutError("No MQTT PUBACK")
-        except (OSError, RuntimeError, TimeoutError) as exc:
-            error = str(exc)
-        finally:
-            client.disconnect()
-            client.loop_stop()
+        with Measurement() as measured:
+            try:
+                client.connect(host, port, keepalive=20)
+                client.loop_start()
+                info = client.publish("seminar/preboard/purchases/latest", row["payload"], qos=1, retain=True)
+                info.wait_for_publish(timeout=10)
+                if not info.is_published():
+                    raise TimeoutError("No MQTT PUBACK")
+            except (OSError, RuntimeError, TimeoutError) as exc:
+                error = str(exc)
+            finally:
+                client.disconnect()
+                client.loop_stop()
         store.delivery(row["event_id"], error)
-        results.append({"event_id": row["event_id"], "error": error, "mqtt_puback": error is None})
+        entry={"event_id":row["event_id"],"error":error,"mqtt_puback":error is None}
+        if profile:entry['measurement']={**measured.result,'scope':'MQTT connect, QoS1 PUBACK and client shutdown; SQLite delivery-status update excluded'}
+        results.append(entry)
         if error:
             break  # preserve ordering: an older failed event must not overwrite a newer state later
     return results

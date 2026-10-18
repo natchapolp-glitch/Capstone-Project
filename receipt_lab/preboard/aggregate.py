@@ -11,6 +11,7 @@ from itertools import product
 from .common import REPO, WORK, digest, read_json, utc, write_json
 from .dataset import MANIFEST, fingerprints, validate
 from .metrics import summarize as summarize_cer
+from .assets import require_registry
 
 PURPOSES={'scored_ocr_evaluation','scored_evaluation','scored_ocr_fields_with_fixed_extractor','scored_final_pipeline_challenge'}
 
@@ -102,11 +103,13 @@ def summarize_condition(rows,purpose):
         m=measurement(r)
         if m.get('sampled_peak_rss_bytes') is not None:memory[m.get('memory_metric','sampled Windows process-tree RSS')].append(m['sampled_peak_rss_bytes'])
         if m.get('child_peak_rss_bytes') is not None:memory[m.get('memory_metric','Linux child peak RSS')].append(m['child_peak_rss_bytes'])
+        client=m.get('windows_client_measurement',{})
+        if client.get('sampled_peak_rss_bytes') is not None:memory['Windows caller process-tree RSS during WSL OCR; excludes Linux child RSS'].append(client['sampled_peak_rss_bytes'])
     result={'documents':len(primary),'transaction_groups':len({r['transaction_group_id'] for r in primary}),
             'attempts':len(rows),'failed_attempts':sum(failed(r,purpose) for r in rows),
             'primary_failed_documents':sum(failed(r,purpose) for r in primary),
             'wall_seconds_all_attempts':distribution(seconds),'missing_time_measurements':sum(v is None for v in seconds),
-            'missing_memory_measurements':sum(measurement(r).get('sampled_peak_rss_bytes') is None and measurement(r).get('child_peak_rss_bytes') is None for r in rows),
+            'missing_memory_measurements':sum(measurement(r).get('sampled_peak_rss_bytes') is None and measurement(r).get('child_peak_rss_bytes') is None and measurement(r).get('windows_client_measurement',{}).get('sampled_peak_rss_bytes') is None for r in rows),
             'memory_bytes_by_metric':{k:distribution(v) for k,v in memory.items()}}
     if purpose=='scored_ocr_evaluation':
         result['cer']=summarize_cer([r['metric'] for r in primary])
@@ -118,6 +121,11 @@ def summarize_condition(rows,purpose):
             result['macro_document_'+key]=statistics.mean(values) if values else None
             result[key+'_scorable_documents']=len(values)
         result.update(fields_summary(primary))
+    if purpose=='scored_final_pipeline_challenge':
+        result['top_one_crop']={'documents':len(primary),'detected':sum(r['detection']['detected'] for r in primary),
+                                'mean_iou':statistics.mean(r['detection']['box_iou'] for r in primary),
+                                'fraction_iou_at_least_0_5':sum(r['detection']['iou50_success'] for r in primary)/len(primary),
+                                'scope':'Single top-one crop, operator orientation; not mAP. Missed crops have IoU zero.'}
     stages=defaultdict(list)
     for row in rows:
         for name,value in row.get('stage_measurements',{}).items():
@@ -125,6 +133,7 @@ def summarize_condition(rows,purpose):
     if stages:
         result['stages']={name:{'wall_seconds':distribution([v.get('wall_seconds') for v in values]),
                                'sampled_rss_bytes':distribution([v.get('sampled_peak_rss_bytes') for v in values]),
+                               'windows_client_rss_bytes':distribution([v.get('windows_client_measurement',{}).get('sampled_peak_rss_bytes') for v in values]),
                                'linux_child_rss_bytes':distribution([v.get('child_peak_rss_bytes') for v in values])} for name,values in stages.items()}
     return result
 
@@ -141,6 +150,7 @@ def aggregate(folder,publish=False):
     errors=validate({**data,'records':records},require_review=True)
     if errors:raise ValueError('Unchecked input records: '+'; '.join(errors))
     if fingerprints(records)!=snapshot:raise ValueError('Dataset/truth changed after this run')
+    if manifest.get('asset_registry_sha256')!=require_registry():raise ValueError('Runtime assets changed after this run')
     if purpose!='scored_ocr_evaluation' and manifest.get('scorer_sha256')!=digest(REPO/'json_extraction_scorer.py'):
         raise ValueError('Scorer changed; use a separately versioned analysis instead of mixing protocols')
     if manifest.get('selection_sha256') and (not (WORK/'selection.json').exists() or manifest['selection_sha256']!=digest(WORK/'selection.json')):

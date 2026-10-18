@@ -10,11 +10,14 @@ from .ocr import OCREngine, prepare_image
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--engine',choices=['tesseract','easyocr'],default='tesseract')
+    ap.add_argument('--run-id')
     args=ap.parse_args()
     rows=[r for r in read_json(MANIFEST)["records"] if not r.get('challenge_candidate')]
     priority=read_json(WORK/'annotations/priority_queue.json')['doc_ids']
     rows=sorted(rows,key=lambda r:priority.index(r['doc_id']) if r['doc_id'] in priority else 999)
-    folder=WORK/f"runs/draft-{args.engine}-all59-v1"
+    run_id=args.run_id or f"draft-{args.engine}-all59-v1"
+    if not run_id.replace('-','').replace('_','').isalnum():ap.error('Use a simple run ID')
+    folder=WORK/'runs'/run_id
     engine=OCREngine(args.engine)
     for index,row in enumerate(rows,1):
         path=folder/"attempts"/(row["doc_id"]+".json")

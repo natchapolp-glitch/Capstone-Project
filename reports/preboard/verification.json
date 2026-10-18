@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-17T20:13:06.711272+00:00",
+  "timestamp": "2026-10-18T04:10:23.501837+00:00",
   "runs": [
     {
       "command": [
@@ -15,9 +15,9 @@
         "-v"
       ],
       "exit_code": 0,
-      "tests": 36,
-      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\03b0155974e6\\check-0.txt",
-      "log_sha256": "9313b4ef31bbb3e74e71495dee575d1a16bfc04d98180f676ebf50553fadbe5f"
+      "tests": 48,
+      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\f2642d2c04e2\\check-0.txt",
+      "log_sha256": "bf79e38c843f49824b066c19cf4a400e20ba6f41c4944b11881da0e57a6e8334"
     },
     {
       "command": [
@@ -32,8 +32,8 @@
       ],
       "exit_code": 0,
       "tests": 13,
-      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\03b0155974e6\\check-1.txt",
-      "log_sha256": "b721227b0a517ba13a187688b5a1f00d958fd450510dccbb08697f944d8a9616"
+      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\f2642d2c04e2\\check-1.txt",
+      "log_sha256": "33b9368c220e6b8437a28215b76e23848c6a88f7ad49e73b2738c986b3255d9f"
     },
     {
       "command": [
@@ -47,8 +47,8 @@
       ],
       "exit_code": 0,
       "tests": null,
-      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\03b0155974e6\\check-2.txt",
-      "log_sha256": "1717a62774c9b4548dee5241b2f1e201cf6ce58304cc92d44a787d2f1e6f8d4a"
+      "log_path": "C:\\Users\\NATCHAPOL\\SeminarLab\\preboard\\verification\\f2642d2c04e2\\check-2.txt",
+      "log_sha256": "6081115d97ec78262a1c9ea0b98d55ec888adb7154ccbfdc6d59fe76ba51542e"
     },
     {
       "command": [
@@ -57,7 +57,7 @@
         "C:\\Users\\NATCHAPOL\\OneDrive\\เดสก์ท็อป\\Seminar\\receipt_lab\\demo_pc\\adjudicate.html scripts"
       ],
       "exit_code": 0,
-      "script_sha256": "a2a92019fe6ff2bb94eaabfc3ed5cd719c477ddda9e5a93485012a56b187cc02"
+      "script_sha256": "c8c02ebc77aa0b0c54c99f1d23e90108e37ce1299e89a1563610d710a316d1d3"
     },
     {
       "command": [
@@ -75,43 +75,52 @@
         "C:\\Users\\NATCHAPOL\\OneDrive\\เดสก์ท็อป\\Seminar\\receipt_lab\\demo_pc\\review.html scripts"
       ],
       "exit_code": 0,
-      "script_sha256": "91fe0a8eca332704f4234b828f2e72581ad2726b437faae916d2ffb21c5c18f8"
+      "script_sha256": "847da2aae7d8e635a9c7932161358e1a1153c0c98ceacdc97184e1dd920ab509"
     }
   ],
   "implementation_sha256": {
-    "receipt_lab/preboard/aggregate.py": "2c4b377f849d747a920eb5b120db78da09f9b217077bed178ac87d2e0b5de7e3",
-    "receipt_lab/preboard/batch_draft_ocr.py": "b9c20aed9f4f637cc30ba6f706728c7351ddc00dcfd7c6ae95fdec4cdb34192a",
-    "receipt_lab/preboard/benchmark_ocr.py": "50bc59dcf5a63995c96261aff5ff6f5249378ec6f143b5134dabdebbd5c1994a",
-    "receipt_lab/preboard/challenge_pipeline.py": "fbba4f8f225b43d95e04765c49e5c1bd52a721b1de90905ac1d930ca38ca9681",
+    "receipt_lab/preboard/aggregate.py": "c705583d90d9378b0bf6585dad66e010077aa6d4fb88914ae86a005046515c19",
+    "receipt_lab/preboard/assets.py": "263b2426ba351a6e7a1e87fb255eaa7f7decb275804cff93883cbd03cc13392c",
+    "receipt_lab/preboard/batch_draft_ocr.py": "49180f7a2e1d99ad91f315e20e6108f42dc59ffa719ca928cd2318b0c45b9766",
+    "receipt_lab/preboard/benchmark_ocr.py": "c882e985907c9c82a25724df1eafa2926f1aea35785c04ed08ace1d529d48db7",
+    "receipt_lab/preboard/challenge_pipeline.py": "4e62c10cea075086969f6790aaea6e9200899b8ece2055c12173f1f88015b0fc",
     "receipt_lab/preboard/common.py": "362f4b90e5a2af1aedb20d4d4100974b5c9bfb7d98aaedab86356a8ba8f8f3fb",
-    "receipt_lab/preboard/dataset.py": "b53fc6d49b418787ada8292c0859cc0fb6a45e4c7538ac1db8a8951a816d8e7e",
-    "receipt_lab/preboard/evaluate_ocr_fields.py": "86b0774bd6fe4b3dbdd164e2d4a1a083b52a83f54d33d7968eb3a2efd198ab47",
-    "receipt_lab/preboard/experiment.py": "ce01c82707a6b8ae38db5ba1b02d6dc18b7dbe42d2eaeee865bc4b1c161f3306",
+    "receipt_lab/preboard/dataset.py": "4eef232f05f54a3514e42fe5aded3651601bf5df3306bc83c77a46d77a3445b7",
+    "receipt_lab/preboard/evaluate_ocr_fields.py": "cb362611c0cfb7b761752642a32efdac8b65776d5dc0911660ca7e55e86ec7cd",
+    "receipt_lab/preboard/evidence_checks.py": "bb07f8c8ca9b686438f7fcd212761fe1967f4b3e76508473d0b9e46158b311fc",
+    "receipt_lab/preboard/experiment.py": "8f1718dad625ec2acf3199d6a0292863ebc4620f3619efa4b73f0bf5621d2caa",
     "receipt_lab/preboard/field_metrics.py": "6babfa908970c0258b7a5bf29148e0123d77be53490cb9ba6a78d8cadfc10e4f",
-    "receipt_lab/preboard/gates.py": "10f7fa63244860b8ce3c98f193ddebc980f5067fa626746808764949c9cbca4d",
+    "receipt_lab/preboard/finish_available.py": "5ba201de86eb07566d1d8e4ca676499e3755e64e5851b2e7a7ba77bfa82b70c7",
+    "receipt_lab/preboard/gates.py": "271d9ef99e72101f1034a827dd567470cf3c3e77d11d76f5c45aa189904b7bd3",
     "receipt_lab/preboard/ha_confirm_linux.py": "fdf25a075e2cb2a22912185f8067eb18ec8ac2c8fefac7c118c9ef97193ccff9",
     "receipt_lab/preboard/intake_challenge.py": "80d49db97eb8f66c9ef09e3f44639546e88f374b3e7ebe70e6787dbd22ce6709",
-    "receipt_lab/preboard/llm.py": "ce2ac9b55018464c93398a9c49a3646ba1709929607ea1a20f6108e64e6ccc1d",
-    "receipt_lab/preboard/metrics.py": "eb69c560da87375cb2fba7bec83bedf43444276c9e1a8c28cd71870f2d650721",
-    "receipt_lab/preboard/ocr.py": "283e54eefc27cbe0c4c26f3ed51fb9a75c1e7e968b173700f2419c037a20bb03",
+    "receipt_lab/preboard/llm.py": "a0ac0ba9c86ec213006a8885c0d5b59fd495738ee9c1ae7c298d41ef0d455ed6",
+    "receipt_lab/preboard/metrics.py": "587bf9557d5113e314e917788395b08c01fd85ca7eaed8bdcc5fbf06b372a96d",
+    "receipt_lab/preboard/ocr.py": "dd04976d44445c1dcbb9d49610cdb8fc7c384b996666d37dc6e2fb5f24494e0d",
+    "receipt_lab/preboard/profile_transport.py": "ab3f416301e80d2b4123372bc99ab52b763bef0033b788bc11b2b99660123284",
     "receipt_lab/preboard/regions.py": "83abfd7b074eff7785247eb632f8436ecf295368d67b1d4f662faee06c989329",
-    "receipt_lab/preboard/report.py": "be0324a6c991dc062b531888719a37340ed085cef1d5f7026f3d6c79f03b7e76",
-    "receipt_lab/preboard/review.py": "e7997c95269dba8c98f715e74966040e39a43ccb512b5984312fd1dd9345a5a3",
-    "receipt_lab/preboard/selection.py": "e1040af82fe658949f8bfa82dfd0211746ed1bf0bd157d41bc0ce316d8fc4c20",
+    "receipt_lab/preboard/report.py": "becee6c054f81231e46366af3c5975263f2162e91d8827ece960e49b12657a16",
+    "receipt_lab/preboard/review.py": "8523280fa6d8d9bbf481e9bb1afa88fed7b9501efc719a5efb9cf4c35854f04b",
+    "receipt_lab/preboard/selection.py": "aaa7f4c0d515b32852f5c2fea1adfc468aab0ff45aaf32daf54f04957a229d0b",
     "receipt_lab/preboard/services.py": "8e76219c5fb2fde5d32266df92227919ba84359a2c556f938490ef333859726e",
     "receipt_lab/preboard/services_linux.py": "725438c71f97e584306c5b0482e6a4a09a8819eed2ed7777b0dc4305df43eacc",
+    "receipt_lab/preboard/service_probe.py": "5759a9bff216e630462207d16f05371d1a05131c4062d488434dd2c8c1874acd",
     "receipt_lab/preboard/setup_assets.py": "597bcd74c1a2248c50aa447606025f2c4cd871de6beb986501d411c94c4cdd76",
+    "receipt_lab/preboard/single_pass.py": "26c722a4904f20f218e44e5a22529e31ec5af589de4b0aa732fe2abc3121d498",
+    "receipt_lab/preboard/single_pass_llm.py": "d660a41a557276d5f8d200480548f9d6bdb0e46c68ec14b92fac3f4c9b2855e5",
+    "receipt_lab/preboard/tesseract_tsv.py": "a7c08f19fe354aaad94a230bb78ae8f7c27a782d055f8d1318b38a1ec10ce4ca",
     "receipt_lab/preboard/verify.py": "4cfc8e5b2bc5e666425d963e7526c630268a541582aa3510757b5d754989485c",
     "receipt_lab/preboard/verify_delivery.py": "a7b1e893691217811570476229079cca3df873f6b6927b7f8d089b5dd818872d",
-    "receipt_lab/preboard/wsl_tesseract.py": "e3ce5616f8dbea4e7e688bd181a67fff51cd8e50cabc12ca6c151c734ea17d86",
+    "receipt_lab/preboard/wsl_asset_info.py": "0adc7cc3764592ef83f09a5456976da766d733e3cd1f6caeda9ffed72065f534",
+    "receipt_lab/preboard/wsl_tesseract.py": "f1e78546ddf5a612cdaa02c1e074e24ad24e4ce294b6e852688f2ad7aa43c40c",
     "receipt_lab/preboard/__init__.py": "faa3fd7f5affb8a11ab9a74d3eb3de9548ab0b4ff671b8a7a22bfa01f5c4efa0",
-    "receipt_lab/demo_pc/pipeline.py": "4f3bcc2fbd0ffb61304d5542b5ea142679dc1c08aeb43596027fdb2aa8b5d213",
-    "receipt_lab/demo_pc/server.py": "143cf3df594f4aeb6490bfbacfcef54b11f1b1561b132851e745cc7e9524f9ea",
-    "receipt_lab/demo_pc/store.py": "fa2bced426ef8fff4ad4a8d1c8bcbd6deae44f99c02d4a9b4a268fd55449e115",
+    "receipt_lab/demo_pc/pipeline.py": "67a0e951c0d1c54bd4e7d5746ae6685c399d362f5780d69d510ed405aeac7edb",
+    "receipt_lab/demo_pc/server.py": "e340f490b638cc0a8a07a67aa892156eadb2862c307119aecff39871a5142a90",
+    "receipt_lab/demo_pc/store.py": "e568e6ebdfec17995cda1ecc8416a3eb2991799a0683e39677f14dbba8979ce7",
     "receipt_lab/demo_pc/__init__.py": "4281d81bbf5be75474bf2cbfaed168c9e17c280db3eb88e8994838e3bb8a8b51",
-    "receipt_lab/demo_pc/adjudicate.html": "09c5034f46bbbe6b4a73965ead54f78fcfb950af77d834da480824f6d2f3dad9",
+    "receipt_lab/demo_pc/adjudicate.html": "6175cb2e20fa084f1bb3e91b8a59e0aab8f4cf5e091b9f1b99dc377d15ab8938",
     "receipt_lab/demo_pc/index.html": "ab6a2d03f95138453e975a5cd07a4f8883cf53f33f7687574a9264a32bc47067",
-    "receipt_lab/demo_pc/review.html": "42b1212713c9fd20814504e4149e2b799484481842cfda692814dfd0e3c840d6",
+    "receipt_lab/demo_pc/review.html": "2be1267470a25aa9a18e4f4d6671414d2ec9d5f77dd006c5805b13567ec39b73",
     "json_extraction_scorer.py": "3975da916558da302269aafec8e60089f9afac4cbf7aaa6ca62689d3a245015a",
     "receipt_schema.json": "8876e5fcd4a7734e3362a4bb52e3f031ebf9eab0423530237bae0de185bd4965"
   },

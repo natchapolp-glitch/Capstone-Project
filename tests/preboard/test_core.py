@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from receipt_lab.demo_pc.store import Store
 from receipt_lab.preboard.dataset import validate
-from receipt_lab.preboard.metrics import ocr_metric, summarize
+from receipt_lab.preboard.metrics import ocr_metric, summarize, box_iou
 from receipt_lab.preboard.common import write_json
 from receipt_lab.preboard import experiment
 from receipt_lab.demo_pc.pipeline import amount_warning
@@ -72,6 +72,11 @@ class StateTests(unittest.TestCase):
 
 
 class MetricTests(unittest.TestCase):
+    def test_crop_iou_retains_missed_detections_as_zero(self):
+        self.assertEqual(box_iou([0,0,10,10],None),0)
+        self.assertEqual(box_iou([0,0,10,10],[0,0,10,10]),1)
+        self.assertEqual(box_iou([0,0,10,10],[10,10,20,20]),0)
+        self.assertAlmostEqual(box_iou([0,0,10,10],[0,0,5,10]),0.5)
     def test_failure_kept_as_full_deletion(self):
         rows = [ocr_metric("abc", "abc"), ocr_metric("abc", None, "missing_output")]
         summary = summarize(rows)

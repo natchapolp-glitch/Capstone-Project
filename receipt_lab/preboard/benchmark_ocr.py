@@ -8,6 +8,7 @@ from .common import REPO, WORK, digest, environment, read_json, utc, write_json
 from .dataset import MANIFEST, validate, fingerprints
 from .metrics import ocr_metric, summarize
 from .ocr import OCREngine, prepare_image
+from .assets import require_registry, REGISTRY
 
 
 def main():
@@ -26,11 +27,13 @@ def main():
     if not rows:
         ap.error("No matching documents")
     if not args.engineering:
+        require_registry()
         errors = validate({**data, "records": rows}, require_review=True)
         if errors:
             ap.error("; ".join(errors))
     folder = WORK / "runs" / (args.run_id or "ocr-"+uuid.uuid4().hex[:12])
     manifest={"created_at": utc(), "purpose": "engineering_only_no_accuracy_claim" if args.engineering else "scored_ocr_evaluation",
+               'asset_registry_sha256':digest(REGISTRY) if REGISTRY.exists() else None,
                "environment": environment(), "dataset_sha256": digest(MANIFEST), "dataset_snapshot": fingerprints(rows), "split": args.split, "doc_ids": [r["doc_id"] for r in rows],
                "engines": ["easyocr", "tesseract"], "modes": ["reference", "predicted"], "repetitions": args.repetitions,
                "expected_attempts": len(rows)*2*2*args.repetitions, "orientation": "oracle metadata, not automatic orientation",
@@ -38,7 +41,7 @@ def main():
                "accuracy_repetitions": "Only repetition 0 enters accuracy summaries; repeats 1+ are timing samples"}
     if (folder/'manifest.json').exists():
         old=read_json(folder/'manifest.json')
-        for key in ['purpose','dataset_snapshot','split','doc_ids','engines','modes','repetitions','implementation_sha256']:
+        for key in ['purpose','dataset_snapshot','split','doc_ids','engines','modes','repetitions','implementation_sha256','asset_registry_sha256']:
             if old.get(key)!=manifest[key]:
                 ap.error('Cannot resume changed data/config/code; preserve evidence and choose a new run ID')
     else:

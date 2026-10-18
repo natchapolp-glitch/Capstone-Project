@@ -38,7 +38,7 @@ class FixedExtractorTests(unittest.TestCase):
                     write_json(source/'attempts'/f'{doc}-{engine}-{mode}-r0.json',
                                {'status':'failed' if failed else 'ok','text':'' if failed else 'SYNTHETIC TOTAL 100'})
             argv=['fields','--split','development','--model','synthetic-test-model','--ocr-run',str(source),'--run-id','fixture-fields']
-            with patch.object(runner,'WORK',root),patch.object(runner,'MANIFEST',manifest),patch.object(runner,'validate',return_value=[]),patch.object(runner,'fingerprints',return_value={doc:'synthetic'}),patch.object(runner,'checked_ocr_run',return_value=source),patch.object(runner,'environment',return_value={'device':'synthetic fixture'}),patch.object(runner,'LocalLLM',Model),patch.object(sys,'argv',argv),contextlib.redirect_stdout(io.StringIO()):
+            with patch.object(runner,'WORK',root),patch.object(runner,'MANIFEST',manifest),patch.object(runner,'validate',return_value=[]),patch.object(runner,'fingerprints',return_value={doc:'synthetic'}),patch.object(runner,'checked_ocr_run',return_value=source),patch.object(runner,'require_registry',return_value='synthetic-assets'),patch.object(runner,'environment',return_value={'device':'synthetic fixture'}),patch.object(runner,'LocalLLM',Model),patch.object(sys,'argv',argv),contextlib.redirect_stdout(io.StringIO()):
                 runner.main();runner.main()
             folder=root/'runs/fixture-fields'
             self.assertEqual(Model.loads,1)
@@ -47,7 +47,7 @@ class FixedExtractorTests(unittest.TestCase):
             self.assertTrue(completion['complete']);self.assertEqual(completion['attempts'],12)
             attempts=[read_json(p) for p in (folder/'attempts').glob('*.json')]
             self.assertEqual(sum(r['score']['f1']==0 for r in attempts),3)
-            with patch('receipt_lab.preboard.aggregate.MANIFEST',manifest),patch('receipt_lab.preboard.aggregate.WORK',root),patch('receipt_lab.preboard.aggregate.validate',return_value=[]),patch('receipt_lab.preboard.aggregate.fingerprints',return_value={doc:'synthetic'}):
+            with patch('receipt_lab.preboard.aggregate.MANIFEST',manifest),patch('receipt_lab.preboard.aggregate.WORK',root),patch('receipt_lab.preboard.aggregate.validate',return_value=[]),patch('receipt_lab.preboard.aggregate.require_registry',return_value='synthetic-assets'),patch('receipt_lab.preboard.aggregate.fingerprints',return_value={doc:'synthetic'}):
                 report=aggregate(folder)
             self.assertEqual(len(report['conditions']),4)
             self.assertEqual(sum(r['primary_failed_documents'] for r in report['conditions'].values()),1)

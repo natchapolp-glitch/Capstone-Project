@@ -1,0 +1,294 @@
+{
+  "timestamp": "2026-10-18T04:45:49.819203+00:00",
+  "run_id": "pc-delivery-profile-engineering-v3",
+  "purpose": "engineering PC/transport timing only; no accuracy or user-study claim",
+  "source_photos": 3,
+  "attempts": 9,
+  "configuration": {
+    "model_id": "qwen3-0.6B-Q4_K_M",
+    "engine": "tesseract",
+    "grammar": true,
+    "asset_registry_sha256": "3c4ce3d9b3273be1469873841687a3c7cfa38464071624a6f6df436a1c662f7f",
+    "selection_sha256": null,
+    "status": "engineering_default_or_override"
+  },
+  "failures": 0,
+  "transport_only": false,
+  "concurrent_ocr_assistance": false,
+  "summaries": {
+    "publish_to_ha_observed_seconds": {
+      "samples": 9,
+      "median": 0.10279950001859106,
+      "min": 0.05568910000147298,
+      "max": 0.12652550000348128,
+      "p95": 0.12140274000703358,
+      "missing": 0
+    },
+    "automated_window_to_ha_observed_seconds": {
+      "samples": 9,
+      "median": 10.758303200011142,
+      "min": 6.214507400000002,
+      "max": 14.807299000007333,
+      "p95": 14.736873840010958,
+      "missing": 0
+    },
+    "ha_linux_service_rss_bytes": {
+      "samples": 9,
+      "median": 240132096,
+      "min": 240070656,
+      "max": 240226304,
+      "p95": 240219750.4
+    },
+    "broker_linux_service_rss_bytes": {
+      "samples": 9,
+      "median": 8900608,
+      "min": 8900608,
+      "max": 8904704,
+      "p95": 8904704.0
+    },
+    "windows_full_host_rss_bytes": {
+      "samples": 9,
+      "median": 2131402752,
+      "min": 2125885440,
+      "max": 2136236032,
+      "p95": 2136011571.2
+    }
+  },
+  "stage_summaries": {
+    "detection_and_preprocessing": {
+      "wall_seconds": {
+        "samples": 9,
+        "median": 0.44051740001305006,
+        "min": 0.26123780000489205,
+        "max": 0.6486238999932539,
+        "p95": 0.6378878200019245,
+        "missing": 0
+      },
+      "sampled_peak_rss_bytes": {
+        "samples": 9,
+        "median": 2103304192,
+        "min": 2092285952,
+        "max": 2108608512,
+        "p95": 2108462694.4,
+        "missing": 0
+      }
+    },
+    "ocr_windows_client": {
+      "wall_seconds": {
+        "samples": 9,
+        "median": 0.8813219000003301,
+        "min": 0.6588602999981958,
+        "max": 1.5642217999848071,
+        "p95": 1.503497359988978,
+        "missing": 0
+      },
+      "sampled_peak_rss_bytes": {
+        "samples": 9,
+        "median": 2131402752,
+        "min": 2125885440,
+        "max": 2136236032,
+        "p95": 2136011571.2,
+        "missing": 0
+      }
+    },
+    "llm_server": {
+      "wall_seconds": {
+        "samples": 9,
+        "median": 8.873782499984372,
+        "min": 4.609393799997633,
+        "max": 13.28940199999488,
+        "p95": 13.168762000004062,
+        "missing": 0
+      },
+      "sampled_peak_rss_bytes": {
+        "samples": 9,
+        "median": 1663873024,
+        "min": 1662767104,
+        "max": 1673932800,
+        "p95": 1670248038.4,
+        "missing": 0
+      }
+    },
+    "confirmation_persist_surrogate": {
+      "wall_seconds": {
+        "samples": 9,
+        "median": 0.052688199997646734,
+        "min": 0.033975199999986216,
+        "max": 0.11079409997910261,
+        "p95": 0.09041301999241114,
+        "missing": 0
+      },
+      "sampled_peak_rss_bytes": {
+        "samples": 9,
+        "median": 2087567360,
+        "min": 2082971648,
+        "max": 2093072384,
+        "p95": 2093011763.2,
+        "missing": 0
+      }
+    },
+    "ocr_linux_child": {
+      "wall_seconds": {
+        "samples": 9,
+        "median": 0.5407182579983782,
+        "min": 0.4210468490018684,
+        "max": 1.1673158180019527,
+        "p95": 1.1573050668004725,
+        "missing": 0
+      },
+      "child_peak_rss_bytes": {
+        "samples": 9,
+        "median": 50417664,
+        "min": 47824896,
+        "max": 53227520,
+        "p95": 53227520.0,
+        "missing": 0
+      }
+    },
+    "mqtt_client": {
+      "wall_seconds": {
+        "samples": 9,
+        "median": 0.04582339999615215,
+        "min": 0.035088300006464124,
+        "max": 0.08615570000256412,
+        "p95": 0.08192918000859209,
+        "missing": 0
+      },
+      "sampled_peak_rss_bytes": {
+        "samples": 9,
+        "median": 2087567360,
+        "min": 2082971648,
+        "max": 2093072384,
+        "p95": 2093011763.2,
+        "missing": 0
+      }
+    }
+  },
+  "human_confirmation_time": null,
+  "latency_note": "HA observed latency includes HTTP polling and is an observation bound, not exact HA processing time",
+  "memory_note": "Windows host/client and Linux HA/broker service-tree RSS are separate; never sum across these metrics",
+  "uncertainty": "Repeated deliveries are not independent transactions; small-sample p95 is descriptive only.",
+  "raw_evidence_sha256": {
+    "R4F4EA934251E-r1.json": "114dba325f64e3566654fa18a07c4b32e564e619cedc29e02b2f80a48b91f9f0",
+    "R4F4EA934251E-r2.json": "769ee4b7506f3a35a824df43d27dc944bc0b5335c5512c547f807a9664cd22da",
+    "R3B0A1D27A6DC-r1.json": "fba2165935c4e558d5b804d9f64340cd402e2059771b86bbbb7615e3b873fe59",
+    "R74946CAAC57E-r1.json": "f8ed6b8b1775177460cf1eda61c2dfebd5e77d798c952afa2243c48d2dafc505",
+    "R74946CAAC57E-r2.json": "ac2af9eaddc7191c7fd5ff19da28b2ef94752657fedc4d8fbb48ea4cc91c4b30",
+    "R4F4EA934251E-r0.json": "5d5023439ec50b5ad87493db4bb4a7d1f662b39e3d5bce3b3f54d4a3a92101e9",
+    "R74946CAAC57E-r0.json": "ed890526de85e50ec38e85cc1005e64c2634a10e838a7b42c3168a7d6b970510",
+    "R3B0A1D27A6DC-r2.json": "f2bb2072c115c7ec0e6db908bdf2d41177e426b9df416d511cb951a4f776da89",
+    "R3B0A1D27A6DC-r0.json": "87f412ff88393cc828ac695f393a82b8e34dca47b0cdfd1c7479af0561c5aed8"
+  },
+  "traces": [
+    {
+      "doc_id": "R4F4EA934251E",
+      "repetition": 1,
+      "pipeline_run_id": "fd3d6c0c-a841-4929-9d28-a3a2818eb907",
+      "event_id": "0820e47d-33a4-420c-9284-8160efc30f44:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R4F4EA934251E",
+      "repetition": 2,
+      "pipeline_run_id": "24206bb9-bb0a-402a-ad21-c7541aa35786",
+      "event_id": "581c5f8a-d109-48b7-b60a-23d29d1a352e:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "repetition": 1,
+      "pipeline_run_id": "605722d5-4151-4241-9d21-9f698be1fbb4",
+      "event_id": "f476a70a-0c52-4c69-b628-81fb5c1fda4a:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R74946CAAC57E",
+      "repetition": 1,
+      "pipeline_run_id": "bc89dfc4-628b-46b5-8976-eae7c54c3b04",
+      "event_id": "ad84598a-6576-4c08-a228-8b96f2543a3d:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R74946CAAC57E",
+      "repetition": 2,
+      "pipeline_run_id": "b3cc2299-5a5d-433b-ad14-d04989c66939",
+      "event_id": "7636e1dd-4969-4462-ba47-f3575ece73cd:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R4F4EA934251E",
+      "repetition": 0,
+      "pipeline_run_id": "4767a1e3-2de2-4b0f-85dc-3b61be54dc8f",
+      "event_id": "f00d3eef-44a3-46e7-b855-785802111de9:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R74946CAAC57E",
+      "repetition": 0,
+      "pipeline_run_id": "3d373615-edf6-43c2-a324-17fef527c7fb",
+      "event_id": "e9308314-c51c-4563-8c98-7b0e0e80bcf0:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "repetition": 2,
+      "pipeline_run_id": "656a6d69-64e8-44d1-a265-e3d74d91f2b2",
+      "event_id": "083733b7-87ee-4e5c-a15b-d27b8a9ce337:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    },
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "repetition": 0,
+      "pipeline_run_id": "b989c118-5360-46e4-98f7-56fd5d2bf045",
+      "event_id": "b6812044-fdd8-4eae-965a-b4a47259a3e1:1",
+      "status": "ok",
+      "ha_entities": [
+        "sensor.seminar_latest_purchase_total",
+        "sensor.seminar_latest_item_count"
+      ],
+      "ha_value_checks": true
+    }
+  ],
+  "manifest_sha256": "6331ccc9c6c4cabec67cf03d8eb312ea296b3c9476dc1e0b2f6a5ed0bd757503",
+  "private_summary_sha256": "3fbf2389cc0b4d9d71853431c2add503ab56ea8f390d9c3939ff4bacc2ca4552"
+}

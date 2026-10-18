@@ -1,20 +1,26 @@
 # Capstone Project — SCS3-4
 
-Project materials for the residential intelligence capstone. Examination group: **SCS3**.
-
-## Next implementation handoff
-
-Use the [five-part PC implementation plan](PREBOARD_IMPLEMENTATION_PLAN.md), [current implementation status](PREBOARD_STATUS.md), and [local demo/review quickstart](PREBOARD_QUICKSTART.md). Implementation and real model runs are underway on `pc-preboard-implementation`. [Aggregate evidence](reports/preboard/) distinguishes engineering runs from scored evaluation. The owner works alone and will check transcripts twice; this is recorded as a single-reviewer limitation. All five completion gates must pass before the final review and READY assignment updates.
+Residential intelligence capstone. Examination group **SCS3**.
 
 ## Current deliverables
 
-| Work | Editable file | Viewing/printing file |
-| --- | --- | --- |
-| Ass5 presentation | [PowerPoint](ass5_output/Residential_Intelligence_Project_Progress_READY_2026-10-18.pptx) | [PDF](ass5_output/Residential_Intelligence_Project_Progress_READY_2026-10-18.pdf) |
-| Ass6 proposal | [Word](ass6_output/Residential_Intelligence_Computer_Project_Proposal_READY_2026-10-18.docx) | [PDF](ass6_output/Residential_Intelligence_Computer_Project_Proposal_READY_2026-10-18.pdf) |
+Use **REVIEWED_2026-10-18**. Earlier READY files are retained as history.
 
-Start with the [team handoff](HANDOFF_ASS5_ASS6_FOR_TEAM_2026-10-18.md). The [Ass5 speaking script](ass5_output/Residential_Intelligence_Presentation_Script_2026-10-18.md) explains the presentation and demo. The [guideline check](ASS5_ASS6_GUIDELINE_CHECK_2026-10-18.md) records the checks and limits of the current results.
+| งาน | ไฟล์แก้ไขได้ | ไฟล์อ่าน/พิมพ์ |
+|---|---|---|
+| Ass5 สไลด์ 21 หน้า | [PowerPoint](ass5_output/Residential_Intelligence_Project_Progress_REVIEWED_2026-10-18.pptx) | [PDF](ass5_output/Residential_Intelligence_Project_Progress_REVIEWED_2026-10-18.pdf) |
+| Ass6 รายงาน 22 หน้า | [Word](ass6_output/Residential_Intelligence_Computer_Project_Proposal_REVIEWED_2026-10-18.docx) | [PDF](ass6_output/Residential_Intelligence_Computer_Project_Proposal_REVIEWED_2026-10-18.pdf) |
 
-The `ass5_build` and `ass6_build` directories contain working files and drafts. Earlier assignments, source references, and project notes are retained for context. The [raw document images and manifest](raw_receipts/README.md) are included. The experiment environment, trained outputs, and intermediate review files remain outside this repository; the embedded example in the presentation supports an offline demo.
+บทพูด 21 สไลด์: [Residential_Intelligence_Presentation_Script_REVIEWED_2026-10-18.md](ass5_output/Residential_Intelligence_Presentation_Script_REVIEWED_2026-10-18.md)
 
-The latest content review adds a clearly labelled planned-output example on slide 10 and aligns the proposal's JSON evaluation with the [canonical schema](receipt_schema.json) and [scoring protocol](JSON_SCORING_PROTOCOL.md). Scorer regression tests use synthetic data; they are not LLM evaluation results. This round prioritizes content correctness as requested by the project owner.
+Start with the [team handoff](HANDOFF_ASS5_ASS6_FOR_TEAM_2026-10-18.md), [guideline review](ASS5_ASS6_GUIDELINE_CHECK_2026-10-18.md), and [evidence audit](reports/preboard/deliverable_audit.json).
+
+## Actual PC evidence
+
+59 photographs have saved single-pass transcripts. Descriptive OCR CER uses 24 eligible photographs; 35 retain their exclusion status. Local LLM format/cost testing completed 288 attempts on six frozen photographs. Corrected PC-to-MQTT/Home Assistant timing completed nine trials on three photographs. These are not independent-transaction semantic accuracy results.
+
+JSON field accuracy and fresh scene testing are **not yet experimented**, as agreed with the project owner. Board NPU/energy measurements require hardware. Skipped annotation fields are unreviewed, not empty ground truth. No second annotation round is required.
+
+See [evidence summaries](reports/preboard/), [status](PREBOARD_STATUS.md), [scope](ASS5_ASS6_COMPLETION_GOAL.md), and [local demo quickstart](PREBOARD_QUICKSTART.md). The [raw images](raw_receipts/README.md) are retained. Models, transcript revisions, raw responses and SQLite evidence remain in the owner's external SeminarLab directory; public reports record their hashes. A friend's machine needs its own runtime/assets before localhost links work.
+
+The original Ass4 and pre-feedback Ass5 remain the foundations. e-Senses is the system concept; e-Eye is the current experimental part. Builder directories contain reproducible update scripts, not additional final submissions. Work is on `pc-preboard-implementation`.

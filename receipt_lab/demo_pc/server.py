@@ -60,6 +60,7 @@ class Handler(BaseHTTPRequestHandler):
                 priority = read_json(WORK/"annotations/priority_queue.json")["doc_ids"] if (WORK/"annotations/priority_queue.json").exists() else []
                 rows = sorted(rows, key=lambda r: (priority.index(r["doc_id"]) if r["doc_id"] in priority else 999, r["doc_id"]))
                 self.output({"token": TOKEN, "review_generation": review_generation(), "documents": [{"doc_id": r["doc_id"], "store": r["store"],
+                            "has_saved_transcript": any(e['slot']=='first' for e in annotations(r['doc_id'])),
                             "status": r["annotation_status"], "prior_item_name_status": r["prior_item_name_status"],
                             "rotation": r["rotation_to_read"], "original_pixel_boxes": r["original_pixel_boxes"]} for r in rows],
                             "receipts": STORE.list(),
@@ -68,19 +69,20 @@ class Handler(BaseHTTPRequestHandler):
                 self.output(STORE.get(query["id"][0]))
             elif url.path == "/api/review-count":
                 records = annotations(query["doc_id"][0])
-                # Never expose another human's transcript to independent entry form.
-                self.output({"slots": [r["slot"] for r in records], "reviewers": [r["reviewer"] for r in records]})
+                self.output({"slots": [r["slot"] for r in records], "reviewers": [r["reviewer"] for r in records],
+                             "saved_entry": next((r for r in records if r['slot'] == 'first'), None),
+                             "review_method": "single_reviewer_single_pass"})
             elif url.path == "/api/ocr-draft":
                 doc_id = query["doc_id"][0]
                 if doc_id not in {r['doc_id'] for r in read_json(MANIFEST)['records']}:
                     raise ValueError("Unknown document")
-                candidates = [WORK/f"runs/draft-{engine}-all59-v1/attempts/{doc_id}.json" for engine in ['easyocr','tesseract']]
+                candidates = [WORK/f"runs/{run}/attempts/{doc_id}.json" for run in ['draft-easyocr-all59-v1','draft-tesseract-all59-v2']]
                 selected = next((p for p in candidates if p.exists()), None)
                 if selected is None:
                     return self.output({"error": "OCR draft not ready yet"}, 409)
                 result = read_json(selected)
                 self.output({"text": result['text'], "engine": result['engine'], "unreviewed": True,
-                             "warning": "OCR draft contains errors. Human correction and a fresh second pass are required."})
+                             "warning": "OCR draft contains errors. Correct against the image; one human pass is sufficient under the owner instruction."})
             elif url.path == "/api/image":
                 row = next(r for r in read_json(MANIFEST)["records"] if r["doc_id"] == query["doc_id"][0])
                 path = Path(row["source"])
@@ -89,7 +91,7 @@ class Handler(BaseHTTPRequestHandler):
                     path, _ = prepare_image(row, "reference" if len(row["original_pixel_boxes"])==1 else "full")
                 self.output(path.read_bytes(), content_type="image/png" if path.suffix==".png" else "image/jpeg")
             elif url.path == "/adjudicate":
-                self.output(Path(__file__).with_name("adjudicate.html").read_bytes(), content_type="text/html; charset=utf-8")
+                self.output(Path(__file__).with_name("review.html").read_bytes(), content_type="text/html; charset=utf-8")
             elif url.path == "/api/adjudication":
                 doc_id = query["doc_id"][0]
                 entries = annotations(doc_id)

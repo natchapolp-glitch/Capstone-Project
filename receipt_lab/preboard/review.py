@@ -39,6 +39,8 @@ def submit_human(doc_id, payload):
               "extraction": payload["extraction"], "unreadable_regions": payload.get("unreadable_regions", []),
               "note": payload.get("note", ""), "entry_id": uuid.uuid4().hex}
     record['model_assisted_first_entry'] = bool(payload.get('model_assisted'))
+    record['review_method'] = 'single_reviewer_single_pass'
+    record['structured_json_status'] = 'unreviewed_not_scorable'
     record['draft_engine'] = payload.get('draft_engine')
     record['region_definition_sha256'] = object_hash({'boxes':rows[doc_id].get('original_pixel_boxes'),
                                                      'rotation':rows[doc_id].get('rotation_to_read')})
@@ -73,6 +75,8 @@ def adjudicate(doc_id, payload):
         raise ValueError("Reviewed split required")
     if len(metadata.get('original_pixel_boxes',[]))!=1:
         raise ValueError('Set one document region before both entries; complex photos remain excluded from this scored protocol')
+    if payload.get('region_attestation') is not True:
+        raise ValueError('กรุณาตรวจกรอบเทียบกับภาพต้นฉบับและติ๊กยืนยันกรอบเอกสารก่อนบันทึก')
     from .dataset import validate
     data = read_json(MANIFEST)
     row = next(r for r in data["records"] if r["doc_id"] == doc_id)
@@ -97,6 +101,7 @@ def adjudicate(doc_id, payload):
              "extraction": extraction, "unreadable_regions": [],
              "review_record_hashes": [object_hash(e) for e in evidence], "note": payload.get("note", "")}
     truth["review_method"] = "single_reviewer_double_entry"
+    truth['region_attestation']=True
     truth['transcript_lines']=line_records(doc_id,truth['transcript'],True)
     if row.get('challenge_candidate'):
         truth['new_scene_attestation']=True

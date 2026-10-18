@@ -5,8 +5,9 @@ import json
 import subprocess
 from pathlib import Path
 
-from .common import LAB, REPO, WORK, Measurement, digest, read_json, utc, write_json
+from .common import LAB, REPO, WORK, Measurement, digest, object_hash, read_json, utc, write_json
 from .dataset import MANIFEST
+from .assets import easy_identity, tesseract_identity, detector_identity, check_registered, portable, REGISTRY
 
 
 def wsl_path(path):
@@ -14,7 +15,7 @@ def wsl_path(path):
     return "/mnt/" + path.drive[0].lower() + path.as_posix()[2:]
 
 
-def prepare_image(row, mode="reference", detector=None, rotation=None):
+def prepare_image(row, mode="reference", detector=None, rotation=None, detector_assets=None):
     from PIL import Image
     im = Image.open(row["source"]).convert("RGB")
     direction = rotation if rotation is not None else row["rotation_to_read"]
@@ -27,6 +28,8 @@ def prepare_image(row, mode="reference", detector=None, rotation=None):
     elif mode == "predicted":
         if detector is None:
             from ultralytics import YOLO
+            detector_assets=detector_identity()
+            check_registered('detector',detector_assets)
             detector = YOLO(str(LAB / "yolo_expanded/runs/receipt_region_v8n/weights/best.pt"))
         import numpy as np
         if direction == "cw":
@@ -61,6 +64,7 @@ def prepare_image(row, mode="reference", detector=None, rotation=None):
     return target, {"crop_mode": mode, "box_original_pixels": box, "rotation": direction,
                     "rotation_provenance": "manual metadata (oracle orientation); not an automatic orientation model",
                     "detection_frame": "after operator-selected rotation" if mode == "predicted" else None,
+                    'detector_assets':portable(detector_assets) if detector_assets else None,
                     "source_sha256": row["sha256"], "crop_sha256": digest(target)}
 
 
@@ -72,33 +76,53 @@ class OCREngine:
             torch.set_num_threads(6)
             import easyocr
             with Measurement() as measured:
+                self.asset_identity=easy_identity()
+                self.asset_registered=check_registered(engine,self.asset_identity)
                 self.reader = easyocr.Reader(["th", "en"], gpu=False, verbose=False,
                        model_storage_directory=str(LAB / "models/easyocr"), download_enabled=False)
             self.load_measurement = measured.result
             self.version = easyocr.__version__
         elif engine == "tesseract":
-            self.load_measurement = None
-            self.version = subprocess.check_output(["wsl", "-d", "Ubuntu", "--exec", "tesseract", "--version"], text=True).splitlines()[0]
+            with Measurement() as measured:
+                self.asset_identity=tesseract_identity()
+                self.asset_registered=check_registered(engine,self.asset_identity)
+            self.load_measurement={**measured.result,'scope':'Runtime/asset verification only; Tesseract CLI loads language weights during each call'}
+            self.version=self.asset_identity['version']
         else:
             raise ValueError("Unknown OCR engine")
+        self.asset_registry_sha256=digest(REGISTRY) if self.asset_registered else None
 
     def run(self, image, timeout=120):
         image = Path(image)
         if self.engine == "easyocr":
+            # YOLO CPU initialization can reset torch's global thread count.
+            import torch
+            torch.set_num_threads(6)
             with Measurement() as m:
                 detected = self.reader.readtext(str(image), detail=1, paragraph=False, canvas_size=1600)
             lines = [{"box": [[float(v) for v in p] for p in box], "text": text,
                       "confidence": float(conf)} for box, text, conf in detected]
             # Preserve engine reading order, fixed in the preregistered config.
             result = {"status": "ok", "lines": lines, "text": "\n".join(x["text"] for x in lines), **m.result}
+            result['actual_torch_threads'] = torch.get_num_threads()
         else:
             command = ["wsl", "-d", "Ubuntu", "--exec", "python3", wsl_path(REPO / "receipt_lab/preboard/wsl_tesseract.py")]
-            p = subprocess.run(command, input=json.dumps({"image": wsl_path(image), "psm": 3, "timeout": timeout}),
-                               text=True, encoding="utf-8", capture_output=True, timeout=timeout+20)
-            if p.returncode:
-                raise RuntimeError(p.stderr[-1000:])
-            result = json.loads(p.stdout)
+            request={'image':wsl_path(image),'psm':3,'timeout':timeout,'tessdata_dir':self.asset_identity['data_dir'],
+                     'expected_assets':{w['filename']:w['sha256'] for w in self.asset_identity['weights']}}
+            with Measurement() as client:
+                try:
+                    p=subprocess.run(command,input=json.dumps(request),text=True,encoding='utf-8',capture_output=True,timeout=timeout+20)
+                    if p.returncode:raise RuntimeError(p.stderr[-1000:])
+                    result=json.loads(p.stdout)
+                except (OSError,ValueError,RuntimeError,subprocess.TimeoutExpired) as exc:
+                    result={'status':'failed','text':'','error':str(exc)}
+            result['linux_tesseract_wall_seconds']=result.get('wall_seconds')
+            result['wall_seconds']=client.result['wall_seconds']
+            result['windows_client_measurement']=client.result
+            result['timing_scope']='Windows request to parsed WSL result; includes bridge/startup. Linux engine time is separate.'
         return {"engine": self.engine, "version": self.version, "languages": ["th", "en"], "cpu_thread_limit": 6,
+                'engine_assets':portable(self.asset_identity),'engine_assets_sha256':object_hash(portable(self.asset_identity)),
+                'asset_registered':self.asset_registered,'asset_registry_sha256':self.asset_registry_sha256,
                 "input_sha256": digest(image), "timestamp": utc(), **result}
 
 

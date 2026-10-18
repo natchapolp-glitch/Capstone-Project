@@ -1,0 +1,11 @@
+{
+    "captured_at":  "2026-10-18T02:56:12.9827474Z",
+    "processor":  {
+                      "Name":  "Intel(R) Core(TM) Ultra 7 155H",
+                      "NumberOfCores":  16,
+                      "NumberOfLogicalProcessors":  22
+                  },
+    "memory":  {
+                   "TotalPhysicalMemory":  16866729984
+               }
+}

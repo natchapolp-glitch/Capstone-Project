@@ -1,0 +1,59 @@
+{
+  "registry_sha256": "3c4ce3d9b3273be1469873841687a3c7cfa38464071624a6f6df436a1c662f7f",
+  "assets": {
+    "easyocr": {
+      "engine": "easyocr",
+      "version": "1.7.2",
+      "config_sha256": "9c36d6c674fe32b05bda27192211ff6b63bf22f00b8439d40d33b35e3e2c1f8d",
+      "weights": [
+        {
+          "filename": "craft_mlt_25k.pth",
+          "bytes": 83152330,
+          "sha256": "4a5efbfb48b4081100544e75e1e2b57f8de3d84f213004b14b85fd4b3748db17",
+          "vendor_md5": "2f8227d2def4037cdb3b34389dcf9ec1",
+          "vendor_md5_matched": true,
+          "source_url": "https://github.com/JaidedAI/EasyOCR/releases/download/pre-v1.1.6/craft_mlt_25k.zip"
+        },
+        {
+          "filename": "thai.pth",
+          "bytes": 215384298,
+          "sha256": "3ebbb9321b9c7c694e169cd23cc37f3c0bd2a160f5b539602bbef80e663e0a17",
+          "vendor_md5": "40a06b563a2b3d7897e2d19df20dc709",
+          "vendor_md5_matched": true,
+          "source_url": "https://github.com/JaidedAI/EasyOCR/releases/download/pre-v1.1.6/thai.zip"
+        }
+      ]
+    },
+    "tesseract": {
+      "engine": "tesseract",
+      "version": "tesseract 5.5.0",
+      "data_dir": "/usr/share/tesseract-ocr/5/tessdata",
+      "executable_sha256": "644efa639b77a21b1096a6ced155112f0c730d05c7db871d52f4b2eb16bdf42a",
+      "weights": [
+        {
+          "filename": "tha.traineddata",
+          "sha256": "294227cc2d1292b0acb28d61d4115c88252b96d466ca90b417cf4cf0c67bf07c",
+          "bytes": 1072600
+        },
+        {
+          "filename": "eng.traineddata",
+          "sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2",
+          "bytes": 4113088
+        }
+      ]
+    },
+    "detector": {
+      "engine": "ultralytics_yolo",
+      "version": "8.4.178",
+      "filename": "best.pt",
+      "sha256": "bf2e82f682d3a2c45d7caf05cf1618f99149e2921c951eff6f9e025c882c9206",
+      "bytes": 6455402,
+      "source": "local training artifact; earlier labels and scores remain retrospective",
+      "training_artifact_hashes": {
+        "args.yaml": "898bad0602748441439ce619c15d6a06e6508b94f896b47a1a9910f428cb1e2b",
+        "results.csv": "7d8a63b0e036eaf20cbef957bc0397f92df1c319802472435aaba69d7f69e7ef"
+      }
+    }
+  },
+  "note": "Current asset identity, not retroactive proof of older engineering runs that omitted asset hashes"
+}

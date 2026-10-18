@@ -46,10 +46,10 @@ class ArtifactTests(unittest.TestCase):
     def test_only_completed_scored_ocr_from_same_checked_truth_is_accepted(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)
-            manifest={'purpose':'scored_ocr_evaluation','split':'evaluation','dataset_snapshot':{'fixture':'old'}}
+            manifest={'purpose':'scored_ocr_evaluation','split':'evaluation','dataset_snapshot':{'fixture':'old'},'asset_registry_sha256':'synthetic-assets'}
             write_json(root/'manifest.json',manifest)
             write_json(root/'completion.json',{'complete':True,'accuracy_scored':True})
-            with patch.object(experiment,'fingerprints',return_value={'fixture':'current'}):
+            with patch.object(experiment,'fingerprints',return_value={'fixture':'current'}),patch.object(experiment,'require_registry',return_value='synthetic-assets'):
                 with self.assertRaises(ValueError):experiment.checked_ocr_run(root,[],'evaluation')
                 manifest['dataset_snapshot']={'fixture':'current'}
                 write_json(root/'manifest.json',manifest)

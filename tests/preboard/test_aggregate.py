@@ -68,6 +68,7 @@ class AggregateTests(unittest.TestCase):
             (repo/'json_extraction_scorer.py').write_bytes((REPO/'json_extraction_scorer.py').read_bytes())
             doc='R000000000001';snapshot={doc:'synthetic-test-only'}
             manifest={'purpose':'scored_evaluation','split':'development','dataset_snapshot':snapshot,
+                      'asset_registry_sha256':'synthetic-assets',
                       'expected_attempts':3,'scorer_sha256':digest(repo/'json_extraction_scorer.py'),
                       'matrix':{'models':['fixture-not-a-real-model'],'sources':['reference'],'grammar':[True],'repetitions':3}}
             write_json(run/'manifest.json',manifest);write_json(run/'completion.json',{'complete':True})
@@ -77,7 +78,7 @@ class AggregateTests(unittest.TestCase):
                 write_json(run/'attempts'/f'fixture-r{rep}.json',{'doc_id':doc,'model':{'id':'fixture-not-a-real-model'},
                            'source_kind':'reference','grammar':True,'repetition':rep,'status':'ok','parse_valid':True,'schema_valid':True,
                            'score':score(truth,truth),'fields':field_metrics(truth,truth),'measurement':{'wall_seconds':rep+1}})
-            with patch('receipt_lab.preboard.aggregate.REPO',repo),patch('receipt_lab.preboard.aggregate.MANIFEST',root/'dataset.json'),patch('receipt_lab.preboard.aggregate.validate',return_value=[]),patch('receipt_lab.preboard.aggregate.fingerprints',return_value=snapshot):
+            with patch('receipt_lab.preboard.aggregate.REPO',repo),patch('receipt_lab.preboard.aggregate.MANIFEST',root/'dataset.json'),patch('receipt_lab.preboard.aggregate.validate',return_value=[]),patch('receipt_lab.preboard.aggregate.require_registry',return_value='synthetic-assets'),patch('receipt_lab.preboard.aggregate.fingerprints',return_value=snapshot):
                 result=aggregate(run,publish=True)
             self.assertEqual(len(result['documents']),3)
             self.assertEqual(next(iter(result['conditions'].values()))['macro_document_f1'],1)

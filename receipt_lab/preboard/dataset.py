@@ -153,6 +153,8 @@ def validate(data, require_review=False, check_hashes=True):
                     errors.append(f'{doc}: new-photo provenance not confirmed by owner')
                 if len(row['original_pixel_boxes'])!=1:
                     errors.append(f'{doc}: single-region scored protocol cannot use a complex/unconfigured image')
+                if truth.get('region_attestation') is not True:
+                    errors.append(f'{doc}: region not confirmed against the original image')
                 errors += [f"{doc}: {e}" for e in schema_errors(truth.get("extraction"))]
                 if truth.get("unreadable_regions") or not truth.get("transcript"):
                     errors.append(f"{doc}: incomplete full-document truth")

@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-17T20:38:52.880530+00:00",
+  "purpose": "Runtime identity and timing-boundary engineering check, not CER/accuracy",
+  "doc_id": "R3B0A1D27A6DC",
+  "status": "ok",
+  "host_wall_seconds": 0.6722570000129053,
+  "linux_wall_seconds": 0.45105921300000773,
+  "linux_child_peak_rss_bytes": 50266112,
+  "windows_client_rss_bytes": 71667712,
+  "wrong_expected_checksum_rejected": true,
+  "source_exif_counts": {
+    "1": 59
+  }
+}

@@ -20,9 +20,11 @@ class GateTests(unittest.TestCase):
         write_json(self.root / "selection.json", {"engine": "tesseract"})
         self.selection_hash = digest(self.root / "selection.json")
         self.patches = [patch.object(gates, "WORK", self.root),
+                        patch.object(gates, "REPO", self.root),
                         patch.object(gates, "MANIFEST", self.root / "dataset.json"),
                         patch.object(gates, "validate", return_value=[]),
                         patch.object(gates, "has_aggregate", return_value=True),
+                        patch.object(gates, "require_registry", return_value='synthetic-assets'),
                         patch.object(gates, "fingerprints", return_value=self.snapshot)]
         for p in self.patches:
             p.start()
@@ -36,6 +38,7 @@ class GateTests(unittest.TestCase):
     def add_matrix(self, name, split):
         folder = self.root / "runs" / name
         write_json(folder / "manifest.json", {"purpose": "scored_evaluation", "split": split,
+                   'asset_registry_sha256':'synthetic-assets',
                    "dataset_snapshot": self.snapshot, "selection_sha256": self.selection_hash,
                    "expected_attempts": 288, "matrix": {"models": ["a", "b", "c", "d"],
                    "sources": ["reference", "tesseract"], "grammar": [True, False], "repetitions": 3}})
@@ -44,6 +47,7 @@ class GateTests(unittest.TestCase):
     def add_pipeline(self):
         folder = self.root / "runs" / "full-pipeline"
         write_json(folder / "manifest.json", {"purpose": "scored_final_pipeline_challenge",
+                   'asset_registry_sha256':'synthetic-assets',
                    "dataset_snapshot": self.snapshot, "selection_sha256": self.selection_hash,
                    "expected_attempts": 18})
         write_json(folder / "completion.json", {"complete": True})
@@ -73,6 +77,17 @@ class GateTests(unittest.TestCase):
     def test_changed_frozen_selection_invalidates_evaluation(self):
         write_json(self.root / "selection.json", {"engine": "easyocr"})
         self.assertEqual(gates.build_report()["gates"][2]["status"], "IN_PROGRESS")
+
+    def test_demo_photo_count_does_not_replace_reviewed_transaction_count(self):
+        evidence={key:True for key in ['broker_stopped_delivery_failed','repeat_confirmation_same_event','restart_no_pending_event','invalid_schema_blocked']}
+        evidence['real_photo_traces']=[{'doc_id':r['doc_id'],'ha_entities':['synthetic-a','synthetic-b']} for r in self.rows[:3]]
+        write_json(self.root/'runs/delivery-integration/evidence.json',evidence)
+        result=gates.build_report()['gates'][3]
+        self.assertTrue(result['technical_trace_pass'])
+        self.assertEqual(result['status'],'WAITING_HUMAN')
+        for row in self.rows[:3]:row['group_status']='reviewed'
+        write_json(self.root/'dataset.json',{'records':self.rows})
+        self.assertEqual(gates.build_report()['gates'][3]['status'],'PASS_IMPLEMENTATION')
 
 
 if __name__ == "__main__":

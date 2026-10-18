@@ -5,6 +5,7 @@ from receipt_lab.preboard.common import LAB, REPO, WORK, Measurement, digest, re
 from receipt_lab.preboard.dataset import MANIFEST
 from receipt_lab.preboard.llm import LocalLLM
 from receipt_lab.preboard.ocr import OCREngine, prepare_image
+from receipt_lab.preboard.assets import detector_identity, check_registered, REGISTRY
 
 
 class PipelineRuntime:
@@ -13,6 +14,8 @@ class PipelineRuntime:
         self.configuration=configuration(model_id,engine)
         from ultralytics import YOLO
         with Measurement() as loaded:
+            self.detector_assets=detector_identity()
+            check_registered('detector',self.detector_assets)
             self.detector=YOLO(str(LAB / "yolo_expanded/runs/receipt_region_v8n/weights/best.pt"))
             self.ocr=OCREngine(self.configuration['engine'])
             self.llm=LocalLLM(self.configuration['model_id'])
@@ -27,7 +30,14 @@ def configuration(model_id=None,engine=None):
     model_id = model_id or selected.get('model_id', 'qwen3-0.6B-Q4_K_M')
     engine = engine or selected.get('engine','tesseract')
     grammar = selected.get('grammar', True)
+    asset_registry_sha256=digest(REGISTRY) if REGISTRY.exists() else None
+    if selected and selected.get('asset_registry_sha256')!=asset_registry_sha256:
+        raise ValueError('Runtime assets differ from the frozen development selection')
+    if selected:
+        for key,path in [('model_registry_sha256',WORK/'model_registry.json'),('schema_sha256',REPO/'receipt_schema.json'),('llm_driver_sha256',REPO/'receipt_lab/preboard/llm.py')]:
+            if selected.get(key)!=digest(path):raise ValueError('Frozen pipeline version changed: '+key)
     return {'model_id':model_id,'engine':engine,'grammar':grammar,
+            'asset_registry_sha256':asset_registry_sha256,
             'selection_sha256':digest(WORK/'selection.json') if selected else None,
             'status':'frozen_from_development' if selected and model_id==selected['model_id'] and engine==selected['engine'] else 'engineering_default_or_override'}
 
@@ -55,12 +65,15 @@ def process(doc_id, store, model_id=None, engine=None, rotation="none", runtime=
               "device": "PC CPU", "purpose": "engineering demo; no accuracy claim without adjudicated truth"}
     record['configuration'] = config
     record['runtime_reused']=runtime is not None
+    detection=None
     with Measurement() as total:
         try:
             from ultralytics import YOLO
             with Measurement() as detection:
+                detector_assets=runtime.detector_assets if runtime else detector_identity()
+                check_registered('detector',detector_assets)
                 detector = runtime.detector if runtime else YOLO(str(LAB / "yolo_expanded/runs/receipt_region_v8n/weights/best.pt"))
-                image, crop = prepare_image(row, "predicted", detector=detector, rotation=rotation)
+                image, crop = prepare_image(row, "predicted", detector=detector, rotation=rotation,detector_assets=detector_assets)
             record["detection_and_preprocessing"] = {**detection.result, "transform": crop}
             ocr = runtime.ocr if runtime else OCREngine(engine)
             record['ocr_load']={'measurement':ocr.load_measurement,'included_in_request':runtime is None}
@@ -86,6 +99,8 @@ def process(doc_id, store, model_id=None, engine=None, rotation="none", runtime=
             if warning:record['warnings'].append(warning)
         except Exception as exc:
             record.update({"status": "processing_failed", "error": str(exc), "extraction": None})
+            if detection is not None and hasattr(detection,'result'):
+                record.setdefault('detection_and_preprocessing',{**detection.result,'status':'failed'})
     record["processing_measurement"] = total.result
     record['processing_measurement']['latency_scope']='warm resident models; startup excluded' if runtime else 'request includes model startup; not warm inference'
     record["processing_measurement"]["note"] = "Windows pipeline process tree; Linux Tesseract child memory is recorded separately in OCR result"

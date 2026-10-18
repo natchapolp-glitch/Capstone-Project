@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-10-17T21:35:49.936128+00:00",
+  "method": "Assistant visual spot-check; not a second human reviewer",
+  "records": [
+    {
+      "doc_id": "R9D4AD3532BE1",
+      "source_sha256": "9d4ad3532be1ca6f5cbaac95302d73f6330a8881879905eff40be00c4ad045e3",
+      "entry_sha256": "e0a6c5bf643794aeabf72cb7b40395b27f32ac28fdb114f1bda000bfc2f78963",
+      "exclusion_reasons": [
+        "two_pages_in_display_but_reference_omits_repeated_header_and_lines"
+      ],
+      "finding": "Source visibly contains two pages. Supplied transcript combines content and omits repeated header/other lines; unsuitable for full-image literal CER. Preserve original submission."
+    }
+  ]
+}

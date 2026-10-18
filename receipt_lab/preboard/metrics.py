@@ -23,3 +23,11 @@ def summarize(rows):
             "reference_characters": chars,
             "micro_cer": sum(r["edit_distance"] for r in applicable)/chars if chars else None,
             "macro_cer": sum(r["cer"] for r in applicable)/len(applicable) if applicable else None}
+
+
+def box_iou(reference,prediction):
+    if prediction is None or len(prediction)!=4:return 0.0
+    ax0,ay0,ax1,ay1=reference;bx0,by0,bx1,by1=prediction
+    intersection=max(0,min(ax1,bx1)-max(ax0,bx0))*max(0,min(ay1,by1)-max(ay0,by0))
+    union=max(0,ax1-ax0)*max(0,ay1-ay0)+max(0,bx1-bx0)*max(0,by1-by0)-intersection
+    return intersection/union if union>0 else 0.0

@@ -19,9 +19,29 @@
 3. กด **ยืนยันและส่งข้อมูล** จะบันทึกการแก้ไขและส่งรายการที่ยืนยันแล้วผ่าน MQTT ถ้า broker ไม่พร้อม รายการจะค้างส่งและกดส่งใหม่ได้
 4. การเลือกในช่อง **รายการที่บันทึกไว้** จะเปิดงานที่ประมวลผลแล้วกลับมาตรวจได้ การกดยืนยันซ้ำข้อมูลเดิมใช้ event เดิม ไม่เพิ่มการซื้อซ้ำ
 
-## เฉลยสำหรับวัดความถูกต้อง
+## ข้อความอ้างอิงจากการตรวจหนึ่งรอบ (ขอบเขตล่าสุด)
 
-ผู้ใช้ยืนยันว่าทำคนเดียว ใช้นายณัชพล เพ็งพลตรวจสองรอบ แล้วรายงานข้อจำกัดนี้ตามจริง
+เจ้าของงานกรอกข้อความครบ **59/59 ภาพ** แล้ว ใช้ข้อความทุกบรรทัดที่บันทึกไว้หนึ่งรอบ ช่องร้าน วันที่ ยอดรวม และรายการสินค้าที่ไม่ได้กรอกถือว่า **ยังไม่ได้ตรวจ** ไม่ใช่เฉลย null หรือรายการว่าง และไม่ต้องกรอกรอบสอง
+
+- ดูข้อความเดิม: http://127.0.0.1:8090/review
+- ดูเฉพาะภาพที่ยังไม่บันทึก: http://127.0.0.1:8090/review?filter=missing (ขณะนี้ไม่มีภาพค้าง)
+- การแก้ข้อความเดิมสร้าง revision ใหม่ เก็บประวัติเดิมไว้ทั้งหมด ต้องบันทึกทีละภาพก่อนกดภาพถัดไป
+- `/adjudicate` เปิดหน้าตรวจรอบเดียวเช่นกัน โค้ดเปรียบเทียบสองรอบเก็บไว้เป็น workflow เดิมและไม่ใช่ข้อกำหนดปัจจุบัน
+
+ผล OCR ล่าสุดอยู่ใน `reports/preboard/single_pass_ocr.json` ใช้ snapshot `single-pass-owner-v4` ซึ่งเก็บข้อความครบ 59 ภาพ ตัดเฉพาะป้าย `[cite: N]` ก่อนคำนวณโดยไม่เปลี่ยนข้อความดิบ มี 24 ภาพผ่านเกณฑ์คัดเข้า และ 35 ภาพแยกสถานะจากความไม่ครบ/การจัดรูปแบบ ข้อความที่ผ่านเกณฑ์ยังไม่ใช่เฉลยที่รับรองครบทุกตัวอักษร
+
+คำสั่งรันซ้ำจาก snapshot เดิม:
+
+```powershell
+& 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.single_pass --run-id single-pass-owner-v4
+& 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.single_pass_llm --run-id single-pass-llm-v2 --snapshot-run single-pass-owner-v2
+```
+
+LLM ตรึง 6 ภาพจาก snapshot ก่อนเติม 4 ภาพท้าย ข้อความของหกภาพนั้นยังตรงแฮชเดิม จึงรันต่อได้และไม่ต้องนับภาพที่เติมใหม่เป็นตัวอย่าง LLM ผลนี้วัด parse/schema และเวลา/RSS เท่านั้น ไม่ให้คะแนนเนื้อหา JSON
+
+## ขั้นตอนเฉลยแบบเต็มจากแผนเดิม (เก็บเพื่ออ้างอิง ไม่ต้องทำในรอบนี้)
+
+แผนเดิมเคยกำหนดให้ผู้ตรวจคนเดียวตรวจสองรอบ ขั้นตอนด้านล่างเก็บไว้เพื่ออ้างอิงเท่านั้น คำสั่งล่าสุดให้ใช้ข้อความหนึ่งรอบที่บันทึกครบ 59 ภาพแล้ว จึงไม่ต้องดำเนินการส่วนนี้ในงานส่งมอบรอบปัจจุบัน
 
 1. เปิด http://127.0.0.1:8090/review เลือกภาพและรอบแรก ถอดข้อความในภาพสำหรับตรวจให้ตรงทุกบรรทัด พร้อมฟิลด์และรายการสินค้า ช่องไหนมีข้อความแต่อ่านไม่ได้ให้ระบุในช่องตำแหน่งที่อ่านไม่ได้
 2. ใส่ชื่อ ติ๊กยืนยันว่าอ่านจากภาพด้วยตนเอง แล้วกด **บันทึกเฉลยรอบนี้** รอข้อความว่าบันทึกสำเร็จก่อนกด **ภาพถัดไป** ต้องบันทึกทีละภาพ ปุ่มนี้บันทึกเฉพาะภาพและรอบที่เปิดอยู่ ไม่ส่งข้อมูลซื้อเข้า Home Assistant
@@ -36,6 +56,8 @@
 การระบุชื่อผู้ตรวจหรือการติ๊กในข้อมูลทดสอบอัตโนมัติไม่ใช่หลักฐานว่าคนตรวจจริง ผลรันที่ assistant สร้างอยู่ในสถานะ engineering/draft
 
 ## ภาพต่างฉากใหม่
+
+สถานะปัจจุบัน: **ยังไม่ได้ทดลอง** ผู้จัดทำให้พักส่วนนี้ไว้ คำแนะนำต่อไปนี้ใช้เมื่อกลับมาทำการทดลองชุดใหม่
 
 นำภาพจริงใหม่อย่างน้อย 6 ภาพ จากอย่างน้อย 3 ธุรกรรมที่ไม่ซ้ำชุดเดิม ใส่ใน `C:\Users\NATCHAPOL\SeminarLab\preboard\new_scene_inbox` ถ่ายให้เห็นเอกสารครบและตัวอักษรชัด เก็บร้าน/วันที่/อุปกรณ์/แสง/ฉากในบันทึกกำกับ การถ่ายซ้ำธุรกรรมเดียวให้นับอยู่กลุ่มเดียวกัน การหมุนหรือปรับแสงภาพเก่าไม่ใช่ภาพใหม่
 
@@ -53,6 +75,7 @@
 
 ```powershell
 # ตรวจโครงข้อมูลและการตรวจเฉลย
+& 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.assets
 & 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.dataset validate
 & 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.verify
 
@@ -71,6 +94,7 @@ $preboardModel = (Get-Content 'C:\Users\NATCHAPOL\SeminarLab\preboard\selection.
 
 # ตรวจการส่งจริงและเงื่อนไขครบห้าข้อ
 & 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.verify_delivery
+& 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.profile_transport
 & 'C:\Users\NATCHAPOL\SeminarLab\.venv\Scripts\python.exe' -m receipt_lab.preboard.gates
 
 # หยุดเฉพาะบริการทดลองที่สร้างไว้
@@ -90,3 +114,7 @@ OCR และ LLM benchmark ใช้ run ID เดิมเพื่อรั�
 ไฟล์ `selection.json` ต้องมี engine, เวลา frozen_at และ hash หลักฐาน development โค้ดไม่เลือกผู้ชนะให้จากภาพ evaluation โดยอัตโนมัติ
 
 Home Assistant ใช้ Core development instance แยกใน WSL สำหรับทดลองทางวิศวกรรม ไม่ใช่การติดตั้ง production ที่แนะนำให้ผู้ใช้ทั่วไป รายละเอียด runtime/model และผลจริงแบบไม่เผยข้อความใบเสร็จอยู่ใน `reports/preboard/` ส่วน raw output และข้อมูลเข้าสู่ระบบอยู่เฉพาะ `SeminarLab/preboard` ห้ามอัปโหลด token หรือรหัสผ่าน
+
+`assets` ตรวจ vendor checksum ของ EasyOCR และบันทึก SHA-256 ของ weights, executable/ภาษาของ Tesseract และ YOLO ลง registry ก่อน scored runs หาก asset เปลี่ยนจะไม่ปะปนกับรอบเดิม Tesseract บันทึกเวลา Windows ที่เรียก WSL ทั้งหมดเป็นเวลาหลัก และแยกเวลา/peak RSS ของ Linux child พร้อม RSS ฝั่ง Windows ไว้คนละ metric
+
+`profile_transport` ใช้ภาพเดโมจริงสามภาพ รันใหม่สามรอบต่อภาพหลัง warm-up เก็บเวลาจากภาพถึง state ใน HA พร้อมขั้นยืนยันฐานข้อมูล/MQTT และ RSS ของ HA/broker ฝั่ง Linux การยืนยันใช้ automation เฉพาะ engineering test ไม่ใช่การตรวจเฉลยหรือ user study; เวลาคนตรวจจึงเป็น null และ state latency รวมการ polling/HTTP ด้วย ผลนี้ต้องแสดง configuration และเงื่อนไขงานเบื้องหลัง ไม่ปนกับคะแนนความถูกต้องหรือเวลาของ final challenge

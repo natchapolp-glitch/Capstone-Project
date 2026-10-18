@@ -86,7 +86,7 @@ class AdjudicationTests(unittest.TestCase):
                          'extraction':truth,'slot':'first','unreadable_regions':[]}
                 first=submit_human(doc,payload)
                 second=submit_human(doc,{**payload,'slot':'second'})
-                adjudication={'adjudicator':'synthetic-test-person','attestation':True,'transcript':payload['transcript'],
+                adjudication={'adjudicator':'synthetic-test-person','attestation':True,'region_attestation':True,'transcript':payload['transcript'],
                     'extraction':truth,'metadata':{'original_pixel_boxes':[[1,0,100,200]],'transaction_group_id':'TX_001','split':'development'}}
                 with self.assertRaises(ValueError):adjudicate(doc,adjudication)
                 first_path=next((folder/'annotations/human'/doc).glob('first-*.json'))
@@ -94,6 +94,7 @@ class AdjudicationTests(unittest.TestCase):
                 write_json(first_path,legacy) # emulate the old fixture format, not a live human record
                 before=digest(first_path)
                 adjudication['metadata']['original_pixel_boxes']=[[0,0,100,200]]
+                with self.assertRaises(ValueError):adjudicate(doc,{**adjudication,'region_attestation':False})
                 adjudicate(doc,adjudication)
                 result=read_json(folder/'annotations/adjudicated'/f'{doc}.json')
                 self.assertEqual(result['review_method'],'single_reviewer_double_entry')

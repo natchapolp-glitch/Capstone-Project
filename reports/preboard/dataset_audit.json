@@ -1,24 +1,24 @@
 {
-  "timestamp": "2026-10-17T20:13:03.652814+00:00",
+  "timestamp": "2026-10-17T21:17:48.099157+00:00",
   "photo_candidates": 59,
   "original_photo_candidates": 59,
   "new_challenge_candidates": 0,
   "original_annotation_status_counts": {
-    "draft_ai": 45,
-    "human_transcribed": 14
+    "draft_ai": 7,
+    "human_transcribed": 52
   },
-  "manifest_sha256": "62bd59815fb830e23c91f9e15249fad55967dda93ab22e165bfc32acb92e11d6",
+  "manifest_sha256": "c19d638eddc5543fb7ef0b86f66d733c6064c4d06d65dfdb8294c9efd89b0958",
   "original_boxes_present": 54,
   "complex_or_missing_boxes": 5,
   "annotation_status_counts": {
-    "draft_ai": 45,
-    "human_transcribed": 14
+    "draft_ai": 7,
+    "human_transcribed": 52
   },
   "unresolved_transaction_groups": 59,
-  "human_review_rounds_received": 14,
-  "photos_with_human_entries": 14,
+  "human_review_rounds_received": 52,
+  "photos_with_human_entries": 52,
   "human_round_counts": {
-    "first": 14,
+    "first": 52,
     "second": 0
   },
   "structural_errors": [],

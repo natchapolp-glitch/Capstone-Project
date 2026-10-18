@@ -87,6 +87,7 @@ def main():
                         'input_sha256':r['input_sha256'],'text_length':len(r['text']),
                         'memory_bytes':r.get('sampled_peak_rss_bytes',r.get('child_peak_rss_bytes')),
                         'memory_metric':r['memory_metric'],'raw_evidence_sha256':digest(p),'accuracy_scored':False})
+            ocr[-1]['timing_scope']=r.get('timing_scope','Legacy Linux child duration only; WSL bridge excluded' if engine=='tesseract' else 'EasyOCR readtext call in Windows')
     write_json(output/'engineering_ocr.json',{'scope':'paired engineering runs on same reference crops; not CER/accuracy; timing not a controlled benchmark',
                                           'runs':ocr})
     delivery=WORK/'runs/delivery-integration/evidence.json'
