@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "command": "get_config",
+      "success": true,
+      "error": null
+    },
+    {
+      "command": "get_states",
+      "success": true,
+      "error": null
+    },
+    {
+      "command": "get_services",
+      "success": true,
+      "error": null
+    },
+    {
+      "command": "get_panels",
+      "success": true,
+      "error": null
+    },
+    {
+      "command": "auth/current_user",
+      "success": true,
+      "error": null
+    },
+    {
+      "command": "frontend/get_themes",
+      "success": true,
+      "error": null
+    }
+  ],
+  "all_passed": true,
+  "timestamp": "2026-10-21T07:13:17.868920+00:00",
+  "cause": "get_services failed importing pymicro_vad",
+  "repair": [
+    "Installed python3.14-dev from Ubuntu repository",
+    "Installed pymicro-vad==1.0.1 and pyspeex-noise==1.0.2 matching installed HA assist_pipeline manifest"
+  ],
+  "browser_visual_confirmation": "User confirmed main page opens after refresh",
+  "mqtt_sensors_readback": {
+    "reachable": true,
+    "entities": [
+      {
+        "entity_id": "sensor.seminar_latest_purchase_total",
+        "state": "99300",
+        "event_id": "8ecccd19-f5e3-4952-9a8b-68220a61b8f3:1",
+        "doc_id": "R3B0A1D27A6DC",
+        "last_updated": "2026-10-21T06:38:22.921726+00:00"
+      },
+      {
+        "entity_id": "sensor.seminar_latest_item_count",
+        "state": "1",
+        "event_id": "8ecccd19-f5e3-4952-9a8b-68220a61b8f3:1",
+        "doc_id": "R3B0A1D27A6DC",
+        "last_updated": "2026-10-21T06:38:22.922674+00:00"
+      }
+    ]
+  }
+}

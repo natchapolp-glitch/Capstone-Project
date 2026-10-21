@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.5 (Python 3.13.7 on win32)" generated="2026-10-21T14:45:49.051486" rpa="false" schemaversion="5">
+<suite id="s1" name="Demo Presentation" source="C:\Users\NATCHAPOL\OneDrive\เดสก์ท็อป\Seminar\tests\robot\demo_presentation.robot">
+<kw name="Start Demo Browser" type="SETUP">
+<kw name="Check Preconditions" owner="DemoEvidence">
+<status status="PASS" start="2026-10-21T14:45:49.451350" elapsed="0.029815"/>
+</kw>
+<if>
+<branch type="IF" condition="$EXISTING_RECEIPT">
+<kw name="Use Existing Test Run" owner="DemoEvidence">
+<arg>${EXISTING_RECEIPT}</arg>
+<status status="PASS" start="2026-10-21T14:45:49.481591" elapsed="0.037338"/>
+</kw>
+<status status="PASS" start="2026-10-21T14:45:49.481329" elapsed="0.037761"/>
+</branch>
+<status status="PASS" start="2026-10-21T14:45:49.481299" elapsed="0.037884"/>
+</if>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2026-10-21T14:45:49.523281" level="INFO">${options} = &lt;selenium.webdriver.chrome.options.Options object at 0x000002837CBD3230&gt;</msg>
+<var>${options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>modules=selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-10-21T14:45:49.519467" elapsed="0.003851"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--headless\=new</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2026-10-21T14:45:49.523417" elapsed="0.000306"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--window-size\=1600,1000</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2026-10-21T14:45:49.523809" elapsed="0.000161"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-10-21T14:45:49.524292" level="INFO">Opening browser 'chrome' to base url 'http://127.0.0.1:8090/demo'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-10-21T14:45:49.524131" elapsed="0.549671"/>
+</kw>
+<status status="PASS" start="2026-10-21T14:45:49.450725" elapsed="0.623209"/>
+</kw>
+<test id="s1-t1" name="05 Home Assistant Login And States Show The Received Event" line="79">
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-10-21T14:45:50.074591" level="INFO">Opening url 'http://127.0.0.1:8123/config/tools/state'</msg>
+<arg>http://127.0.0.1:8123/config/tools/state</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-10-21T14:45:50.074463" elapsed="0.100598"/>
+</kw>
+<kw name="Sign In To Home Assistant Privately" owner="DemoEvidence">
+<status status="PASS" start="2026-10-21T14:45:50.175248" elapsed="0.660881"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Home Assistant State Page Should Load" owner="DemoEvidence">
+<msg time="2026-10-21T14:45:50.840349" level="FAIL">Home Assistant main config panel has not loaded</msg>
+<status status="FAIL" start="2026-10-21T14:45:50.836754" elapsed="0.004386">Home Assistant main config panel has not loaded</status>
+</kw>
+<kw name="Home Assistant State Page Should Load" owner="DemoEvidence">
+<status status="PASS" start="2026-10-21T14:45:51.841940" elapsed="0.208948"/>
+</kw>
+<arg>45s</arg>
+<arg>1s</arg>
+<arg>Home Assistant State Page Should Load</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-10-21T14:45:50.836329" elapsed="1.214638"/>
+</kw>
+<kw name="Filter Home Assistant Demo Sensors" owner="DemoEvidence">
+<status status="PASS" start="2026-10-21T14:45:52.051078" elapsed="0.084908"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<status status="PASS" start="2026-10-21T14:45:52.137372" elapsed="0.024889"/>
+</kw>
+<arg>30s</arg>
+<arg>1s</arg>
+<arg>Home Assistant Should Display Test Event</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-10-21T14:45:52.136433" elapsed="0.025913"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-21T14:45:52.266735" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-21T14:45:52.162675" elapsed="0.104255"/>
+</kw>
+<status status="PASS" start="2026-10-21T14:45:50.074029" elapsed="2.193030"/>
+</test>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2026-10-21T14:45:52.267959" elapsed="2.153068"/>
+</kw>
+<doc>Real Chrome UI flow on the presentation PC. Synthetic edits and automated confirmation are transport tests, not human ground truth.</doc>
+<status status="PASS" start="2026-10-21T14:45:49.055166" elapsed="5.366005"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Demo Presentation" id="s1" pass="1" fail="0" skip="0">Demo Presentation</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

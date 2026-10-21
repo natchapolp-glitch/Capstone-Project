@@ -1,0 +1,177 @@
+{
+  "timestamp": "2026-10-21T06:00:39.640461+00:00",
+  "purpose": "Presentation PC readiness; automatic engineering confirmation, not human review or semantic accuracy",
+  "browser_click_test": "not performed: no connected browser",
+  "documents": 59,
+  "saved_transcripts": 59,
+  "trials": [
+    {
+      "doc_id": "R4F4EA934251E",
+      "receipt_id": "32a69858-20f2-4e9a-9e44-92c2d5ae2338",
+      "pipeline_run_id": "4152cde9-304b-4a0c-a4b2-b67c4bef5418",
+      "process_http_seconds": 33.96597570000449,
+      "rotation": "none",
+      "status": "ok",
+      "configuration": {
+        "model_id": "qwen3-0.6B-Q4_K_M",
+        "engine": "tesseract",
+        "grammar": true,
+        "asset_registry_sha256": "3c4ce3d9b3273be1469873841687a3c7cfa38464071624a6f6df436a1c662f7f",
+        "selection_sha256": null,
+        "status": "engineering_default_or_override"
+      },
+      "processing_measurement": {
+        "wall_seconds": 33.815360600012355,
+        "sampled_peak_rss_bytes": 2029670400,
+        "rss_samples": 461,
+        "rss_interval_seconds": 0.05,
+        "measured_pid": 10616,
+        "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+        "latency_scope": "request includes model startup; not warm inference",
+        "note": "Windows pipeline process tree; Linux Tesseract child memory is recorded separately in OCR result"
+      },
+      "ocr_status": "ok",
+      "llm_status": "ok",
+      "schema_valid": true,
+      "event_id": "32a69858-20f2-4e9a-9e44-92c2d5ae2338:1",
+      "mqtt_puback": true,
+      "ha_value_checks": true,
+      "ha_entities": [
+        {
+          "entity_id": "sensor.seminar_latest_purchase_total",
+          "state": "92140.0",
+          "event_id": "32a69858-20f2-4e9a-9e44-92c2d5ae2338:1"
+        },
+        {
+          "entity_id": "sensor.seminar_latest_item_count",
+          "state": "1",
+          "event_id": "32a69858-20f2-4e9a-9e44-92c2d5ae2338:1"
+        }
+      ],
+      "same_confirmation_idempotent": true,
+      "detection_image_http_verified": true
+    },
+    {
+      "doc_id": "R3B0A1D27A6DC",
+      "receipt_id": "f504cf9b-567b-499a-b809-c708e27a2479",
+      "pipeline_run_id": "883e09d2-5839-4a48-8121-c779221d4400",
+      "process_http_seconds": 11.423478199983947,
+      "rotation": "ccw",
+      "status": "ok",
+      "configuration": {
+        "model_id": "qwen3-0.6B-Q4_K_M",
+        "engine": "tesseract",
+        "grammar": true,
+        "asset_registry_sha256": "3c4ce3d9b3273be1469873841687a3c7cfa38464071624a6f6df436a1c662f7f",
+        "selection_sha256": null,
+        "status": "engineering_default_or_override"
+      },
+      "processing_measurement": {
+        "wall_seconds": 11.388198400032707,
+        "sampled_peak_rss_bytes": 2095534080,
+        "rss_samples": 149,
+        "rss_interval_seconds": 0.05,
+        "measured_pid": 10616,
+        "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+        "latency_scope": "request includes model startup; not warm inference",
+        "note": "Windows pipeline process tree; Linux Tesseract child memory is recorded separately in OCR result"
+      },
+      "ocr_status": "ok",
+      "llm_status": "ok",
+      "schema_valid": true,
+      "event_id": "f504cf9b-567b-499a-b809-c708e27a2479:1",
+      "mqtt_puback": true,
+      "ha_value_checks": true,
+      "ha_entities": [
+        {
+          "entity_id": "sensor.seminar_latest_purchase_total",
+          "state": "99300",
+          "event_id": "f504cf9b-567b-499a-b809-c708e27a2479:1"
+        },
+        {
+          "entity_id": "sensor.seminar_latest_item_count",
+          "state": "1",
+          "event_id": "f504cf9b-567b-499a-b809-c708e27a2479:1"
+        }
+      ],
+      "same_confirmation_idempotent": true,
+      "detection_image_http_verified": true
+    },
+    {
+      "doc_id": "R74946CAAC57E",
+      "receipt_id": "903a5782-771d-47ab-a2a1-882ebfaa735e",
+      "pipeline_run_id": "3248fe01-4172-4747-8109-9838e18bd8ca",
+      "process_http_seconds": 20.586021800001618,
+      "rotation": "ccw",
+      "status": "ok",
+      "configuration": {
+        "model_id": "qwen3-0.6B-Q4_K_M",
+        "engine": "tesseract",
+        "grammar": true,
+        "asset_registry_sha256": "3c4ce3d9b3273be1469873841687a3c7cfa38464071624a6f6df436a1c662f7f",
+        "selection_sha256": null,
+        "status": "engineering_default_or_override"
+      },
+      "processing_measurement": {
+        "wall_seconds": 20.52278539998224,
+        "sampled_peak_rss_bytes": 2098761728,
+        "rss_samples": 272,
+        "rss_interval_seconds": 0.05,
+        "measured_pid": 10616,
+        "memory_metric": "sampled process-tree RSS; shared pages may be counted twice",
+        "latency_scope": "request includes model startup; not warm inference",
+        "note": "Windows pipeline process tree; Linux Tesseract child memory is recorded separately in OCR result"
+      },
+      "ocr_status": "ok",
+      "llm_status": "ok",
+      "schema_valid": true,
+      "event_id": "903a5782-771d-47ab-a2a1-882ebfaa735e:1",
+      "mqtt_puback": true,
+      "ha_value_checks": true,
+      "ha_entities": [
+        {
+          "entity_id": "sensor.seminar_latest_purchase_total",
+          "state": "0",
+          "event_id": "903a5782-771d-47ab-a2a1-882ebfaa735e:1"
+        },
+        {
+          "entity_id": "sensor.seminar_latest_item_count",
+          "state": "6",
+          "event_id": "903a5782-771d-47ab-a2a1-882ebfaa735e:1"
+        }
+      ],
+      "same_confirmation_idempotent": true,
+      "detection_image_http_verified": true
+    }
+  ],
+  "all_passed": true,
+  "pending_outbox_after": 0,
+  "ui_static_checks": {
+    "all_js_element_ids_exist": true,
+    "ha_readback_endpoint": true,
+    "detector_images": 3,
+    "browser_click_test": false,
+    "javascript_syntax": "node --check: passed",
+    "served_html_matches_latest_file": true,
+    "detection_overlay_visually_checked": "R74946CAAC57E",
+    "thai_encoding_regression": {
+      "required_unicode_labels_in_http_response": true,
+      "corrupted_question_mark_runs": 0,
+      "note": "Earlier shell-piped Thai literals became question marks; fixed with direct UTF-8 patch after user screenshot. Earlier UTF-8 claim was insufficient."
+    },
+    "user_screenshot": "User screenshot confirms page and detector image load; it revealed corrupt labels which are now repaired in served HTML. Updated browser rendering not yet observed."
+  },
+  "modified_source_sha256": {
+    "receipt_lab\\demo_pc\\server.py": "3797eecab29b7ecbe529bf4627a0380e091f22f2c72f44c6d85d5bbfd49b37a6",
+    "receipt_lab\\demo_pc\\index.html": "0635c89263256f2682bcb45c6e75183c26cfc7a85b500160b9bb8e8f5cc59986",
+    "receipt_lab/demo_pc/index.html": "d13a9d4ee5691d7cacde32b1118fc2e0a56b2b79b6ca385ed721e431a608f6c6"
+  },
+  "launcher_test": "Start-Demo.ps1 -NoBrowser: READY",
+  "browser_followup": {
+    "tool": "Robot Framework + SeleniumLibrary + real headless Chrome",
+    "passed": 5,
+    "failed": 0,
+    "report": "DEMO_PRESENTATION_2026-10-21/robot_results/report.html",
+    "scope": "UI and transport, synthetic edits; final report merges run2 and failed-case rerun5"
+  }
+}

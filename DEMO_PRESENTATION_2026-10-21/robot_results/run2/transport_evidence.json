@@ -1,0 +1,42 @@
+{
+  "receipt_id": "a76d02a0-3b36-443f-875b-f63b35b9008c",
+  "pipeline_run_id": "6b4e0858-44a6-437a-a41e-12e011472f1a",
+  "event_id": "a76d02a0-3b36-443f-875b-f63b35b9008c:1",
+  "confirmed": {
+    "merchant": "ROBOT FRAMEWORK TRANSPORT TEST - NOT HUMAN TRUTH",
+    "transaction_date": "2026-10-21",
+    "grand_total": 45,
+    "currency": "THB",
+    "items": [
+      {
+        "name": "AUTOMATED UI TEST ITEM",
+        "quantity": 1,
+        "unit": "item",
+        "unit_price": 45,
+        "line_total": 45
+      }
+    ]
+  },
+  "ha_readback": {
+    "reachable": true,
+    "entities": [
+      {
+        "entity_id": "sensor.seminar_latest_purchase_total",
+        "state": "45",
+        "event_id": "a76d02a0-3b36-443f-875b-f63b35b9008c:1",
+        "doc_id": "R74946CAAC57E",
+        "last_updated": "2026-10-21T07:43:44.183376+00:00"
+      },
+      {
+        "entity_id": "sensor.seminar_latest_item_count",
+        "state": "1",
+        "event_id": "a76d02a0-3b36-443f-875b-f63b35b9008c:1",
+        "doc_id": "R74946CAAC57E",
+        "last_updated": "2026-10-21T07:43:44.183043+00:00"
+      }
+    ]
+  },
+  "purpose": "Synthetic UI edits test persistence and transport; not semantic model accuracy or human review",
+  "human_annotations_unchanged": true,
+  "raw_model_output_preserved": true
+}

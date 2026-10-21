@@ -67,6 +67,39 @@ class Handler(BaseHTTPRequestHandler):
                             "reviewer_defaults": read_json(WORK/"annotations/reviewer_roster.json") if (WORK/"annotations/reviewer_roster.json").exists() else {}})
             elif url.path == "/api/receipt":
                 self.output(STORE.get(query["id"][0]))
+            elif url.path == "/api/ha-status":
+                # Expose only the two demo sensors, never the private HA bearer token.
+                from receipt_lab.preboard.services import access_token, request
+                try:
+                    states = request('/api/states', token=access_token())
+                    entities = [{"entity_id": s['entity_id'], "state": s['state'],
+                                 "event_id": s['attributes'].get('event_id'),
+                                 "doc_id": s['attributes'].get('doc_id'),
+                                 "last_updated": s['last_updated']}
+                                for s in states if s['entity_id'] in {
+                                    'sensor.seminar_latest_purchase_total', 'sensor.seminar_latest_item_count'}]
+                    self.output({"reachable": True, "entities": entities})
+                except Exception:
+                    self.output({"reachable": False, "entities": [], "error": "Home Assistant is not ready; start local demo services"})
+            elif url.path == "/api/detection-image":
+                import io
+                from PIL import Image, ImageDraw
+                record = STORE.get(query['id'][0])
+                row = next(r for r in read_json(MANIFEST)['records'] if r['doc_id'] == record['doc_id'])
+                transform = record['raw_result'].get('detection_and_preprocessing', {}).get('transform', {})
+                box = transform.get('box_original_pixels')
+                if not box:
+                    raise ValueError('No detection in this run')
+                im = Image.open(row['source']).convert('RGB')
+                ImageDraw.Draw(im).rectangle(box, outline='#00b878', width=max(4, im.width // 150))
+                direction = transform.get('rotation')
+                if direction == 'cw':
+                    im = im.transpose(Image.Transpose.ROTATE_270)
+                elif direction == 'ccw':
+                    im = im.transpose(Image.Transpose.ROTATE_90)
+                buf = io.BytesIO()
+                im.save(buf, format='PNG')
+                self.output(buf.getvalue(), content_type='image/png')
             elif url.path == "/api/review-count":
                 records = annotations(query["doc_id"][0])
                 self.output({"slots": [r["slot"] for r in records], "reviewers": [r["reviewer"] for r in records],
