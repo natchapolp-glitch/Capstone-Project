@@ -1,5 +1,13 @@
 # Handoff หลัง review ชุดพรี 10 นาที — 26 ตุลาคม 2569
 
+## อัปเดตแผนคลิปตามผู้ใช้
+
+ผู้ใช้เลือกอัดคลิปที่กด **อ่านภาพด้วยระบบ** จริง แล้วตรวจแก้ ยืนยัน และดู Home Assistant ใช้คลิปไม่เกิน 2 นาทีบนเวที ผลย้อนหลังเป็นแผนสำรองเท่านั้น บทอัดฉบับใช้งานอยู่ที่ [RECORD_DEMO_SCRIPT.html](PRESENTATION_READY_2026-10-26/RECORD_DEMO_SCRIPT.html) และ [ฉบับข้อความ](PRESENTATION_READY_2026-10-26/RECORD_DEMO_SCRIPT.md)
+
+ใช้สไลด์ `Ass5_10MIN_RECORDED_DEMO_v3_2026-10-26.pptx` และ `SCRIPT_10_MIN_REVIEWED_v3.md` ในโฟลเดอร์ PRESENTATION_READY_2026-10-26 รุ่น v3 เปลี่ยนเฉพาะ notes หน้า 18 ภาพ ตัวเลข ตาราง และส่วนอื่นใน PPTX เหมือน v2 ตรวจโครงสร้างผ่าน 21 หน้า ส่งออก PDF ด้วย PowerPoint แล้ว หลักฐาน Robot 7/7 ยังคงเป็นรอบเดิม ไม่ได้รัน inference/ยืนยันรายการใหม่ในรอบแก้เอกสารนี้
+
+ยังต้องให้เจ้าของงานอัด ตรวจข้อมูล และตรวจไฟล์คลิปจริง รวมทั้งซ้อมเวลา ไม่อ้างว่ามี DEMO_2_MIN.mp4 แล้ว เก็บ v2 และข้อความ review ด้านล่างเป็นประวัติ
+
 เริ่มใช้ที่ [PRESENTATION_READY_2026-10-26/START_HERE.md](PRESENTATION_READY_2026-10-26/START_HERE.md) ผลตรวจละเอียดอยู่ใน [REVIEW_RESULTS](PRESENTATION_READY_2026-10-26/REVIEW_RESULTS_2026-10-26.md)
 
 ## คำสั่งและขอบเขต
