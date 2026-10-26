@@ -1,5 +1,7 @@
 # ชุดใช้พรี Ass5 บนเครื่องนี้
 
+> ชุดล่าสุดอยู่ที่ [PRESENTATION_READY_2026-10-26](../PRESENTATION_READY_2026-10-26/START_HERE.md) ใช้สไลด์ v2 และ [คู่มือกดตามทีละขั้นพร้อมภาพ](../PRESENTATION_READY_2026-10-26/CLICK_BY_CLICK_GUIDE.html) ข้อมูลด้านล่างเก็บไว้เป็นประวัติชุด 21 ต.ค.
+
 เริ่มอ่าน [handoff ล่าสุดสำหรับเพื่อน](../HANDOFF_PRESENTATION_2026-10-21.md) และเปิด [โพยช่วยพรี](PRESENTATION_QUICK_GUIDE.html) ในเบราว์เซอร์ รายงานล่าสุดคือ FORMAT_REVIEWED_2026-10-21 ที่โฟลเดอร์หลัก
 
 1. **สไลด์:** `Residential_Intelligence_Project_Progress_REVIEWED_2026-10-18.pptx` และ PDF คู่กัน เป็นสำเนาชุดเดิม 21 สไลด์
