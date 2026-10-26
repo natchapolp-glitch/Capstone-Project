@@ -1,0 +1,7 @@
+{
+  "receipt_id": "f63be3b7-e6e5-4178-b79e-46b1b7cc0c3c",
+  "pipeline_run_id": "5c4ba623-b27a-44b7-b7ce-90ae63edb8a1",
+  "purpose": "Read-only display of a historical model result, not fresh inference",
+  "record_unchanged": true,
+  "new_runs_created": 0
+}

@@ -1,0 +1,126 @@
+{
+  "date": "2026-10-26",
+  "robot_run": "run-20261026-185448",
+  "tests": [
+    {
+      "name": "01 Thai Page Loads And Confirmation Requires A Selected Run",
+      "status": "PASS"
+    },
+    {
+      "name": "02 Process Real Image And Display Detection OCR And JSON",
+      "status": "PASS"
+    },
+    {
+      "name": "03 Missing Reviewer Is Rejected And Edits Reach MQTT And HA",
+      "status": "PASS"
+    },
+    {
+      "name": "04 Duplicate Confirmation Does Not Create Another Event",
+      "status": "PASS"
+    },
+    {
+      "name": "05 Home Assistant Login And States Show The Received Event",
+      "status": "PASS"
+    },
+    {
+      "name": "06 Saved Result Fallback Displays Without Running Models",
+      "status": "PASS"
+    },
+    {
+      "name": "07 Presentation Viewports Remain Readable Without Page Overflow",
+      "status": "PASS"
+    }
+  ],
+  "unmerged_single_run": true,
+  "content_verification": {
+    "speaker_notes_match_all_21_sections": true,
+    "llm_table_all_16_cells_match_saved_evidence": true,
+    "llm_attempts": 288,
+    "same_pixels_as_previous_native_pdf": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      19,
+      20,
+      21
+    ],
+    "changed_pixels": [
+      18
+    ],
+    "files": {
+      "Ass5_10MIN_REVIEWED_v2_2026-10-26.pptx": "0c6e6329b58f7fdc40a1fed112bb23b4a4ab496a6a84929542986a39f24cb6d2",
+      "Ass5_10MIN_REVIEWED_v2_2026-10-26.pdf": "c996bae4127a1dfcd4992d01bc36b1def40e5d521715a9eb077577a699b3ca6b"
+    },
+    "human_rehearsal_timing": "not measured; 540-second plan includes 120-second demo"
+  },
+  "transport": {
+    "receipt_id": "f63be3b7-e6e5-4178-b79e-46b1b7cc0c3c",
+    "pipeline_run_id": "5c4ba623-b27a-44b7-b7ce-90ae63edb8a1",
+    "event_id": "f63be3b7-e6e5-4178-b79e-46b1b7cc0c3c:1",
+    "confirmed": {
+      "merchant": "ROBOT FRAMEWORK TRANSPORT TEST - NOT HUMAN TRUTH",
+      "transaction_date": "2026-10-21",
+      "grand_total": 45,
+      "currency": "THB",
+      "items": [
+        {
+          "name": "AUTOMATED UI TEST ITEM",
+          "quantity": 1,
+          "unit": "item",
+          "unit_price": 45,
+          "line_total": 45
+        }
+      ]
+    },
+    "ha_readback": {
+      "reachable": true,
+      "entities": [
+        {
+          "entity_id": "sensor.seminar_latest_purchase_total",
+          "state": "45",
+          "event_id": "f63be3b7-e6e5-4178-b79e-46b1b7cc0c3c:1",
+          "doc_id": "R74946CAAC57E",
+          "last_updated": "2026-10-26T11:55:18.965366+00:00"
+        },
+        {
+          "entity_id": "sensor.seminar_latest_item_count",
+          "state": "1",
+          "event_id": "f63be3b7-e6e5-4178-b79e-46b1b7cc0c3c:1",
+          "doc_id": "R74946CAAC57E",
+          "last_updated": "2026-10-26T11:55:18.965832+00:00"
+        }
+      ]
+    },
+    "purpose": "Synthetic UI edits test persistence and transport; not semantic model accuracy or human review",
+    "human_annotations_unchanged": true,
+    "raw_model_output_preserved": true
+  },
+  "antivirus_condition": "owner reported disabling antivirus before runtime restoration; protection-enabled operation not tested",
+  "quarantine_evidence": {
+    "source": "AVG chest/index.xml",
+    "filename": "llama-server.exe",
+    "detection": "IDP.Generic"
+  },
+  "runtime_archive_sha256": "f78eded047061a3f86372db426797400a2f1bb0ec37868d5927dd820eb3386c0",
+  "runtime_executable_sha256": "12c015512d280661fc53ed59f2d8f5cdba3ca9b6948a891eab3087cd93b1154d",
+  "unfinished": [
+    "human timed rehearsal",
+    "recorded and checked demo clip if chosen",
+    "native slideshow/video playback",
+    "protection-enabled runtime check"
+  ]
+}

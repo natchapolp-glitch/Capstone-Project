@@ -20,6 +20,8 @@ class DemoEvidence:
         self.rid = None
         self.raw_before = None
         self.annotation_before = None
+        self.valid_live_run = False
+        self.transport_event = None
 
     def api(self, path):
         with urllib.request.urlopen('http://127.0.0.1:8090' + path, timeout=45) as response:
@@ -47,6 +49,70 @@ class DemoEvidence:
         assert raw['llm']['schema_valid'] is True
         self.raw_before = raw
         return self.rid
+
+    @keyword
+    def Mark_Live_UI_Ready(self):
+        self.valid_live_run = True
+
+    @keyword
+    def Clear_Expected_Validation_Error(self):
+        driver = BuiltIn().get_library_instance('SeleniumLibrary').driver
+        entries = driver.get_log('browser')
+        unexpected = [e for e in entries if e['level'] == 'SEVERE'
+                      and not ('/api/confirm' in e['message'] and '400 (Bad Request)' in e['message'])]
+        assert not unexpected, unexpected
+
+    @keyword
+    def Require_Valid_Live_Run(self):
+        if not self.valid_live_run:
+            BuiltIn().skip('Live inference prerequisite failed; no edits or publish attempted')
+
+    @keyword
+    def Require_Transport_Event(self):
+        if not self.transport_event:
+            BuiltIn().skip('No verified transport event from this suite; downstream check is not applicable')
+
+    @keyword
+    def Select_Saved_Result_Without_Inference(self):
+        """Exercise historical fallback independently, without publishing or modifying a receipt."""
+        driver = BuiltIn().get_library_instance('SeleniumLibrary').driver
+        from selenium.webdriver.support.ui import Select
+        candidates = self.api('/api/state')['receipts']
+        chosen = None
+        for candidate in candidates:
+            record = self.api('/api/receipt?id=' + candidate['id'])
+            raw = record['raw_result']
+            if raw.get('llm', {}).get('status') == 'ok' and raw.get('llm', {}).get('schema_valid'):
+                chosen = record
+                break
+        assert chosen, 'No valid historical model result is available for fallback'
+        before = len(candidates)
+        Select(driver.find_element(By.ID, 'saved')).select_by_value(chosen['id'])
+        WebDriverWait(driver, 30).until(lambda d: chosen['raw_result']['run_id'] in d.find_element(By.ID, 'run-meta').get_attribute('textContent'))
+        WebDriverWait(driver, 30).until(lambda d: d.find_element(By.ID, 'photo').get_attribute('src').find('/api/detection-image?id=') >= 0)
+        WebDriverWait(driver, 30).until(lambda d: d.execute_script('return document.getElementById("photo").complete && document.getElementById("photo").naturalWidth > 0'))
+        assert len(self.api('/api/state')['receipts']) == before, 'Fallback unexpectedly created an inference run'
+        assert self.api('/api/receipt?id=' + chosen['id']) == chosen, 'Fallback changed the saved record'
+        if chosen['confirmed']:
+            assert driver.find_element(By.ID, 'reviewer').get_attribute('value') == (chosen['last_confirmed_by'] or ''), 'Saved reviewer must reflect the recorded actor, not a default human name'
+        assert self.annotation_hashes() == self.annotation_before
+        output = Path(BuiltIn().get_variable_value('${OUTPUT DIR}'))
+        (output / 'fallback_evidence.json').write_text(json.dumps({
+            'receipt_id': chosen['id'], 'pipeline_run_id': chosen['raw_result']['run_id'],
+            'purpose': 'Read-only display of a historical model result, not fresh inference',
+            'record_unchanged': True, 'new_runs_created': 0,
+        }, indent=2), encoding='utf-8')
+
+    @keyword
+    def Verify_Presentation_Viewport(self, width, height):
+        driver = BuiltIn().get_library_instance('SeleniumLibrary').driver
+        driver.set_window_size(int(width), int(height))
+        metrics = driver.execute_script('return {viewport:innerWidth, page:document.documentElement.scrollWidth, image:document.getElementById("photo").naturalWidth, fonts:document.fonts.status}')
+        assert metrics['page'] <= metrics['viewport'] + 1, metrics
+        assert metrics['image'] > 0 and metrics['fonts'] == 'loaded', metrics
+        self.Verify_Thai_Labels_And_Page()
+        output = Path(BuiltIn().get_variable_value('${OUTPUT DIR}'))
+        driver.save_screenshot(str(output / f'viewport-{width}x{height}.png'))
 
     @keyword
     def Use_Existing_Test_Run(self, receipt_id):
@@ -83,6 +149,7 @@ class DemoEvidence:
             'purpose': 'Synthetic UI edits test persistence and transport; not semantic model accuracy or human review',
             'human_annotations_unchanged': True, 'raw_model_output_preserved': True,
         }, ensure_ascii=False, indent=2), encoding='utf-8')
+        self.transport_event = event_id
         return event_id
 
     @keyword

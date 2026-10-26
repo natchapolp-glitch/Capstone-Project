@@ -27,6 +27,8 @@ def review_generation():
 
 
 class Handler(BaseHTTPRequestHandler):
+    protocol_version = 'HTTP/1.1'
+
     def valid_host(self):
         parsed = urlparse("http://"+self.headers.get("Host", ""))
         try:

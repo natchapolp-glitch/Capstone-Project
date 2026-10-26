@@ -29,7 +29,8 @@ class LocalLLM:
         self.model = next(m for m in registry["models"] if m["id"] == model_id)
         if digest(self.model["path"]) != self.model["sha256"]:
             raise ValueError("Model hash mismatch")
-        exe = next(Path(registry["binary_dir"]).rglob("llama-server.exe"))
+        from .demo_preflight import find_llama_server
+        exe = find_llama_server(registry["binary_dir"])
         self.url = f"http://127.0.0.1:{port}"
         # Refuse to reuse an unrelated service that owns this port.
         import socket

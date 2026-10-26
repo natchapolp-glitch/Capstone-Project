@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.5 (Python 3.13.7 on win32)" generated="2026-10-26T18:44:55.506643" rpa="false" schemaversion="5">
+<suite id="s1" name="Demo Presentation" source="C:\Users\NATCHAPOL\OneDrive\เดสก์ท็อป\Seminar\tests\robot\demo_presentation.robot">
+<kw name="Start Demo Browser" type="SETUP">
+<kw name="Check Preconditions" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:44:55.746172" elapsed="0.022414"/>
+</kw>
+<if>
+<branch type="IF" condition="$EXISTING_RECEIPT">
+<kw name="Use Existing Test Run" owner="DemoEvidence">
+<arg>${EXISTING_RECEIPT}</arg>
+<status status="NOT RUN" start="2026-10-26T18:44:55.768880" elapsed="0.000025"/>
+</kw>
+<status status="NOT RUN" start="2026-10-26T18:44:55.768705" elapsed="0.000235"/>
+</branch>
+<status status="PASS" start="2026-10-26T18:44:55.768683" elapsed="0.000390"/>
+</if>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2026-10-26T18:44:55.772061" level="INFO">${options} = &lt;selenium.webdriver.chrome.options.Options object at 0x0000020254A96A50&gt;</msg>
+<var>${options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>modules=selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-10-26T18:44:55.769299" elapsed="0.002824"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--headless\=new</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2026-10-26T18:44:55.772292" elapsed="0.000406"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--window-size\=1600,1000</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2026-10-26T18:44:55.772873" elapsed="0.000304"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:55.773714" level="INFO">Opening browser 'chrome' to base url 'http://127.0.0.1:8090/demo'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-10-26T18:44:55.773460" elapsed="0.659628"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:44:55.745713" elapsed="0.687511"/>
+</kw>
+<test id="s1-t1" name="01 Thai Page Loads And Confirmation Requires A Selected Run" line="18">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:ha-refresh</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-10-26T18:44:56.433758" elapsed="0.032464"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:message</arg>
+<arg>กดอ่านภาพด้วยระบบ</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:44:56.466507" elapsed="0.021042"/>
+</kw>
+<kw name="Verify Thai Labels And Page" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:44:56.487750" elapsed="0.029188"/>
+</kw>
+<kw name="Get List Items" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:56.986179" level="INFO">${photos} = ['R3B0A1D27A6DC', 'R74946CAAC57E', 'R4F4EA934251E', 'RC4859AC7A019', 'R295ACA1B69DF', 'RCDB7A40C2061', 'R020B7F269C6C', 'R0305B69BA009', 'R04E000437143', 'R0AD4A4095E5D', 'R126F88D04CB4', 'R167E1A2130...</msg>
+<var>${photos}</var>
+<arg>id:doc</arg>
+<arg>values=True</arg>
+<doc>Returns all labels or values of selection list ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:44:56.517210" elapsed="0.469039"/>
+</kw>
+<kw name="Length Should Be" owner="BuiltIn">
+<msg time="2026-10-26T18:44:56.987157" level="INFO">Length is 59.</msg>
+<arg>${photos}</arg>
+<arg>59</arg>
+<doc>Verifies that the length of the given item is correct.</doc>
+<status status="PASS" start="2026-10-26T18:44:56.986477" elapsed="0.000757"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:56.987730" level="INFO">Clicking button 'id:confirm'.</msg>
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:44:56.987418" elapsed="0.095142"/>
+</kw>
+<kw name="Element Should Contain" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:57.106445" level="INFO">Element 'id:message' contains text 'อ่านภาพหรือเลือกรายการที่บันทึกไว้ก่อน'.</msg>
+<arg>id:message</arg>
+<arg>อ่านภาพหรือเลือกรายการที่บันทึกไว้ก่อน</arg>
+<doc>Verifies that element ``locator`` contains text ``expected``.</doc>
+<status status="PASS" start="2026-10-26T18:44:57.082752" elapsed="0.023853"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T18:44:57.283352" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T18:44:57.107113" elapsed="0.176362"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:44:56.433319" elapsed="0.850278"/>
+</test>
+<test id="s1-t2" name="02 Process Real Image And Display Detection OCR And JSON" line="27">
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:57.284576" level="INFO">Selecting options from selection list 'id:doc' by value R74946CAAC57E.</msg>
+<arg>id:doc</arg>
+<arg>${PHOTO}</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="PASS" start="2026-10-26T18:44:57.284272" elapsed="0.160884"/>
+</kw>
+<kw name="List Selection Should Be" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:57.445613" level="INFO">Verifying list 'id:rotation' has option [ หมุนทวนเข็ม 90° ] selected.</msg>
+<msg time="2026-10-26T18:44:57.464155" level="INFO">Current page contains list 'id:rotation'.</msg>
+<arg>id:rotation</arg>
+<arg>หมุนทวนเข็ม 90°</arg>
+<doc>Verifies selection list ``locator`` has ``expected`` options selected.</doc>
+<status status="PASS" start="2026-10-26T18:44:57.445377" elapsed="0.069292"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:57.515080" level="INFO">Typing text 'robot_framework_automated_test_not_human_ground_truth' into text field 'id:reviewer'.</msg>
+<arg>id:reviewer</arg>
+<arg>${TEST_ACTOR}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:44:57.514850" elapsed="0.096261"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:44:57.611510" level="INFO">Clicking button 'id:process'.</msg>
+<arg>id:process</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:44:57.611304" elapsed="0.081444"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:status</arg>
+<arg>pending_review</arg>
+<arg>timeout=180s</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:44:57.692933" elapsed="26.173360"/>
+</kw>
+<kw name="Wait Until Element Is Enabled" owner="SeleniumLibrary">
+<arg>id:process</arg>
+<arg>timeout=180s</arg>
+<doc>Waits until the element ``locator`` is enabled.</doc>
+<status status="PASS" start="2026-10-26T18:45:23.866542" elapsed="0.023729"/>
+</kw>
+<kw name="Remember Current Run" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:23.890504" elapsed="0.083131"/>
+</kw>
+<kw name="Get Element Attribute" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:23.997320" level="INFO">${photo_src} = http://127.0.0.1:8090/api/detection-image?id=f5a95224-bfd1-4152-b856-e0619b852952</msg>
+<var>${photo_src}</var>
+<arg>id:photo</arg>
+<arg>src</arg>
+<doc>Returns the value of ``attribute`` from the element ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:23.973998" elapsed="0.023751"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${photo_src}</arg>
+<arg>/api/detection-image?id=</arg>
+<doc>Fails if the `container` does not contain the `item` one or more times.</doc>
+<status status="PASS" start="2026-10-26T18:45:23.998060" elapsed="0.000494"/>
+</kw>
+<kw name="Wait For Condition" owner="SeleniumLibrary">
+<arg>return document.getElementById('photo').complete &amp;&amp; document.getElementById('photo').naturalWidth &gt; 0</arg>
+<doc>Waits until ``condition`` is true or ``timeout`` expires.</doc>
+<status status="PASS" start="2026-10-26T18:45:23.998680" elapsed="0.429964"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:24.430239" level="INFO">Clicking element 'xpath://summary[contains(.,'ผลจากเครื่องมือก่อนผู้ใช้แก้ไข')]'.</msg>
+<arg>xpath://summary[contains(.,'ผลจากเครื่องมือก่อนผู้ใช้แก้ไข')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:24.429414" elapsed="0.110534"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:24.562838" level="INFO">${ocr} = 0
+ALL, ไ - ไ ไอ บ อ ก ห น อ ง ไผ ม่ ร ต ช (09103)
+07542000011 (VAT Included)
+07575 Pos#092C2CWP0 9401003
+จ ร ั บ เง ิ น / ไ บ ก ํ า ก ั บ ภา ษี อ ล ่ า ง ฮ่ อ
+้ กา โน ่ เล ็ น 22 อ อ 45.00
+1 fy 45.00
+...</msg>
+<var>${ocr}</var>
+<arg>id:ocr-output</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:24.540200" elapsed="0.022727"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2026-10-26T18:45:24.563685" level="INFO">Length is 256.</msg>
+<arg>${ocr}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2026-10-26T18:45:24.563203" elapsed="0.000527"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:24.633444" level="INFO">${json} = {"transaction_date": "17/10/69 07:46", "merchant": "ALL, ไ - ไ ไอ บ อ ก ห น อ ง ไผ ม่ ร ต ช", "grand_total": 0, "currency": "THB", "items": [{"name": "07542000011", "quantity": 1, "unit": "VAT Include...</msg>
+<var>${json}</var>
+<arg>id:json-output</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:24.563853" elapsed="0.069757"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${json}</arg>
+<arg>items</arg>
+<doc>Fails if the `container` does not contain the `item` one or more times.</doc>
+<status status="PASS" start="2026-10-26T18:45:24.634201" elapsed="0.001226"/>
+</kw>
+<kw name="Element Should Contain" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:24.690053" level="INFO">Element 'id:run-meta' contains text 'tesseract'.</msg>
+<arg>id:run-meta</arg>
+<arg>tesseract</arg>
+<doc>Verifies that element ``locator`` contains text ``expected``.</doc>
+<status status="PASS" start="2026-10-26T18:45:24.635898" elapsed="0.054520"/>
+</kw>
+<kw name="Verify Thai Labels And Page" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:24.691048" elapsed="0.078748"/>
+</kw>
+<kw name="Mark Live UI Ready" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:24.770182" elapsed="0.000186"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T18:45:25.134389" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T18:45:24.770695" elapsed="0.364006"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:44:57.283959" elapsed="27.851027"/>
+</test>
+<test id="s1-t3" name="03 Missing Reviewer Is Rejected And Edits Reach MQTT And HA" line="47">
+<kw name="Require Valid Live Run" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:25.137317" elapsed="0.000306"/>
+</kw>
+<kw name="Clear Element Text" owner="SeleniumLibrary">
+<arg>id:reviewer</arg>
+<doc>Clears the value of the text-input-element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.137902" elapsed="0.050059"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.188467" level="INFO">Clicking button 'id:confirm'.</msg>
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.188238" elapsed="0.062376"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:message</arg>
+<arg>Reviewer name is required</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.250808" elapsed="0.018591"/>
+</kw>
+<kw name="Clear Expected Validation Error" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:25.269567" elapsed="0.003449"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.273391" level="INFO">Typing text 'robot_framework_automated_test_not_human_ground_truth' into text field 'id:reviewer'.</msg>
+<arg>id:reviewer</arg>
+<arg>${TEST_ACTOR}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.273166" elapsed="0.140733"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.414753" level="INFO">Typing text 'ROBOT FRAMEWORK TRANSPORT TEST - NOT HUMAN TRUTH' into text field 'id:merchant'.</msg>
+<arg>id:merchant</arg>
+<arg>ROBOT FRAMEWORK TRANSPORT TEST - NOT HUMAN TRUTH</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.414370" elapsed="0.122445"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.537541" level="INFO">Typing text '2026-10-21' into text field 'id:date'.</msg>
+<arg>id:date</arg>
+<arg>2026-10-21</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.537195" elapsed="0.092035"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.629694" level="INFO">Typing text '45' into text field 'id:total'.</msg>
+<arg>id:total</arg>
+<arg>45</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.629475" elapsed="0.112039"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.742856" level="INFO">Typing text 'THB' into text field 'id:currency'.</msg>
+<arg>id:currency</arg>
+<arg>THB</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.742156" elapsed="0.192619"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.952185" level="INFO">${rows} = 6</msg>
+<var>${rows}</var>
+<arg>css:#items tr</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.935388" elapsed="0.016857"/>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:25.953371" level="INFO">Clicking button 'css:#items tr:first-child button'.</msg>
+<arg>css:#items tr:first-child button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:25.952902" elapsed="0.136194"/>
+</kw>
+<var name="${i}">0</var>
+<status status="PASS" start="2026-10-26T18:45:25.952611" elapsed="0.137143"/>
+</iter>
+<iter>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:26.091751" level="INFO">Clicking button 'css:#items tr:first-child button'.</msg>
+<arg>css:#items tr:first-child button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:26.091269" elapsed="0.099494"/>
+</kw>
+<var name="${i}">1</var>
+<status status="PASS" start="2026-10-26T18:45:26.090918" elapsed="0.099926"/>
+</iter>
+<iter>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:26.191300" level="INFO">Clicking button 'css:#items tr:first-child button'.</msg>
+<arg>css:#items tr:first-child button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:26.191078" elapsed="0.115391"/>
+</kw>
+<var name="${i}">2</var>
+<status status="PASS" start="2026-10-26T18:45:26.190972" elapsed="0.115625"/>
+</iter>
+<iter>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:26.307212" level="INFO">Clicking button 'css:#items tr:first-child button'.</msg>
+<arg>css:#items tr:first-child button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:26.306947" elapsed="0.125020"/>
+</kw>
+<var name="${i}">3</var>
+<status status="PASS" start="2026-10-26T18:45:26.306785" elapsed="0.125263"/>
+</iter>
+<iter>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:26.432823" level="INFO">Clicking button 'css:#items tr:first-child button'.</msg>
+<arg>css:#items tr:first-child button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:26.432281" elapsed="0.048924"/>
+</kw>
+<var name="${i}">4</var>
+<status status="PASS" start="2026-10-26T18:45:26.432171" elapsed="0.049114"/>
+</iter>
+<iter>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:26.481725" level="INFO">Clicking button 'css:#items tr:first-child button'.</msg>
+<arg>css:#items tr:first-child button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:26.481541" elapsed="0.112454"/>
+</kw>
+<var name="${i}">5</var>
+<status status="PASS" start="2026-10-26T18:45:26.481430" elapsed="0.112783"/>
+</iter>
+<var>${i}</var>
+<value>${rows}</value>
+<status status="PASS" start="2026-10-26T18:45:25.952380" elapsed="0.641970"/>
+</for>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:26.596076" level="INFO">Clicking button 'id:add'.</msg>
+<arg>id:add</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:26.594716" elapsed="0.088637"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:26.683850" level="INFO">Typing text 'AUTOMATED UI TEST ITEM' into text field 'css:#items input[data-key="name"]'.</msg>
+<arg>css:#items input[data-key="name"]</arg>
+<arg>AUTOMATED UI TEST ITEM</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:26.683636" elapsed="0.327120"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:27.011920" level="INFO">Typing text '1' into text field 'css:#items input[data-key="quantity"]'.</msg>
+<arg>css:#items input[data-key="quantity"]</arg>
+<arg>1</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.011374" elapsed="0.103885"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:27.116151" level="INFO">Typing text 'item' into text field 'css:#items input[data-key="unit"]'.</msg>
+<arg>css:#items input[data-key="unit"]</arg>
+<arg>item</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.115812" elapsed="0.136800"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:27.253679" level="INFO">Typing text '45' into text field 'css:#items input[data-key="unit_price"]'.</msg>
+<arg>css:#items input[data-key="unit_price"]</arg>
+<arg>45</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.253096" elapsed="0.099483"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:27.353306" level="INFO">Typing text '45' into text field 'css:#items input[data-key="line_total"]'.</msg>
+<arg>css:#items input[data-key="line_total"]</arg>
+<arg>45</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.352900" elapsed="0.082708"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:27.436103" level="INFO">Clicking button 'id:confirm'.</msg>
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.435851" elapsed="0.150047"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:status</arg>
+<arg>published</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.586445" elapsed="0.266494"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:27.853787" level="INFO">Clicking button 'id:ha-refresh'.</msg>
+<arg>id:ha-refresh</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.853377" elapsed="0.095386"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:ha-output</arg>
+<arg>ได้รับรายการที่เลือกแล้ว</arg>
+<arg>timeout=30s</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:45:27.949130" elapsed="0.042186"/>
+</kw>
+<kw name="Verify Stored Edit And HA" owner="DemoEvidence">
+<msg time="2026-10-26T18:45:28.073578" level="INFO">${event} = f5a95224-bfd1-4152-b856-e0619b852952:1</msg>
+<var>${event}</var>
+<status status="PASS" start="2026-10-26T18:45:27.991483" elapsed="0.082171"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-10-26T18:45:28.074545" level="INFO">${EVENT} = f5a95224-bfd1-4152-b856-e0619b852952:1</msg>
+<arg>${EVENT}</arg>
+<arg>${event}</arg>
+<doc>Makes the variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.073974" elapsed="0.000646"/>
+</kw>
+<kw name="Element Should Contain" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:28.095951" level="INFO">Element 'id:ha-output' contains text 'f5a95224-bfd1-4152-b856-e0619b852952:1'.</msg>
+<arg>id:ha-output</arg>
+<arg>${EVENT}</arg>
+<doc>Verifies that element ``locator`` contains text ``expected``.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.074821" elapsed="0.021229"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T18:45:28.365814" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.096385" elapsed="0.269599"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:45:25.136099" elapsed="3.229985"/>
+</test>
+<test id="s1-t4" name="04 Duplicate Confirmation Does Not Create Another Event" line="76">
+<kw name="Require Transport Event" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:28.366893" elapsed="0.000137"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:28.367371" level="INFO">Clicking button 'id:confirm'.</msg>
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.367152" elapsed="0.110683"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:message</arg>
+<arg>${EVENT}</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.478383" elapsed="0.067659"/>
+</kw>
+<kw name="Wait Until Element Is Enabled" owner="SeleniumLibrary">
+<arg>id:process</arg>
+<doc>Waits until the element ``locator`` is enabled.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.546285" elapsed="0.023796"/>
+</kw>
+<kw name="Verify Stored Edit And HA" owner="DemoEvidence">
+<msg time="2026-10-26T18:45:28.707280" level="INFO">${event} = f5a95224-bfd1-4152-b856-e0619b852952:1</msg>
+<var>${event}</var>
+<status status="PASS" start="2026-10-26T18:45:28.570209" elapsed="0.137237"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${event}</arg>
+<arg>${EVENT}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.708193" elapsed="0.001216"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T18:45:28.974599" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.710250" elapsed="0.264520"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:45:28.366400" elapsed="0.608492"/>
+</test>
+<test id="s1-t5" name="05 Home Assistant Login And States Show The Received Event" line="84">
+<kw name="Require Transport Event" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:28.975922" elapsed="0.000172"/>
+</kw>
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:28.976359" level="INFO">Opening url 'http://127.0.0.1:8123/config/tools/state'</msg>
+<arg>http://127.0.0.1:8123/config/tools/state</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-10-26T18:45:28.976232" elapsed="0.248806"/>
+</kw>
+<kw name="Sign In To Home Assistant Privately" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:29.225445" elapsed="0.807898"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Home Assistant State Page Should Load" owner="DemoEvidence">
+<msg time="2026-10-26T18:45:30.046579" level="FAIL">Home Assistant main config panel has not loaded</msg>
+<status status="FAIL" start="2026-10-26T18:45:30.034495" elapsed="0.013229">Home Assistant main config panel has not loaded</status>
+</kw>
+<kw name="Home Assistant State Page Should Load" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:31.048593" elapsed="0.621365"/>
+</kw>
+<arg>45s</arg>
+<arg>1s</arg>
+<arg>Home Assistant State Page Should Load</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-10-26T18:45:30.033627" elapsed="1.636489"/>
+</kw>
+<kw name="Filter Home Assistant Demo Sensors" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:31.670345" elapsed="0.188952"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:31.860214" elapsed="0.010069"/>
+</kw>
+<arg>30s</arg>
+<arg>1s</arg>
+<arg>Home Assistant Should Display Test Event</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-10-26T18:45:31.859666" elapsed="0.010761"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T18:45:31.970291" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-5.png"&gt;&lt;img src="selenium-screenshot-5.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T18:45:31.870829" elapsed="0.099600"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:45:28.975305" elapsed="2.995216"/>
+</test>
+<test id="s1-t6" name="06 Saved Result Fallback Displays Without Running Models" line="92">
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:31.971401" level="INFO">Opening url 'http://127.0.0.1:8090/demo'</msg>
+<arg>${URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-10-26T18:45:31.971229" elapsed="0.055841"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:message</arg>
+<arg>กดอ่านภาพด้วยระบบ</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:45:32.027492" elapsed="0.249052"/>
+</kw>
+<kw name="Select Saved Result Without Inference" owner="DemoEvidence">
+<doc>Exercise historical fallback independently, without publishing or modifying a receipt.</doc>
+<status status="PASS" start="2026-10-26T18:45:32.277190" elapsed="0.939778"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:33.218363" level="INFO">Clicking element 'xpath://summary[contains(.,'ผลจากเครื่องมือก่อนผู้ใช้แก้ไข')]'.</msg>
+<arg>xpath://summary[contains(.,'ผลจากเครื่องมือก่อนผู้ใช้แก้ไข')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T18:45:33.217608" elapsed="0.091700"/>
+</kw>
+<kw name="Verify Thai Labels And Page" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T18:45:33.309480" elapsed="0.053327"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T18:45:33.623993" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-6.png"&gt;&lt;img src="selenium-screenshot-6.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T18:45:33.363302" elapsed="0.260966"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:45:31.970846" elapsed="1.653547"/>
+</test>
+<test id="s1-t7" name="07 Presentation Viewports Remain Readable Without Page Overflow" line="99">
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-10-26T18:45:33.625596" level="INFO">Opening url 'http://127.0.0.1:8090/demo'</msg>
+<arg>${URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-10-26T18:45:33.625375" elapsed="0.100592"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:message</arg>
+<arg>กดอ่านภาพด้วยระบบ</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T18:45:33.726644" elapsed="0.261986"/>
+</kw>
+<kw name="Select Saved Result Without Inference" owner="DemoEvidence">
+<doc>Exercise historical fallback independently, without publishing or modifying a receipt.</doc>
+<status status="PASS" start="2026-10-26T18:45:33.988990" elapsed="0.921808"/>
+</kw>
+<kw name="Verify Presentation Viewport" owner="DemoEvidence">
+<arg>1366</arg>
+<arg>768</arg>
+<status status="PASS" start="2026-10-26T18:45:34.911246" elapsed="0.286888"/>
+</kw>
+<kw name="Verify Presentation Viewport" owner="DemoEvidence">
+<arg>1920</arg>
+<arg>1080</arg>
+<status status="PASS" start="2026-10-26T18:45:35.198455" elapsed="0.394225"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T18:45:35.795873" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-7.png"&gt;&lt;img src="selenium-screenshot-7.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T18:45:35.593562" elapsed="0.202547"/>
+</kw>
+<status status="PASS" start="2026-10-26T18:45:33.624901" elapsed="2.171299"/>
+</test>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2026-10-26T18:45:35.796873" elapsed="2.443112"/>
+</kw>
+<doc>Real Chrome UI flow on the presentation PC. Synthetic edits and automated confirmation are transport tests, not human ground truth.</doc>
+<status status="PASS" start="2026-10-26T18:44:55.507769" elapsed="42.732403"/>
+</suite>
+<statistics>
+<total>
+<stat pass="7" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Demo Presentation" id="s1" pass="7" fail="0" skip="0">Demo Presentation</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

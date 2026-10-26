@@ -5,6 +5,7 @@ import secrets
 import subprocess
 import time
 import urllib.parse
+import urllib.error
 import urllib.request
 
 from .common import REPO, WORK, read_json, utc, write_json
@@ -35,10 +36,20 @@ def access_token():
 
 def configure():
     # This path is a new, isolated dev instance; never onboard or reconfigure an existing user's HA.
+    existing_auth = AUTH.exists()
     for attempt in range(90):
         try:
+            if existing_auth:
+                # Completed onboarding may legitimately return 404. Verify the
+                # existing private credential instead; do not restart onboarding.
+                token = access_token()
+                break
             steps = request("/api/onboarding")
             break
+        except urllib.error.HTTPError as error:
+            if error.code in {400, 401, 403, 404}:
+                raise RuntimeError("HA setup/authentication endpoint rejected the request; inspect the existing instance and private credentials") from None
+            time.sleep(1)
         except OSError:
             time.sleep(1)
     else:
@@ -53,7 +64,8 @@ def configure():
         # Stored only outside the repository; never log the password or bearer tokens.
         write_json(AUTH, {"username": credentials["username"], "password": credentials["password"],
                           "refresh_token": auth["refresh_token"], "created_at": utc()})
-    token = access_token()
+    if not existing_auth:
+        token = access_token()
     config = request("/api/config", token=token)
     if config["location_name"] != "Seminar Preboard Local":
         raise RuntimeError("Unexpected HA instance; refusing to configure")

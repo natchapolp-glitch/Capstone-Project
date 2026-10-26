@@ -43,14 +43,16 @@ class StateTests(unittest.TestCase):
         restarted.delivery(event)
         self.assertEqual(Store(self.path).pending(), [])
         self.assertEqual(Store(self.path).get(self.rid)["status"], "published")
+        self.assertEqual(Store(self.path).get(self.rid)["last_confirmed_by"], "synthetic-test-actor")
 
     def test_changed_revision_and_stale_write(self):
         self.store.confirm(self.rid, receipt(), "test", 0)
         changed = receipt(); changed["grand_total"] = 30
         with self.assertRaises(ValueError):
             self.store.confirm(self.rid, changed, "test", 0)
-        self.store.confirm(self.rid, changed, "test", 1)
+        self.store.confirm(self.rid, changed, "second-test-actor", 1)
         self.assertEqual(self.store.get(self.rid)["revision"], 2)
+        self.assertEqual(self.store.get(self.rid)["last_confirmed_by"], "second-test-actor")
 
     def test_invalid_cannot_reach_outbox(self):
         for data in [{"total": 20}, {**receipt(), "grand_total": True}, {**receipt(), "grand_total": float("nan")}]:

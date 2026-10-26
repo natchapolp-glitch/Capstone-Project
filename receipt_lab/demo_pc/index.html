@@ -17,7 +17,27 @@ async function api(path,data,retried=false){const r=await fetch(path,data?{metho
 function showPhoto(id){$('photo').src='/api/image?doc_id='+encodeURIComponent(id);$('full').href=$('photo').src}
 async function refresh(){state=await api('/api/state');if(!$('reviewer').value)$('reviewer').value=state.reviewer_defaults.first_reviewer_name||'';const previous=$('doc').value;$('doc').replaceChildren();for(const d of state.documents){const o=new Option(d.doc_id+' · '+(d.store||'ไม่ระบุร้าน'),d.doc_id);$('doc').append(o)}if(previous)$('doc').value=previous;$('saved').replaceChildren(new Option('รายการที่บันทึกไว้',''));for(const r of state.receipts)$('saved').append(new Option(r.doc_id+' · '+r.status+' · '+new Date(r.created_at).toLocaleString('th-TH'),r.id))}
 $('doc').onchange=()=>{current=null;const d=state.documents.find(x=>x.doc_id===$('doc').value);showPhoto(d.doc_id);$('rotation').value=d.rotation;$('saved').value='';fill(empty());$('ocr-output').textContent='';$('json-output').textContent='';$('run-meta').textContent='';$('status').textContent='ยังไม่ได้ประมวลผล';message('กดอ่านภาพด้วยระบบ หรือเลือกรายการที่บันทึกไว้เพื่อเปิดผลรันเดิม')};
-$('add').onclick=()=>itemRow();$('saved').onchange=async()=>{if(!$('saved').value)return;try{current=await api('/api/receipt?id='+encodeURIComponent($('saved').value));$('doc').value=current.doc_id;showPhoto(current.doc_id);const raw=current.raw_result;const transform=raw.detection_and_preprocessing?.transform;$('rotation').value=transform?.rotation||state.documents.find(d=>d.doc_id===current.doc_id)?.rotation||'none';if(transform?.box_original_pixels)$('photo').src='/api/detection-image?id='+encodeURIComponent(current.id);$('ocr-output').textContent=raw.ocr?.text||'ไม่มีข้อความ OCR';$('json-output').textContent=raw.llm?.raw_content||JSON.stringify(raw.extraction,null,2);$('run-meta').textContent='รอบรัน '+raw.run_id+' | OCR: '+(raw.ocr?.engine||'-')+' | เวลา '+Number(raw.processing_measurement?.wall_seconds||0).toFixed(2)+' วินาที (ขอบเขต: '+(raw.processing_measurement?.latency_scope||'ตามหลักฐานรอบเดิม')+')';fill(current.confirmed||current.raw_result.extraction);$('status').textContent=current.status;message('ผลโมเดลยังอาจมีข้อผิดพลาด กรุณาตรวจแก้กับภาพก่อนยืนยัน\n'+((current.raw_result.warnings||[]).join('\n')||current.raw_result.error||''));await checkHA()}catch(e){message(e.message)}};
+$('add').onclick=()=>itemRow();
+$('saved').onchange=async()=>{
+  if(!$('saved').value)return;
+  try{
+    current=await api('/api/receipt?id='+encodeURIComponent($('saved').value));
+    $('doc').value=current.doc_id;
+    const raw=current.raw_result, transform=raw.detection_and_preprocessing?.transform;
+    $('full').href='/api/image?doc_id='+encodeURIComponent(current.doc_id);
+    $('photo').src=transform?.box_original_pixels?'/api/detection-image?id='+encodeURIComponent(current.id):$('full').href;
+    $('rotation').value=transform?.rotation||state.documents.find(d=>d.doc_id===current.doc_id)?.rotation||'none';
+    $('ocr-output').textContent=raw.ocr?.text||'ไม่มีข้อความ OCR';
+    $('json-output').textContent=raw.llm?.raw_content||JSON.stringify(raw.extraction,null,2);
+    $('run-meta').textContent='รอบรัน '+raw.run_id+' | OCR: '+(raw.ocr?.engine||'-')+' | เวลา '+Number(raw.processing_measurement?.wall_seconds||0).toFixed(2)+' วินาที (ขอบเขต: '+(raw.processing_measurement?.latency_scope||'ตามหลักฐานรอบเดิม')+')';
+    fill(current.confirmed||raw.extraction);
+    if(current.confirmed)$('reviewer').value=current.last_confirmed_by||'';
+    $('status').textContent=current.status;
+    const provenance=current.confirmed?'ผู้ยืนยันที่บันทึกไว้: '+(current.last_confirmed_by||'ไม่พบข้อมูลผู้ยืนยัน')+'\n':'';
+    message(provenance+'ผลโมเดลยังอาจมีข้อผิดพลาด กรุณาตรวจแก้กับภาพก่อนยืนยัน\n'+((raw.warnings||[]).join('\n')||raw.error||''));
+    await checkHA();
+  }catch(e){message(e.message)}
+};
 $('process').onclick=async()=>{const b=$('process');b.disabled=true;message('กำลังตรวจภาพและอ่านรายการ อาจใช้เวลาหลายนาทีบน CPU…');try{const r=await api('/api/process',{doc_id:$('doc').value,rotation:$('rotation').value});await refresh();$('saved').value=r.id;await $('saved').onchange()}catch(e){message(e.message)}finally{b.disabled=false}};
 $('confirm').onclick=async()=>{try{if(!current)throw Error('อ่านภาพหรือเลือกรายการที่บันทึกไว้ก่อน');const r=await api('/api/confirm',{id:current.id,revision:current.revision,reviewer:$('reviewer').value,extraction:extraction()});current=await api('/api/receipt?id='+current.id);await checkHA();$('status').textContent=current.status;message('บันทึกการยืนยันแล้ว · '+r.event_id+'\n'+(r.delivery.some(x=>x.error)?'ยังส่งไม่สำเร็จ กดส่งรายการที่ค้างอีกครั้งเมื่อ broker พร้อม':'ส่งถึง MQTT broker แล้ว ตรวจสถานะปลายทางได้ใน Home Assistant'))}catch(e){message(e.message)}};
 $('reject').onclick=async()=>{try{if(!current)throw Error('เลือกรายการก่อน');await api('/api/reject',{id:current.id});$('status').textContent='rejected';message('ปฏิเสธรายการแล้ว ไม่มีการส่งข้อมูล')}catch(e){message(e.message)}};

@@ -1,4 +1,4 @@
-param([switch]$NoBrowser)
+param([switch]$NoBrowser, [switch]$SavedResultsOnly)
 $ErrorActionPreference = 'Stop'
 $repoPath = Split-Path -Parent $PSScriptRoot
 $demoPython = Join-Path $env:USERPROFILE 'SeminarLab\.venv\Scripts\python.exe'
@@ -6,6 +6,10 @@ $logFolder = Join-Path $env:USERPROFILE 'SeminarLab\preboard\services'
 if (!(Test-Path -LiteralPath $demoPython)) { throw "Missing demo Python: $demoPython" }
 Push-Location -LiteralPath $repoPath
 try {
+    if (!$SavedResultsOnly) {
+        & $demoPython -m receipt_lab.preboard.demo_preflight
+        if ($LASTEXITCODE -ne 0) { throw 'Live inference runtime is unavailable. Inspect the error above, or explicitly use -SavedResultsOnly for historical results.' }
+    }
     Write-Host 'Starting MQTT and Home Assistant...'
     & $demoPython -m receipt_lab.preboard.services start
     if ($LASTEXITCODE -ne 0) { throw 'Could not start local services' }
@@ -27,7 +31,12 @@ try {
     if (!$ha.reachable -or $ha.entities.Count -ne 2) { throw 'The two Home Assistant demo sensors are not ready' }
     & $demoPython -m receipt_lab.preboard.check_ha_frontend
     if ($LASTEXITCODE -ne 0) { throw 'Home Assistant frontend WebSocket check failed. Inspect the private ha.log before presenting.' }
-    Write-Host 'READY: http://127.0.0.1:8090/demo' -ForegroundColor Green
-    Write-Host 'Keep this PC awake and plugged in. Allow up to one minute for the first inference.'
+    if ($SavedResultsOnly) {
+        Write-Host 'READY FOR SAVED RESULTS ONLY: http://127.0.0.1:8090/demo' -ForegroundColor Yellow
+    } else {
+        Write-Host 'SERVICES READY: http://127.0.0.1:8090/demo' -ForegroundColor Green
+        Write-Host 'Runtime files exist. Run the Robot live test before claiming inference is ready.'
+    }
+    Write-Host 'Keep this PC awake and plugged in. CPU inference can take several minutes; use a checked clip within the 10-minute presentation.'
     if (!$NoBrowser) { Start-Process 'http://127.0.0.1:8090/demo' }
 } finally { Pop-Location }

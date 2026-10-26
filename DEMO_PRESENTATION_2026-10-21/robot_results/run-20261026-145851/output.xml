@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.5 (Python 3.13.7 on win32)" generated="2026-10-26T14:58:52.324285" rpa="false" schemaversion="5">
+<suite id="s1" name="Demo Presentation" source="C:\Users\NATCHAPOL\OneDrive\เดสก์ท็อป\Seminar\tests\robot\demo_presentation.robot">
+<kw name="Start Demo Browser" type="SETUP">
+<kw name="Check Preconditions" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T14:58:53.153498" elapsed="0.114991"/>
+</kw>
+<if>
+<branch type="IF" condition="$EXISTING_RECEIPT">
+<kw name="Use Existing Test Run" owner="DemoEvidence">
+<arg>${EXISTING_RECEIPT}</arg>
+<status status="NOT RUN" start="2026-10-26T14:58:53.269500" elapsed="0.000027"/>
+</kw>
+<status status="NOT RUN" start="2026-10-26T14:58:53.269246" elapsed="0.000322"/>
+</branch>
+<status status="PASS" start="2026-10-26T14:58:53.269211" elapsed="0.000388"/>
+</if>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2026-10-26T14:58:53.281556" level="INFO">${options} = &lt;selenium.webdriver.chrome.options.Options object at 0x0000016693F767B0&gt;</msg>
+<var>${options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>modules=selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-10-26T14:58:53.269679" elapsed="0.011946"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--headless\=new</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2026-10-26T14:58:53.281864" elapsed="0.000403"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_argument</arg>
+<arg>--window-size\=1600,1000</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2026-10-26T14:58:53.282415" elapsed="0.000253"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:53.283181" level="INFO">Opening browser 'chrome' to base url 'http://127.0.0.1:8090/demo'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-10-26T14:58:53.282952" elapsed="3.568709"/>
+</kw>
+<status status="PASS" start="2026-10-26T14:58:53.152059" elapsed="3.699824"/>
+</kw>
+<test id="s1-t1" name="01 Thai Page Loads And Confirmation Requires A Selected Run" line="17">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id:ha-refresh</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-10-26T14:58:56.852766" elapsed="0.053268"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:message</arg>
+<arg>กดอ่านภาพด้วยระบบ</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="PASS" start="2026-10-26T14:58:56.906226" elapsed="0.038826"/>
+</kw>
+<kw name="Verify Thai Labels And Page" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T14:58:56.945330" elapsed="0.080137"/>
+</kw>
+<kw name="Get List Items" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:57.797877" level="INFO">${photos} = ['R3B0A1D27A6DC', 'R74946CAAC57E', 'R4F4EA934251E', 'RC4859AC7A019', 'R295ACA1B69DF', 'RCDB7A40C2061', 'R020B7F269C6C', 'R0305B69BA009', 'R04E000437143', 'R0AD4A4095E5D', 'R126F88D04CB4', 'R167E1A2130...</msg>
+<var>${photos}</var>
+<arg>id:doc</arg>
+<arg>values=True</arg>
+<doc>Returns all labels or values of selection list ``locator``.</doc>
+<status status="PASS" start="2026-10-26T14:58:57.025712" elapsed="0.772224"/>
+</kw>
+<kw name="Length Should Be" owner="BuiltIn">
+<msg time="2026-10-26T14:58:57.798629" level="INFO">Length is 59.</msg>
+<arg>${photos}</arg>
+<arg>59</arg>
+<doc>Verifies that the length of the given item is correct.</doc>
+<status status="PASS" start="2026-10-26T14:58:57.798132" elapsed="0.000543"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:57.798963" level="INFO">Clicking button 'id:confirm'.</msg>
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T14:58:57.798803" elapsed="0.087677"/>
+</kw>
+<kw name="Element Should Contain" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:57.909736" level="INFO">Element 'id:message' contains text 'อ่านภาพหรือเลือกรายการที่บันทึกไว้ก่อน'.</msg>
+<arg>id:message</arg>
+<arg>อ่านภาพหรือเลือกรายการที่บันทึกไว้ก่อน</arg>
+<doc>Verifies that element ``locator`` contains text ``expected``.</doc>
+<status status="PASS" start="2026-10-26T14:58:57.886661" elapsed="0.023173"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T14:58:58.114008" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T14:58:57.910100" elapsed="0.204025"/>
+</kw>
+<status status="PASS" start="2026-10-26T14:58:56.852046" elapsed="1.262175"/>
+</test>
+<test id="s1-t2" name="02 Process Real Image And Display Detection OCR And JSON" line="26">
+<kw name="Select From List By Value" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:58.115146" level="INFO">Selecting options from selection list 'id:doc' by value R74946CAAC57E.</msg>
+<arg>id:doc</arg>
+<arg>${PHOTO}</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<status status="PASS" start="2026-10-26T14:58:58.114915" elapsed="0.103607"/>
+</kw>
+<kw name="List Selection Should Be" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:58.218966" level="INFO">Verifying list 'id:rotation' has option [ หมุนทวนเข็ม 90° ] selected.</msg>
+<msg time="2026-10-26T14:58:58.249265" level="INFO">Current page contains list 'id:rotation'.</msg>
+<arg>id:rotation</arg>
+<arg>หมุนทวนเข็ม 90°</arg>
+<doc>Verifies selection list ``locator`` has ``expected`` options selected.</doc>
+<status status="PASS" start="2026-10-26T14:58:58.218699" elapsed="0.131590"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:58.350696" level="INFO">Typing text 'robot_framework_automated_test_not_human_ground_truth' into text field 'id:reviewer'.</msg>
+<arg>id:reviewer</arg>
+<arg>${TEST_ACTOR}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T14:58:58.350474" elapsed="0.121592"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T14:58:58.473571" level="INFO">Clicking button 'id:process'.</msg>
+<arg>id:process</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T14:58:58.472600" elapsed="0.095856"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<msg time="2026-10-26T15:01:58.879189" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-10-26T15:01:58.879497" level="FAIL">Element 'id:status' did not get text 'pending_review' in 3 minutes.</msg>
+<arg>id:status</arg>
+<arg>pending_review</arg>
+<arg>timeout=180s</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="FAIL" start="2026-10-26T14:58:58.568682" elapsed="180.330382">Element 'id:status' did not get text 'pending_review' in 3 minutes.</status>
+</kw>
+<kw name="Wait Until Element Is Enabled" owner="SeleniumLibrary">
+<arg>id:process</arg>
+<arg>timeout=180s</arg>
+<doc>Waits until the element ``locator`` is enabled.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.899347" elapsed="0.000036"/>
+</kw>
+<kw name="Remember Current Run" owner="DemoEvidence">
+<status status="NOT RUN" start="2026-10-26T15:01:58.899765" elapsed="0.000039"/>
+</kw>
+<kw name="Get Element Attribute" owner="SeleniumLibrary">
+<var>${photo_src}</var>
+<arg>id:photo</arg>
+<arg>src</arg>
+<doc>Returns the value of ``attribute`` from the element ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.899993" elapsed="0.000033"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${photo_src}</arg>
+<arg>/api/detection-image?id=</arg>
+<doc>Fails if the `container` does not contain the `item` one or more times.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900143" elapsed="0.000023"/>
+</kw>
+<kw name="Wait For Condition" owner="SeleniumLibrary">
+<arg>return document.getElementById('photo').complete &amp;&amp; document.getElementById('photo').naturalWidth &gt; 0</arg>
+<doc>Waits until ``condition`` is true or ``timeout`` expires.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900258" elapsed="0.000021"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<arg>xpath://summary[contains(.,'ผลจากเครื่องมือก่อนผู้ใช้แก้ไข')]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900380" elapsed="0.000055"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<var>${ocr}</var>
+<arg>id:ocr-output</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900543" elapsed="0.000020"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${ocr}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900655" elapsed="0.000018"/>
+</kw>
+<kw name="Get Text" owner="SeleniumLibrary">
+<var>${json}</var>
+<arg>id:json-output</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900732" elapsed="0.000016"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${json}</arg>
+<arg>items</arg>
+<doc>Fails if the `container` does not contain the `item` one or more times.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900814" elapsed="0.000014"/>
+</kw>
+<kw name="Element Should Contain" owner="SeleniumLibrary">
+<arg>id:run-meta</arg>
+<arg>tesseract</arg>
+<doc>Verifies that element ``locator`` contains text ``expected``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:01:58.900887" elapsed="0.000016"/>
+</kw>
+<kw name="Verify Thai Labels And Page" owner="DemoEvidence">
+<status status="NOT RUN" start="2026-10-26T15:01:58.900951" elapsed="0.000013"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T15:01:58.989623" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T15:01:58.901190" elapsed="0.088603"/>
+</kw>
+<status status="FAIL" start="2026-10-26T14:58:58.114569" elapsed="180.875358">Element 'id:status' did not get text 'pending_review' in 3 minutes.</status>
+</test>
+<test id="s1-t3" name="03 Missing Reviewer Is Rejected And Edits Reach MQTT And HA" line="45">
+<kw name="Clear Element Text" owner="SeleniumLibrary">
+<arg>id:reviewer</arg>
+<doc>Clears the value of the text-input-element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T15:01:58.991059" elapsed="0.091011"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T15:01:59.082449" level="INFO">Clicking button 'id:confirm'.</msg>
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T15:01:59.082249" elapsed="0.156350"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<msg time="2026-10-26T15:02:29.443343" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2026-10-26T15:02:29.443642" level="FAIL">Element 'id:message' did not get text 'Reviewer name is required' in 30 seconds.</msg>
+<arg>id:message</arg>
+<arg>Reviewer name is required</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="FAIL" start="2026-10-26T15:01:59.238839" elapsed="30.209109">Element 'id:message' did not get text 'Reviewer name is required' in 30 seconds.</status>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id:reviewer</arg>
+<arg>${TEST_ACTOR}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.448430" elapsed="0.000070"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id:merchant</arg>
+<arg>ROBOT FRAMEWORK TRANSPORT TEST - NOT HUMAN TRUTH</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.448740" elapsed="0.000109"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id:date</arg>
+<arg>2026-10-21</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.449047" elapsed="0.000039"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id:total</arg>
+<arg>45</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.449272" elapsed="0.000040"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>id:currency</arg>
+<arg>THB</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.449679" elapsed="0.000045"/>
+</kw>
+<kw name="Get Element Count" owner="SeleniumLibrary">
+<var>${rows}</var>
+<arg>css:#items tr</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.449886" elapsed="0.000034"/>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Click Button" owner="SeleniumLibrary">
+<arg>css:#items tr:first-child button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.450400" elapsed="0.000035"/>
+</kw>
+<var name="${i}"/>
+<status status="NOT RUN" start="2026-10-26T15:02:29.450255" elapsed="0.000232"/>
+</iter>
+<var>${i}</var>
+<value>${rows}</value>
+<status status="NOT RUN" start="2026-10-26T15:02:29.450067" elapsed="0.000487"/>
+</for>
+<kw name="Click Button" owner="SeleniumLibrary">
+<arg>id:add</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.450707" elapsed="0.000035"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>css:#items input[data-key="name"]</arg>
+<arg>AUTOMATED UI TEST ITEM</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.450898" elapsed="0.000033"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>css:#items input[data-key="quantity"]</arg>
+<arg>1</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.451094" elapsed="0.000034"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>css:#items input[data-key="unit"]</arg>
+<arg>item</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.451337" elapsed="0.000035"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>css:#items input[data-key="unit_price"]</arg>
+<arg>45</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.451519" elapsed="0.000030"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>css:#items input[data-key="line_total"]</arg>
+<arg>45</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.451873" elapsed="0.000035"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.452031" elapsed="0.000031"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:status</arg>
+<arg>published</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.452179" elapsed="0.000030"/>
+</kw>
+<kw name="Click Button" owner="SeleniumLibrary">
+<arg>id:ha-refresh</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.452330" elapsed="0.000030"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<arg>id:ha-output</arg>
+<arg>ได้รับรายการที่เลือกแล้ว</arg>
+<arg>timeout=30s</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.452532" elapsed="0.000055"/>
+</kw>
+<kw name="Verify Stored Edit And HA" owner="DemoEvidence">
+<var>${event}</var>
+<status status="NOT RUN" start="2026-10-26T15:02:29.452719" elapsed="0.000033"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<arg>${EVENT}</arg>
+<arg>${event}</arg>
+<doc>Makes the variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.452933" elapsed="0.000033"/>
+</kw>
+<kw name="Element Should Contain" owner="SeleniumLibrary">
+<arg>id:ha-output</arg>
+<arg>${EVENT}</arg>
+<doc>Verifies that element ``locator`` contains text ``expected``.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.453086" elapsed="0.000029"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T15:02:29.590407" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-5.png"&gt;&lt;img src="selenium-screenshot-5.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T15:02:29.453477" elapsed="0.137257"/>
+</kw>
+<status status="FAIL" start="2026-10-26T15:01:58.990460" elapsed="30.600657">Element 'id:message' did not get text 'Reviewer name is required' in 30 seconds.</status>
+</test>
+<test id="s1-t4" name="04 Duplicate Confirmation Does Not Create Another Event" line="72">
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2026-10-26T15:02:29.592716" level="INFO">Clicking button 'id:confirm'.</msg>
+<arg>id:confirm</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-26T15:02:29.592304" elapsed="0.158157"/>
+</kw>
+<kw name="Wait Until Element Contains" owner="SeleniumLibrary">
+<msg time="2026-10-26T15:02:29.751026" level="FAIL">Variable '${EVENT}' not found.</msg>
+<arg>id:message</arg>
+<arg>${EVENT}</arg>
+<doc>Waits until the element ``locator`` contains ``text``.</doc>
+<status status="FAIL" start="2026-10-26T15:02:29.750687" elapsed="0.000381">Variable '${EVENT}' not found.</status>
+</kw>
+<kw name="Wait Until Element Is Enabled" owner="SeleniumLibrary">
+<arg>id:process</arg>
+<doc>Waits until the element ``locator`` is enabled.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.751181" elapsed="0.000023"/>
+</kw>
+<kw name="Verify Stored Edit And HA" owner="DemoEvidence">
+<var>${event}</var>
+<status status="NOT RUN" start="2026-10-26T15:02:29.751282" elapsed="0.000028"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${event}</arg>
+<arg>${EVENT}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2026-10-26T15:02:29.751422" elapsed="0.000020"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T15:02:29.844146" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-6.png"&gt;&lt;img src="selenium-screenshot-6.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T15:02:29.751652" elapsed="0.092684"/>
+</kw>
+<status status="FAIL" start="2026-10-26T15:02:29.591683" elapsed="0.252773">Variable '${EVENT}' not found.</status>
+</test>
+<test id="s1-t5" name="05 Home Assistant Login And States Show The Received Event" line="79">
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2026-10-26T15:02:29.845569" level="INFO">Opening url 'http://127.0.0.1:8123/config/tools/state'</msg>
+<arg>http://127.0.0.1:8123/config/tools/state</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2026-10-26T15:02:29.845434" elapsed="0.330124"/>
+</kw>
+<kw name="Sign In To Home Assistant Privately" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T15:02:30.175822" elapsed="0.910707"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Home Assistant State Page Should Load" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:31.124390" level="FAIL">Home Assistant main config panel has not loaded</msg>
+<status status="FAIL" start="2026-10-26T15:02:31.087188" elapsed="0.062244">Home Assistant main config panel has not loaded</status>
+</kw>
+<kw name="Home Assistant State Page Should Load" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T15:02:32.150110" elapsed="0.810504"/>
+</kw>
+<arg>45s</arg>
+<arg>1s</arg>
+<arg>Home Assistant State Page Should Load</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-10-26T15:02:31.086728" elapsed="1.874009"/>
+</kw>
+<kw name="Filter Home Assistant Demo Sensors" owner="DemoEvidence">
+<status status="PASS" start="2026-10-26T15:02:32.960920" elapsed="0.341136"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:33.332431" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:33.303079" elapsed="0.029812">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:34.388328" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:34.334831" elapsed="0.053955">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:35.424732" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:35.391220" elapsed="0.034214">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:36.459327" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:36.426213" elapsed="0.033611">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:37.501374" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:37.460806" elapsed="0.041149">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:38.525008" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:38.502461" elapsed="0.023088">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:39.556019" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:39.526348" elapsed="0.030187">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:40.580828" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:40.557408" elapsed="0.024547">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:41.644749" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:41.582817" elapsed="0.062421">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:42.663808" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:42.645990" elapsed="0.018416">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:43.723569" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:43.665177" elapsed="0.058861">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:44.761423" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:44.724839" elapsed="0.037140">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:45.792357" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:45.762757" elapsed="0.030224">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:46.831168" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:46.793885" elapsed="0.037918">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:47.868279" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:47.833479" elapsed="0.036141">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:48.891759" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:48.870207" elapsed="0.022169">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:49.931496" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:49.893096" elapsed="0.039160">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:50.976418" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:50.934276" elapsed="0.043238">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:52.005673" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:51.978679" elapsed="0.027502">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:53.046810" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:53.008462" elapsed="0.039057">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:54.085403" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:54.049138" elapsed="0.037054">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:55.108534" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:55.087054" elapsed="0.021991">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:56.130310" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:56.109721" elapsed="0.021149">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:57.147360" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:57.131348" elapsed="0.016341">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:58.176297" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:58.148323" elapsed="0.028526">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:02:59.203421" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:02:59.177364" elapsed="0.026506">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:03:00.226669" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:03:00.204792" elapsed="0.022461">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:03:01.250463" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:03:01.230863" elapsed="0.019993">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:03:02.267373" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:03:02.251261" elapsed="0.016411">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:03:03.292607" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:03:03.268326" elapsed="0.024748">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Home Assistant Should Display Test Event" owner="DemoEvidence">
+<msg time="2026-10-26T15:03:04.315524" level="FAIL">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<status status="FAIL" start="2026-10-26T15:03:04.293472" elapsed="0.022653">TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<msg time="2026-10-26T15:03:04.316350" level="FAIL">Keyword 'Home Assistant Should Display Test Event' failed after retrying for 30 seconds. The last error was: TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</msg>
+<arg>30s</arg>
+<arg>1s</arg>
+<arg>Home Assistant Should Display Test Event</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="FAIL" start="2026-10-26T15:02:33.302364" elapsed="31.014599">Keyword 'Home Assistant Should Display Test Event' failed after retrying for 30 seconds. The last error was: TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary" type="TEARDOWN">
+<msg time="2026-10-26T15:03:04.423260" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-7.png"&gt;&lt;img src="selenium-screenshot-7.png" width="800px"&gt;&lt;/a&gt;</msg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-10-26T15:03:04.317453" elapsed="0.105919"/>
+</kw>
+<status status="FAIL" start="2026-10-26T15:02:29.844757" elapsed="34.578691">Keyword 'Home Assistant Should Display Test Event' failed after retrying for 30 seconds. The last error was: TypeError: 'in &lt;string&gt;' requires string as left operand, not NoneType</status>
+</test>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2026-10-26T15:03:04.423948" elapsed="2.344862"/>
+</kw>
+<doc>Real Chrome UI flow on the presentation PC. Synthetic edits and automated confirmation are transport tests, not human ground truth.</doc>
+<status status="FAIL" start="2026-10-26T14:58:52.325921" elapsed="254.443021"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="4" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Demo Presentation" id="s1" pass="1" fail="4" skip="0">Demo Presentation</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

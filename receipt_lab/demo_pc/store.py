@@ -50,11 +50,13 @@ class Store:
     def get(self, rid):
         with self.connect() as con:
             row = con.execute("SELECT * FROM receipts WHERE id=?", (rid,)).fetchone()
+            actor = con.execute("SELECT actor FROM edits WHERE receipt_id=? ORDER BY revision DESC LIMIT 1", (rid,)).fetchone()
         if not row:
             raise KeyError(rid)
         item = dict(row)
         item["raw_result"] = json.loads(item.pop("raw_json"))
         item["confirmed"] = json.loads(item.pop("confirmed_json") or "null")
+        item["last_confirmed_by"] = actor["actor"] if actor else None
         return item
 
     def list(self):

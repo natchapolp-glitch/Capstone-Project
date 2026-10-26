@@ -12,6 +12,7 @@ ${URL}            http://127.0.0.1:8090/demo
 ${PHOTO}          R74946CAAC57E
 ${TEST_ACTOR}     robot_framework_automated_test_not_human_ground_truth
 ${EXISTING_RECEIPT}    ${EMPTY}
+${EVENT}          ${EMPTY}
 
 *** Test Cases ***
 01 Thai Page Loads And Confirmation Requires A Selected Run
@@ -41,11 +42,14 @@ ${EXISTING_RECEIPT}    ${EMPTY}
     Should Contain    ${json}    items
     Element Should Contain    id:run-meta    tesseract
     Verify Thai Labels And Page
+    Mark Live UI Ready
 
 03 Missing Reviewer Is Rejected And Edits Reach MQTT And HA
+    Require Valid Live Run
     Clear Element Text    id:reviewer
     Click Button    id:confirm
     Wait Until Element Contains    id:message    Reviewer name is required
+    Clear Expected Validation Error
     Input Text    id:reviewer    ${TEST_ACTOR}
     Input Text    id:merchant    ROBOT FRAMEWORK TRANSPORT TEST - NOT HUMAN TRUTH
     Input Text    id:date    2026-10-21
@@ -70,6 +74,7 @@ ${EXISTING_RECEIPT}    ${EMPTY}
     Element Should Contain    id:ha-output    ${EVENT}
 
 04 Duplicate Confirmation Does Not Create Another Event
+    Require Transport Event
     Click Button    id:confirm
     Wait Until Element Contains    id:message    ${EVENT}
     Wait Until Element Is Enabled    id:process
@@ -77,11 +82,26 @@ ${EXISTING_RECEIPT}    ${EMPTY}
     Should Be Equal    ${event}    ${EVENT}
 
 05 Home Assistant Login And States Show The Received Event
+    Require Transport Event
     Go To    http://127.0.0.1:8123/config/tools/state
     Sign In To Home Assistant Privately
     Wait Until Keyword Succeeds    45s    1s    Home Assistant State Page Should Load
     Filter Home Assistant Demo Sensors
     Wait Until Keyword Succeeds    30s    1s    Home Assistant Should Display Test Event
+
+06 Saved Result Fallback Displays Without Running Models
+    Go To    ${URL}
+    Wait Until Element Contains    id:message    กดอ่านภาพด้วยระบบ
+    Select Saved Result Without Inference
+    Click Element    xpath://summary[contains(.,'ผลจากเครื่องมือก่อนผู้ใช้แก้ไข')]
+    Verify Thai Labels And Page
+
+07 Presentation Viewports Remain Readable Without Page Overflow
+    Go To    ${URL}
+    Wait Until Element Contains    id:message    กดอ่านภาพด้วยระบบ
+    Select Saved Result Without Inference
+    Verify Presentation Viewport    1366    768
+    Verify Presentation Viewport    1920    1080
 
 *** Keywords ***
 Start Demo Browser

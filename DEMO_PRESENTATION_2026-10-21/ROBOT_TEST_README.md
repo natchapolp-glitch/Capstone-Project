@@ -1,5 +1,7 @@
 # ผลทดสอบ Robot Framework บน PC สำหรับพรี
 
+> **ผลล่าสุด 26 ต.ค.:** [รอบ 18:54:48](robot_results/run-20261026-185448/report.html) ผ่าน 7/7 ในการรันครั้งเดียว ไม่ใช่ merged report เพิ่ม saved-result fallback และ viewport 1366×768/1920×1080 ดู [review ล่าสุด](../PRESENTATION_READY_2026-10-26/REVIEW_RESULTS_2026-10-26.md) ส่วนด้านล่างเป็นประวัติผลวันที่ 21 ต.ค.
+
 วันที่ 21 ตุลาคม 2569 ใช้ Robot Framework 7.5, SeleniumLibrary 6.9.0 และ Selenium 4.51.0 ควบคุม Chrome จริงแบบ headless ที่ขนาด 1600×1000
 
 เปิด `robot_results/report.html` เพื่อดูสรุป และ `robot_results/log.html` เพื่อดูลำดับคำสั่งกับภาพหน้าจอ
